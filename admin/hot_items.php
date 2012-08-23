@@ -1,16 +1,13 @@
 <?
-
-//Edited : 07-10-2009
-
-    if(!defined('IS_ADMIN')){die('No Access');} 
+ require('./start.php'); 
  
 //------------------------------------- New Stores Menu ------------------------------
-if($action=="hot_items" || $action=="hot_items_add" || $action=="hot_items_del"){
+if(!$action || $action=="hot_items" || $action=="add" || $action=="del"){
        if_admin("hot_items");
 
     print "<p class=title align=center>$phrases[hot_items]</p>";
     
-if($action=="hot_items_add"){
+if($action=="add"){
     $id = (array) $id ;
     
  foreach($id as $idx){
@@ -19,11 +16,11 @@ if($action=="hot_items_add"){
    
      
 $cntx = db_qr_fetch("select count(id) as count from store_products_data where id='$idx'");
-$max_ord = db_qr_fetch("select max(ord)+1 as ord from store_hot_items limit 1"); 
 
      if($cntx['count']){
-        db_query("insert into store_hot_items (`product_id`,ord) values ('$idx','$max_ord[ord]')");
-
+         db_query("update store_hot_items set ord=ord+1");
+        db_query("insert into store_hot_items (`product_id`,ord) values ('$idx','0')");
+        
         }else{
         print_admin_table("<center>$phrases[err_invalid_id] : $idx</center>");
         print "<br>";
@@ -33,14 +30,14 @@ $max_ord = db_qr_fetch("select max(ord)+1 as ord from store_hot_items limit 1");
  
         }  
 //------ del ----------//        
-if($action=="hot_items_del"){
+if($action=="del"){
  db_query("delete from store_hot_items where id='$id'");
   }
 //------------------//
 
   print "<center>
-  <form action=index.php method=post name=sender>
-  <input type=hidden name=action value='hot_items_add'>
+  <form action=hot_items.php method=post name=sender>
+  <input type=hidden name=action value='add'>
   <table width=50% class=grid><tr>
   <td> <b> ID   :</b>
   <input type=text name=id[] size=4>
@@ -49,12 +46,10 @@ if($action=="hot_items_del"){
   
   <input type=submit value='$phrases[add_button]'></td></tr></table></form>
               <br>
-          <table width=80% class=grid><tr><td>";
+          <table width=100% class=grid><tr><td>";
           
-print "<style type='text/css'>
-   div { cursor: move; }
-</style>
-          <div id=\"hot_items_list\">";
+print "
+          <div id=\"hot_items_list\" class='sortable'>";
           
 $qr=db_query("select * from store_hot_items order by ord asc");
 if(db_num($qr)){
@@ -65,12 +60,14 @@ while($data = db_fetch($qr)){
     
        if(db_num($qr2)){
                $data2 = db_fetch($qr2);
-        print "<div id=\"item_$data[id]\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\"
-     onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
+               toggle_tr_class();
+        print "<div id=\"item_$data[id]\" class='$tr_class'>
+             
         <table width=100%><tr>
+        <td class='handle'></td>
         <td width=23 align=center><img width=30 height=30 src=\"$scripturl/".get_image($data2['img'])."\"></td>
         <td>$data2[cat] ->  <b>$data2[name]</b></td>
-      <td width=100><a href=\"index.php?action=hot_items_del&id=$data[id]\" onClick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a></td>
+      <td width=100><a href=\"hot_items.php?action=del&id=$data[id]\" onClick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a></td>
        </tr></table>
        </div>
        ";
@@ -93,6 +90,9 @@ while($data = db_fetch($qr)){
 
         
   print "<script type=\"text/javascript\">
-        init_sortlist('hot_items_list','set_hot_items_sort');
+        init_sortlist('hot_items_list','hot_items');
 </script>";      
         }
+        
+//-----------end ----------------
+ require(ADMIN_DIR.'/end.php');

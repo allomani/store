@@ -4,12 +4,12 @@
 
 global $action,$cat,$id,$field_option,$price_from,$price_to,$style;
 
-if(THIS_PAGE !="index"){die();}
 
-if($action=="browse" || $action=="product_details"){
+
+if(CFN=="browse.php" || CFN=="product_details.php"){
 
 if($cat || $id){
-if($action=="browse"){
+if(CFN=="browse.php"){
  $fields_array = get_product_cat_fields($cat,true); 
 $data_fields = db_qr_fetch("select name,id from store_products_cats where id='$cat'");
 }else{    
@@ -22,8 +22,7 @@ $fields_array = get_product_cat_fields($data_cat['cat'],true);
   //$fields_array = array_map('intval',$fields_array);
 
 
-print "<form action=index.php method=get>
-<input type=hidden name=action value='browse'>
+print "<form action='browse.php' method=get>
 <input type=hidden name='hide_subcats' value='1'>
 
 

@@ -1,9 +1,8 @@
 <?
-     if(!defined('IS_ADMIN')){die('No Access');} 
+ require('./start.php'); 
  
-
 // -------------- Blocks ----------------------------------
-if ($action == "blocks" or $action=="del_block" or $action=="edit_block_ok" or $action=="add_block"
+if (!$action || $action == "blocks" or $action=="del_block" or $action=="edit_block_ok" or $action=="add_block"
 || $action=="block_disable" || $action=="block_enable" || $action=="block_order" || $action=="blocks_fix_order"){
 
 
@@ -103,7 +102,7 @@ pages='".db_escape($pg_view)."',hide_title='".db_escape($hide_title)."',cat='$ca
 //------------------------------------------------------------
 
 print "<p align=center class=title>$phrases[the_blocks]</p><br>
-<img src='images/add.gif'><a href='index.php?action=block_add'>$phrases[add_button]</a><br><br>";
+<img src='images/add.gif'><a href='blocks.php?action=block_add'>$phrases[add_button]</a><br><br>";
 
 
 
@@ -129,25 +128,19 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
        foreach($qr_arr as $qr){  
                                           
          while($data= db_fetch($qr)){
-         if($data['pos'] == "r"){
-                 $block_color = "#0080C0";
-                 }elseif($data['pos'] == "l"){
-                   $block_color = "#2C920E";
-                   }else{
-                   $block_color = "#EA7500";
-                           }
+       
        if($last_block_pos != $data['pos']){
           
-           if($i > 0){print "</div>";}
+           if($i > 0){print "</ul>";}
            print "</td><td valign=top dir=$global_dir>";
            
-            print "<div id='blocks_list_".$data['pos']."'>";
+            print "<ul id='".$data['pos']."' class='blocks_group'>";
             $i++;
        } 
                           
        $last_block_pos = $data['pos'];
-     print "<div id=\"item_$data[id]\" style=\"border: thin dashed ".iif($data['active'],"#C0C0C0","#000000").";".iif(!$data['active'],"background-color:#FFEAEA;")."\"><center>
-     <table width=96%>
+     print "<li id=\"item_$data[id]\" class='".iif($data['active'],"active","inactive")."'><center>
+     <table width=100%>
      <tr>
      <td  align=$global_align width=25>
       <span style=\"cursor: move;\" class=\"handle\"><img alt='$phrases[click_and_drag_to_change_order]' src='images/move.gif'></span> 
@@ -156,13 +149,13 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
      
   
      
-                <td align=center><font color='$block_color'><b>";
+                <td align=center><span class='title'>";
                 if($data['title']){
                     print $data['title'] ;
                     }else{
                     print "[ $phrases[without_title] ]" ;
                         }
-                        print "</b></font></td>
+                        print "</span></td>
                         
                        <td align=$global_align_x width=31>".iif($data['cat'],"<img src='images/tabbed.gif' alt='Tabbed Menu'>")."</td>  
                         
@@ -173,33 +166,33 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
                 <td align=center colspan=3>";
 
                 if($data['active']){
-                        print "<a href='index.php?action=block_disable&id=$data[id]'>$phrases[disable]</a>" ;
+                        print "<a href='blocks.php?action=block_disable&id=$data[id]'>$phrases[disable]</a>" ;
                         }else{
-                        print "<a href='index.php?action=block_enable&id=$data[id]'>$phrases[enable]</a>" ;
+                        print "<a href='blocks.php?action=block_enable&id=$data[id]'>$phrases[enable]</a>" ;
                         }
 
-                print "- <a href='index.php?action=edit_block&id=$data[id]'>$phrases[edit] </a>
-                - <a href='index.php?action=del_block&id=$data[id]' onClick=\"return confirm('Are you sure you want to delete ?');\">$phrases[delete] </a></td>
+                print "- <a href='blocks.php?action=edit_block&id=$data[id]'>$phrases[edit] </a>
+                - <a href='blocks.php?action=del_block&id=$data[id]' onClick=\"return confirm('Are you sure you want to delete ?');\">$phrases[delete] </a></td>
         </tr>
-        </table></center></div>";
+        </table></center></li>";
             //    $i++;
                  }
        }
-                print "</div>
+                print "</ul>
        
 
 
                ";
                 ?>
 <script type="text/javascript">
-        init_blocks_sortlist();
+    init_blocks_sortlist(); 
 </script>
 <?
  //<div id=result>result here</div>
                 print"</td></tr></table>"; 
                 
               /*
-                print "<br><form action='index.php' method=post>
+                print "<br><form action='blocks.php' method=post>
                 <input type=hidden name=action value='blocks_fix_order'>
                 <input type=submit value=' $phrases[cp_blocks_fix_order] '>
                 </form><br>";
@@ -216,51 +209,59 @@ if($action == "edit_block"){
   $data=db_qr_fetch("select * from store_blocks where id='$id'");
       $data['file'] = htmlspecialchars($data['file']) ;
 
- print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=blocks'>$phrases[the_blocks]</a> / $data[title] <br><br>
+?>
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <script src="codemirror/mode/php/php.js"></script>
+    <script src="codemirror/mode/clike/clike.js"></script> 
+    <script src="codemirror/mode/xml/xml.js"></script> 
+    <script src="codemirror/mode/css/css.js"></script> 
+    <script src="codemirror/mode/javascript/javascript.js"></script> 
+        
+   
+
+    <style type="text/css">
+      .CodeMirror {
+        border: 1px solid #ccc;
+        direction:ltr;
+        text-align:left;
+       width:99%;
+      }
+      .CodeMirror-scroll {
+        height: 300px;
+        overflow-y: auto;
+        overflow-x: scroll;
+        width: 100%;
+      }
+    </style>
+<?
+
+ print "<img src='images/arrw.gif'>&nbsp;<a href='blocks.php?action=blocks'>$phrases[the_blocks]</a> / $data[title] <br><br>
  
- <center><table border=\"0\" width=\"80%\"  class=\"grid\" >
+ <form method=\"POST\" action=\"blocks.php\">  
+ <input type=hidden name=\"action\" value='edit_block_ok'>
+ <input type=hidden name=\"id\" value='$id'>
+                       
+ <center><table border=\"0\" width=\"99%\"  class=\"grid\" >
 
-
-                <form method=\"POST\" action=\"index.php\">
-
-                      <input type=hidden name=\"action\" value='edit_block_ok'>
-                       <input type=hidden name=\"id\" value='$id'>
-
-
-                        <tr>
-                        <td width=150>
+                 <tr>
+                 <td width=150>
                 <b>$phrases[the_title]</b></td><td>
                 <input type=\"text\" name=\"title\" value='$data[title]' size=\"29\">&nbsp; <input type=checkbox value=1 name=\"hide_title\"".iif($data['hide_title']," checked")."> $phrases[hide_title]</td>
                         </tr>
-                       <tr>
-                                <td >
-                <b>$phrases[the_content]</b></td><td >
-                 <textarea name='file' rows=10 cols=50 dir=ltr >$data[file]</textarea></td>
-                        </tr>";
-
-                        if($data['pos']=="r"){
-                                $option1 = "selected";
-                                }elseif($data['pos']=="c"){
-                                $option2 = "selected";
-                                }else{
-                                $option3="selected";
-                                }
-
-                              if($data['template']==0){
-                                      $def_chk = "selected" ;}else{$def_chk = "" ;}
-
-                             print"  <tr> <td >
+              </table><br>
+                    
+                 <textarea name='file' id='file'>$data[file]</textarea>
+                 <br> <table border=\"0\" width=\"99%\"  class=\"grid\" >
+         <tr> <td>
                 <b>$phrases[the_position]</b></td>
-                                <td width=\"223\">
-                <select size=\"1\" name=\"pos\">
-                        <option value=\"r\" $option1>$phrases[right]</option>
-                        <option value=\"c\" $option2>$phrases[center]</option>
-                         <option value=\"l\" $option3>$phrases[left]</option>
-                        </select>
-                        </td>
+                                <td>";
+                print_select_row("pos",array("r"=>$phrases['right'],"c"=>$phrases['center'],"l"=>$phrases['left']),$data['pos']);
+                      print "
+                      </td>
                         </tr>
 
-                   <tr><td><b>$phrases[the_template] </b></td><td><select name=template><option value='0' $def_chk> $phrases[the_default_template] </option>";
+                   <tr><td><b>$phrases[the_template] </b></td><td><select name=template><option value='0'".iif($data['template']==0," selected")."> $phrases[the_default_template] </option>";
 
   $qr_template = db_query("select name,id,cat from store_templates where protected !=1 order by cat,id");
               while($data_template = db_fetch($qr_template)){
@@ -293,7 +294,7 @@ if($action == "edit_block"){
                       
                               <tr>
                                 <td>
-                <b>$phrases[the_order]</b></td><td width='223'>
+                <b>$phrases[the_order]</b></td><td>
                 <input type='text' name='ord' value='$data[ord]' size='2'></td>
                         </tr>
                         <tr><td> <b> $phrases[appearance_places]</b></td><td><table width=100%><tr><td>";
@@ -304,10 +305,12 @@ if($action == "edit_block"){
   if(is_array($actions_checks)){
 
   $c=0;
- for($i=0; $i < count($actions_checks);$i++) {
+  $i=0;
+ //for($i=0; $i < count($actions_checks);$i++) {
 
-        $keyvalue = current($actions_checks);
+  //      $keyvalue = current($actions_checks);
 
+ foreach($actions_checks as $key=>$keyvalue){
 if($c==4){
     print "</td><td>" ;
     $c=0;
@@ -315,12 +318,13 @@ if($c==4){
 
 if(in_array($keyvalue,$pages_view)){$chk = "checked" ;}else{$chk = "" ;}
 
-print "<input  name=\"pages[$i]\" type=\"checkbox\" value=\"$keyvalue\" $chk>".key($actions_checks)."<br>";
+print "<input  name=\"pages[$i]\" type=\"checkbox\" value=\"$keyvalue\" $chk>".$key."<br>";
 
 
 $c++ ;
+$i++;
 
- next($actions_checks);
+ //next($actions_checks);
 }
 }
 
@@ -328,48 +332,80 @@ $c++ ;
 
                           print "</td></tr></table>" ;
            print "</td></tr><tr><td colspan=2 align=center><input type=\"submit\" value=\"$phrases[edit]\"> </td></tr>
-
-
-
+    
 </table>
-</form>    </center>\n";
+ </center>
+</form>";
+?>
+<script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("file"), {
+       matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        lineNumbers: true,
+        lineWrapping: true,
+        fixedGutter : true
+      });
+    </script>
+    <?
 
         }
         
 //------------ Block Add ------------
 if($action=="block_add"){
-     print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=blocks'>$phrases[the_blocks]</a> / $phrases[add_button] <br><br>     
-    
-    <center><table border=\"0\" width=\"80%\"  cellpadding=\"0\" cellspacing=\"0\" class=\"grid\">
-        <tr>
-                <td height=\"0\" >
+     print "<img src='images/arrw.gif'>&nbsp;<a href='blocks.php?action=blocks'>$phrases[the_blocks]</a> / $phrases[add_button] <br><br>";     
+?>
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <script src="codemirror/mode/php/php.js"></script>
+    <script src="codemirror/mode/clike/clike.js"></script> 
+    <script src="codemirror/mode/xml/xml.js"></script> 
+    <script src="codemirror/mode/css/css.js"></script> 
+    <script src="codemirror/mode/javascript/javascript.js"></script> 
+        
+   
 
+    <style type="text/css">
+      .CodeMirror {
+        border: 1px solid #ccc;
+        direction:ltr;
+        text-align:left;
+       width:99%;
+      }
+      .CodeMirror-scroll {
+        height: 300px;
+        overflow-y: auto;
+        overflow-x: scroll;
+        width: 100%;
+      }
+    </style>
+<?    
+   print "
+    <form method=\"POST\" action=\"blocks.php\" name=submit_form>
+    <input type=hidden name=\"action\" value='add_block'>
+                
+                
+    <center>
+    <table border=\"0\" width=\"99%\" class=\"grid\">
 
-                <form method=\"POST\" action=\"index.php\" name=submit_form>
-
-                      <input type=hidden name=\"action\" value='add_block'>
-
-                    
-
-                        <tr>
-                                <td width=\"150\">
+    <tr>
+                                <td>
                 <b>$phrases[the_title]</b></td><td >
                 <input type=\"text\" name=\"title\" size=\"29\">&nbsp; <input type=checkbox name=\"hide_title\" value=1> $phrases[hide_title]</td>
                         </tr>
-                       <tr>
-                                <td width=\"70\">
-                <b>$phrases[the_content]</b></td><td width=\"223\">
-                  <textarea name='file' rows=10 cols=50  dir=ltr ></textarea></td>
-                        </tr>
-
-                               <tr> <td width=\"50\">
+                 </table><br>
+                       
+                  <textarea name='file' id='file'></textarea>
+                           <br>
+                <table border=\"0\" width=\"99%\" class=\"grid\">  
+                     <tr> <td>
                 <b>$phrases[the_position]</b></td>
-                                <td width=\"223\">
-                <select size=\"1\" name=\"pos\" onchange=\"set_menu_pages(this)\">
-                        <option value=\"r\" selected>$phrases[right]</option>
-                         <option value=\"c\">$phrases[center]</option>
-                        <option value=\"l\">$phrases[left]</option>
-                        </select>
+                                <td>";
+                print_select_row("pos",array("r"=>$phrases['right'],"c"=>$phrases['center'],"l"=>$phrases['left']));     
+                        print "
                         </td>
                         </tr>
               <tr><td><b>$phrases[the_template]</b></td><td><select name=template><option value='0' selected> $phrases[the_default_template] </option>";
@@ -398,8 +434,8 @@ if($action=="block_add"){
                       
                       
                         <tr>
-                                <td width=\"50\">
-                <b>$phrases[the_order]</b></td><td width=\"223\">
+                                <td>
+                <b>$phrases[the_order]</b></td><td>
                 <input type=\"text\" name=\"ord\" value=\"1\" size=\"2\"></td>
                         </tr>
 
@@ -408,28 +444,50 @@ if($action=="block_add"){
 
   if(is_array($actions_checks)){
 $c=0;
- for($i=0; $i < count($actions_checks);$i++) {
+$i=0;
+ //for($i=0; $i < count($actions_checks);$i++) {
 
-        $keyvalue = current($actions_checks);
+   //  $keyvalue = current($actions_checks);
 
+ foreach($actions_checks as $key=>$keyvalue){
 if($c==4){
     print "</td><td>" ;
     $c=0;
     }
 
-print "<input  name=\"pages[$i]\" type=\"checkbox\" value=\"$keyvalue\" checked>".key($actions_checks)."<br>";
+print "<input  name=\"pages[$i]\" type=\"checkbox\" value=\"$keyvalue\" checked>".$key."<br>";
 
 
 $c++ ;
-
- next($actions_checks);
+$i++;
+// next($actions_checks);
 }
 }
-
-
-          print " </td></tr></table></td></tr><tr><td colspan=2 align=center><input type=\"submit\" value=\"$phrases[add_button]\"></td></tr>
+        print " </td></tr></table></td></tr><tr><td colspan=2 align=center><input type=\"submit\" value=\"$phrases[add_button]\"></td></tr>
 
 
 </table>
-</form>    </center> <br>\n";
+</center>
+</form>";
+
+?>
+<script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("file"), {
+       matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        lineNumbers: true,
+        lineWrapping: true,
+        fixedGutter : true
+      });
+    </script>
+    <?
+
+
 }
+
+ //-----------end ----------------
+ require(ADMIN_DIR.'/end.php');

@@ -9,7 +9,7 @@ print "<?xml version=\"1.0\" encoding=\"$settings[site_pages_encoding]\" ?> \n";
 $qr=db_query("select id,name from store_products_cats where active=1 order by id desc");
 while($data = db_fetch($qr)){
 print "<url>
-<loc>$scripturl/".str_replace('{id}',$data['id'],$links['links_browse_products'])."</loc>
+<loc>$scripturl/".str_replace('{id}',$data['id'],$links['browse_products'])."</loc>
 <changefreq>daily</changefreq>
 <priority>0.50</priority>
 </url>";    
@@ -18,7 +18,7 @@ print "<url>
 $qr=db_query("select id,name from store_products_data where active=1 order by id desc");
 while($data = db_fetch($qr)){
 print "<url>
-<loc>$scripturl/".str_replace('{id}',$data['id'],$links['links_product_details'])."</loc>
+<loc>$scripturl/".str_replace('{id}',$data['id'],$links['product_details'])."</loc>
 <changefreq>daily</changefreq>
 <priority>0.50</priority>
 </url>";    
@@ -29,7 +29,7 @@ print "<url>
 $qr=db_query("select id from store_pages where active=1 order by id desc");
 while($data = db_fetch($qr)){
 print "<url>
-<loc>$scripturl/".str_replace('{id}',$data['id'],$links['links_pages'])."</loc>
+<loc>$scripturl/".str_replace('{id}',$data['id'],$links['pages'])."</loc>
 <changefreq>daily</changefreq>
 <priority>0.50</priority>
 </url>";    
@@ -39,7 +39,7 @@ print "<url>
 $qr=db_query("select id from store_news order by id desc");
 while($data = db_fetch($qr)){
 print "<url>
-<loc>$scripturl/".str_replace('{id}',$data['id'],$links['links_browse_news'])."</loc>
+<loc>$scripturl/".str_replace('{id}',$data['id'],$links['browse_news'])."</loc>
 <changefreq>daily</changefreq>
 <priority>0.50</priority>
 </url>";    

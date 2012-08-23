@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<safe_functions>
+
+    <func>and</func>
+    <func>or</func>
+    <func>xor</func>
+    <func>if</func>                    
+    <func>substr</func>
+    <func>get_image</func>
+    <func>check_member_login</func>
+    <func>print</func>
+    <func>echo</func>
+    <func>in_array</func>
+    <func>is_array</func>
+    <func>is_numeric</func>
+    <func>isset</func>
+    <func>empty</func>
+    <func>defined</func>
+    <func>array</func>
+    <func>open_table</func>
+    <func>close_table</func>
+    <func>strpos</func>
+    <func>strlen</func>
+    <func>login_redirect</func>
+    <func>print_style_selection</func>
+    <func>iif</func>
+    <func>get_template</func>
+    <func>urlencode</func>
+    <func>count</func>
+    <func>str_replace</func>
+    <func>strchr</func>
+    <func>run_template</func>
+    <func>strtotime</func>
+    <func>date</func>
+    <func>intval</func>
+    <func>htmlspecialchars</func>
+    <func>number_format</func>
+    <func>open_block</func>
+    <func>close_block</func>
+    <func>print_rating</func>
+    <func>db_fetch</func>
+    <func>db_num</func>
+    <func>print_pages_links</func>
+    <func>get_date</func>
+    <func>get_short_details_fields_data</func>
+    <func>number_format</func>
+    <func>rand</func>
+    
+</safe_functions>

@@ -6,16 +6,16 @@ $is_admin =1 ;
 
 include_once(CWD . "/global.php") ;
 
-if(!check_login_cookies()){die("<center> $phrases[access_denied] </center>");} 
+if(!check_admin_login()){die("<center> $phrases[access_denied] </center>");} 
 
 if_admin("clients");
 
 print "<html dir=$global_dir>\n";
-print "<META http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
-<META http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
+print "<meta http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
+<meta http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
 
 print "<link href=\"images/style.css\" type=text/css rel=stylesheet>
-<script src='js.js' type=\"text/javascript\" language=\"javascript\"></script>";
+<script src='javascript.js' type=\"text/javascript\" language=\"javascript\"></script>";
 
 
 if ($conf){
@@ -131,7 +131,7 @@ if($send_to=="all"){
    <tr ><td> $phrases[sender_name] </td><td><input type=text name='mailing[from_name]' value='$sitename' size=30></td></tr>
     <tr id='sender_email_tr'><td> $phrases[sender_email] </td><td>
 
-     <input type=text name='mailing[from_email]' value='$settings[mailing_email]' size=30></td></tr>
+     <input type=text name='mailing[from_email]' value=\"$mailing_email\" size=30></td></tr>
 
       <tr id='msg_type_tr'><td>$phrases[msg_type] : </td><td><select name=mailing[from_use_html]>" ;
  if($settings['mailing_default_use_html']){$chk1 = "selected" ; $chk2 ="" ;}else{ $chk2 = "selected" ; $chk1 ="" ;}

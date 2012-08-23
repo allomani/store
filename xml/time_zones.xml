@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zones>
+
+    <zone name="GMT-11:00 Midway Island, Samoa">Pacific/Midway</zone>
+    <zone name="GMT-10:00 Hawaii">Pacific/Honolulu</zone>
+    <zone name="GMT-09:00 Alaska">America/Nome</zone>
+    <zone name="GMT-08:00 Pacific Time (US &amp; Canada); Los Angeles">America/Los_Angeles</zone>
+    <zone name="GMT-08:00 Pacific Time (US &amp; Canada); Tijuana">America/Tijuana</zone>
+    <zone name="GMT-07:00 Arizona">America/Phoenix</zone> 
+    <zone name="GMT-07:00 Mountain Time (US &amp; Canada)">America/Denver</zone> 
+    <zone name="GMT-06:00 Central Time (US &amp; Canada)">America/Chicago</zone>
+    <zone name="GMT-06:00 Eastern Time - Indiana - Starke County">America/Indiana/Knox</zone> 
+    <zone name="GMT-06:00 Mexico City, Tegucigalpa">America/Mexico_City</zone> 
+    <zone name="GMT-06:00 Nicaragua">America/Managua</zone> 
+    <zone name="GMT-06:00 Saskatchewan">America/Regina</zone> 
+    <zone name="GMT-05:00 Bogota, Lima">America/Bogota</zone> 
+    <zone name="GMT-05:00 Eastern Time (US &amp; Canada)">America/New_York</zone> 
+    <zone name="GMT-05:00 Eastern Time - Indiana - most locations">America/Indiana/Indianapolis</zone> 
+    <zone name="GMT-04:30 Caracas">America/Caracas</zone> 
+    <zone name="GMT-04:00 Atlantic Time (Canada)">America/Halifax</zone> 
+    <zone name="GMT-04:00 La Paz">America/La_Paz</zone> 
+    <zone name="GMT-03:30 Newfoundland">America/St_Johns</zone> 
+    <zone name="GMT-03:00 E Argentina (BA, DF, SC, TF)">America/Buenos_Aires</zone> 
+    <zone name="GMT-03:00 NE Brazil (MA, PI, CE, RN, PB)">America/Fortaleza</zone> 
+    <zone name="GMT-03:00 Pernambuco">America/Recife</zone> 
+    <zone name="GMT-03:00 S &amp; SE Brazil (GO, DF, MG, ES, RJ, SP, PR, SC, RS)">America/Sao_Paulo</zone> 
+    <zone name="GMT-02:00 Mid-Atlantic">Atlantic/South_Georgia</zone> 
+    <zone name="GMT-01:00 Azores, Cape Verde Island">Atlantic/Azores</zone> 
+    <zone name="GMT (no DST) Tangiers, Casablanca">Africa/Casablanca</zone> 
+    <zone name="GMT+00:00 Lisbon">Europe/Lisbon</zone> 
+    <zone name="GMT (Coordinated Universal Time)">Etc/GMT</zone> 
+    <zone name="GMT (Coordinated Universal Time) Dublin, Edinburgh, London">Europe/London</zone> 
+    <zone name="GMT+01:00 Berlin, Stockholm, Rome, Bern, Brussels">Europe/Berlin</zone> 
+    <zone name="GMT+01:00 Paris, Madrid">Europe/Paris</zone> 
+    <zone name="GMT+01:00 Prague, Warsaw">Europe/Prague</zone> 
+    <zone name="GMT+02:00 Athens, Helsinki, Istanbul">Europe/Athens</zone> 
+    <zone name="GMT+02:00 Cairo">Africa/Cairo</zone> 
+    <zone name="GMT+02:00 Eastern Europe">EET</zone> 
+    <zone name="GMT+02:00 Harare, Pretoria">Africa/Harare</zone> 
+    <zone name="GMT+02:00 Israel">Asia/Jerusalem</zone> 
+    <zone name="GMT+03:00 Baghdad, Kuwait, Nairobi, Riyadh">Asia/Baghdad</zone> 
+    <zone name="GMT+03:00 Moscow, St. Petersburg, Volgograd">Europe/Moscow</zone> 
+    <zone name="GMT+03:30 Tehran">Asia/Tehran</zone> 
+    <zone name="GMT+04:00 Abu Dhabi, Muscat, Tbilisi, Kazan">Asia/Tbilisi</zone> 
+    <zone name="GMT+04:30 Kabul">Asia/Kabul</zone> 
+    <zone name="GMT+05:00 Islamabad, Karachi">Asia/Karachi</zone> 
+    <zone name="GMT+05:00 Sverdlovsk, Tashkent">Asia/Yekaterinburg</zone> 
+    <zone name="GMT+05:30 Mumbai, Kolkata, Chennai, New Delhi">Asia/Calcutta</zone> 
+    <zone name="GMT+05:45 Kathmandu, Nepal">Asia/Katmandu</zone> 
+    <zone name="GMT+06:00 Almaty, Dhaka">Asia/Almaty</zone> 
+    <zone name="GMT+06:00 Omsk, Novosibirsk">Asia/Omsk</zone> 
+    <zone name="GMT+07:00 Bangkok, Jakarta, Hanoi">Asia/Bangkok</zone> 
+    <zone name="GMT+07:00 Krasnoyarsk">Asia/Krasnoyarsk</zone> 
+    <zone name="GMT+08:00 Beijing, Chongqing, Urumqi">Asia/Shanghai</zone> 
+    <zone name="GMT+08:00 Hong Kong SAR, Perth, Singapore, Taipei">Australia/Perth</zone> 
+    <zone name="GMT+08:00 Irkutsk (Lake Baikal)">Asia/Irkutsk</zone> 
+    <zone name="GMT+09:00 Tokyo, Osaka, Sapporo, Seoul">Asia/Tokyo</zone> 
+    <zone name="GMT+09:00 Yakutsk (Lena River)">Asia/Yakutsk</zone> 
+    <zone name="GMT+09:30 Adelaide">Australia/Adelaide</zone> 
+    <zone name="GMT+09:30 Darwin">Australia/Darwin</zone> 
+    <zone name="GMT+10:00 Brisbane">Australia/Brisbane</zone> 
+    <zone name="GMT+10:00 Guam, Port Moresby">Pacific/Guam</zone> 
+    <zone name="GMT+10:00 Sydney, Melbourne">Australia/Sydney</zone> 
+    <zone name="GMT+10:00 Vladivostok">Asia/Vladivostok</zone> 
+    <zone name="GMT+11:00 Hobart">Australia/Hobart</zone> 
+    <zone name="GMT+12:00 Eniwetok, Kwajalein">Pacific/Kwajalein</zone> 
+    <zone name="GMT+12:00 Fiji Islands, Marshall Islands">Pacific/Fiji</zone> 
+    <zone name="GMT+12:00 Kamchatka">Asia/Kamchatka</zone> 
+    <zone name="GMT+12:00 Magadan, Solomon Islands, New Caledonia">Asia/Magadan</zone> 
+    <zone name="GMT+12:00 Wellington, Auckland">Pacific/Auckland</zone> 
+
+</zones>

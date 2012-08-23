@@ -1,10 +1,8 @@
 <?
-// Edited : 07-10-2009
-
-  if(!defined('IS_ADMIN')){die('No Access');} 
+require('./start.php');   
  
 //------------- Orders --------------//
-if($action=="orders" ||  $action=="orders_del"){
+if(!$action ||  $action=="orders_del"){
 
     if_admin("orders");
     
@@ -17,7 +15,7 @@ if($action=="orders_del"){
 
 print "<p align=center class=title>$phrases[the_orders]</p>
 
-<a href='index.php?action=orders_search'><img src='images/search.gif' border=0>&nbsp; $phrases[search]</a><br><br>";
+<a href='orders.php?action=orders_search'><img src='images/search.gif' border=0>&nbsp; $phrases[search]</a><br><br>";
 
 //--------------------------
 $start = intval($start);
@@ -28,16 +26,18 @@ $perpage = $settings['orders_perpage'];
 if($op=="search"){
 $query_string = $_SERVER['QUERY_STRING'];
 $query_string = iif(strchr($query_string,"&start="),$query_string,$query_string."&start=0");
-$page_string = htmlspecialchars("index.php?".substr($query_string,0,strpos($query_string,"&start="))."&start={start}"); 
+$page_string = htmlspecialchars("orders.php?".substr($query_string,0,strpos($query_string,"&start="))."&start={start}"); 
 
  
 
  
  //------------
     
- $sql_where = "where 
-id like '%".iif($order_id,intval($order_id),"")."%' and 
-date like '%".db_escape($order_date)."%' and paid like '%".db_escape($paid)."%'
+ $sql_where = "where id != 0 
+".iif($order_id,"and id = '".intval($order_id)."' ")."
+".iif($order_date_from,"and date >= '".strtotime($order_date_from)."'")."
+".iif($order_date_to,"and date <= '".strtotime($order_date_to)."'")."
+    and paid like '%".db_escape($paid)."%'
 ".iif($status !="all" && isset($status),iif($status," and status='".intval($status)."'",iif($status_text," and status_text like '%".db_escape($status_text)."%'"," and status=0")))."
 ".iif($payment_method_id !="all" && isset($payment_method_id),iif($payment_method_id," and payment_method_id='".intval($payment_method_id)."'",iif($payment_method_name," and payment_method_name like '%".db_escape($payment_method_name)."%'"," and payment_method_id=0")))."
 ".iif($shipping_method_id !="all" && isset($shipping_method_id),iif($shipping_method_id," and shipping_method_id='".intval($shipping_method_id)."'",iif($shipping_method_name," and shipping_method_name like '%".db_escape($shipping_method_name)."%'"," and shipping_method_id=0")))."
@@ -75,7 +75,7 @@ shipping_telephone like '%".db_escape($shipping_telephone)."%'";
     
     
 }else{
-    $page_string = "index.php?action=orders&start={start}";
+    $page_string = "orders.php?action=orders&start={start}";
   $sql_where = "";  
 }
 
@@ -95,14 +95,14 @@ if(db_num($qr)){
    
     print "
     <b> $phrases[the_orders_count] : </b> $orders_count[count]<br><br>
-    <center><table width=99% class=grid>
+    <center><table width=99% class='grid center'>
     <tr>
-    <td><b>$phrases[the_order_number]</b></td>
-    <td><b>$phrases[order_status]</b></td>
-    <td><b>$phrases[order_date]</b></td> 
-    <td><b>$phrases[client_account]</b></td>
-    <td><b>$phrases[billing_name]</b></td>
-    <td><b>$phrases[the_options]</b></td>
+    <th>$phrases[the_order_number]</th>
+    <th>$phrases[order_status]</th>
+    <th>$phrases[order_date]</th> 
+    <th>$phrases[client_account]</th>
+    <th>$phrases[billing_name]</th>
+    <th>$phrases[the_options]</th>
     </tr>
     ";
    
@@ -116,7 +116,7 @@ $tr_class="row_1";
 
 
      $data_user = db_qr_fetch("select id,username from store_clients where id='$data[userid]'");
-     print "<tr class='$tr_class'><td><a href='index.php?action=orders_edit&id=$data[id]'>$data[id]</a></td>
+     print "<tr class='$tr_class'><td><a href='orders.php?action=orders_edit&id=$data[id]'>$data[id]</a></td>
      <td><b>";
     
     if($status_texts[$data['status']]['name']){
@@ -126,10 +126,10 @@ $tr_class="row_1";
  }
  
     print "</b></td>
-     <td>$data[date]</td> 
+     <td>".get_date($data[date])."</td> 
      <td><a href='index.php?action=client_edit&id=$data_user[id]'>$data_user[username]</a></td>
      <td>$data[billing_name]</td>
-     <td><a href='index.php?action=orders_edit&id=$data[id]'>$phrases[edit]</a> - <a href='index.php?action=orders_del&id=$data[id]' onClick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a></td>";
+     <td><a href='orders.php?action=orders_edit&id=$data[id]'>$phrases[edit]</a> - <a href='orders.php?action=orders_del&id=$data[id]' onClick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a></td>";
      
  }
  print "</table></center>";
@@ -153,8 +153,7 @@ print "<p align=center class=title>$phrases[orders_seach]</p>
 
 
   <center>
-  <form action=index.php method=get>
-  <input type=hidden name=action value='orders'>
+  <form action=orders.php method=get>
   <input type=hidden name=op value='search'>
   
  <fieldset>
@@ -284,7 +283,7 @@ if($action=="orders_edit" || $action=="orders_edit_ok" || $action=="orders_item_
       
     $id = intval($id);
     
-print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=orders'>$phrases[the_orders]</a> / <a href='index.php?action=orders_edit&id=$id'>$phrases[order_number_x] $id</a><br><br>";
+print "<img src='images/arrw.gif'>&nbsp;<a href='orders.php'>$phrases[the_orders]</a> / <a href='orders.php?action=orders_edit&id=$id'>$phrases[order_number_x] $id</a><br><br>";
 
 
 //----------------- update order  ---------------------------
@@ -369,6 +368,7 @@ $msg_rplc_arr = array($sitename,$scripturl,$id,$invc_url,"\"".addslashes($old_st
  billing_address2='".db_escape($billing_address2)."',
  billing_telephone='".db_escape($billing_telephone)."',
  billing_country='".db_escape($billing_country)."',billing_city='".db_escape($billing_city)."',
+ shipping_price='".db_escape($shipping_price)."',
  paid='".intval($paid)."',date='".db_escape($date)."',status='".intval($status)."',status_text='".db_escape($status_text)."' where id='$id'");
     
 }
@@ -400,7 +400,7 @@ document.forms['new_item_form'].submit();
 }
 
 </script>
-<form action='index.php' method=post name='new_item_form'>
+<form action='orders.php' method=post name='new_item_form'>
 <input type=hidden name=action value='orders_item_add'>
 <input type=hidden name=id value='$id'>
 
@@ -415,14 +415,14 @@ print "
 <div align='$global_align_x'>
 <table class=grid><tr><td>
 <center>
-<a href='index.php?action=orders_del&id=$id' onClick=\"return confirm('".$phrases['are_you_sure']."');\"><img src='images/del.gif' border=0><br>
+<a href='orders.php?action=orders_del&id=$id' onClick=\"return confirm('".$phrases['are_you_sure']."');\"><img src='images/del.gif' border=0><br>
 $phrases[order_delete]</a>
 </center>
 </td></tr></table>
 </div>
 <br>
 
-<form action='index.php' method=post name=sender>
+<form action='orders.php' method=post name=sender>
  <input type=hidden name=action value=\"orders_edit_ok\">
  <input type=hidden name=id value='$id'>
  
@@ -450,12 +450,12 @@ $tr_color="#F0F0F0";
 print "<tr bgcolor='$tr_color'>
 <td><b>".($i+1)."</b></td>
 <input type=hidden name=\"items[$i][id]\" value=\"$data_items[id]\">
-<td><input type=text name=\"items[$i][name]\" value=\"$data_items[name]\" size=30></td>
+<td><textarea cols=30 rows=5 name=\"items[$i][name]\">$data_items[name]</textarea></td>
 <td><input type=text name=\"items[$i][qty]\" value=\"$data_items[qty]\" size=4></td>
 <td><input type=text name=\"items[$i][price]\" value=\"$data_items[price]\" size=5></td>
 
 <td>$item_price $settings[currency]</td>
-<td width=10><a href='index.php?action=orders_item_del&id=$id&item_id=$data_items[id]' onClick=\"return confirm('".$phrases['are_you_sure']."');\"><img src='images/del.gif' border=0 alt='$phrases[delete]'></a></td>
+<td width=10><a href='orders.php?action=orders_item_del&id=$id&item_id=$data_items[id]' onClick=\"return confirm('".$phrases['are_you_sure']."');\"><img src='images/del.gif' border=0 alt='$phrases[delete]'></a></td>
 </tr>";
  $i++;
  $total_price += $item_price;
@@ -482,7 +482,14 @@ $tr_color="#F0F0F0";
 
  print "<tr><td colspan=5 align=$global_align_x>
  <br>
- <b>$phrases[the_total] :</b> $total_price $settings[currency]
+ 
+    <table>
+        <tr><td><b>Items : </b></td><td>$total_price $settings[currency]</td></tr>
+        <tr><td><b>Shipping : </b></td><td><input type='text' size=4 name='shipping_price' value=\"$data[shipping_price]\"> $settings[currency]</td></tr>
+        <tr><td><b>$phrases[the_total] :</b></td><td>".($total_price + $data['shipping_price'])." $settings[currency] </td></tr>
+    </table>
+         
+        
  </td></tr>
  
 
@@ -525,11 +532,11 @@ $tr_color="#F0F0F0";
  print ">$phrases[other]</option>
  </select>
  <br>
- <input type=text name=payment_method_name size=30 value=\"$data[payment_method_name]\"></td></tr>";
+ <input type=text name='payment_method_name'  id='payment_method_name' size=30 value=\"$data[payment_method_name]\"></td></tr>";
  
   unset($found_st,$datapm,$qrpm);
 
- print "<tr><td><b>$phrases[shipping_method]</b></td><td><select name='shipping_method_id' onChange=\"set_shipping_method_text_display(this.value);\">";
+ print "<tr><td><b>$phrases[shipping_method]</b></td><td><select name='shipping_method_id' id='shipping_method_id' onChange=\"set_shipping_method_text_display(this.value);\">";
  $qrpm=db_query("select id,name from store_shipping_methods where active=1 order by ord");
  while($datapm=db_fetch($qrpm)){
  print "<option value='$datapm[id]'";
@@ -542,12 +549,12 @@ $tr_color="#F0F0F0";
  print ">$phrases[other]</option>
  </select>
  <br>
- <input type=text name=shipping_method_name size=30 value=\"$data[shipping_method_name]\"></td></tr>";
+ <input type=text name='shipping_method_name' id='shipping_method_name' size=30 value=\"$data[shipping_method_name]\"></td></tr>";
  
   unset($found_st,$datapm,$qrpm); 
   
    
- print "<tr><td><b>$phrases[order_status]</b></td><td><select name='status' onChange=\"set_status_text_display(this.value);\">";
+ print "<tr><td><b>$phrases[order_status]</b></td><td><select name='status' id='status' onChange=\"set_status_text_display(this.value);\">";
  $qrst=db_query("select id,name from store_orders_status where active=1 order by ord");
  while($datast=db_fetch($qrst)){
  print "<option value='$datast[id]'";
@@ -561,7 +568,7 @@ $tr_color="#F0F0F0";
  print ">$phrases[other]</option>
  </select>
  <br>
- <input type=text name=status_text size=30 value=\"$data[status_text]\">
+ <input type=text id='status_text' id='status_text' size=30 value=\"$data[status_text]\">
  <input type=checkbox name=status_change_notify value=1 ".iif($settings['default_status_change_notify'],"checked")."> $phrases[notify_client_when_order_status_change]
  </td></tr> 
  <tr><td colspan=2> </td></tr>
@@ -636,3 +643,7 @@ print_admin_table("<center>
         print_admin_table("<center>$phrases[err_wrong_url]</center>");
     }
 }
+
+
+//-----------end ----------------
+ require(ADMIN_DIR.'/end.php');

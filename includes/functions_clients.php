@@ -1,8 +1,5 @@
 <?
 
-// Edited : 06-10-2009
-
-
 function init_members_connector(){
   global $member_table_tofind,$member_table_toreplace,$members_connector,$member_fields_tofind,$member_fields_toreplace,$search_fields,$required_database_fields_names,$required_database_fields_types;     
 if($members_connector['enable']){
@@ -34,10 +31,17 @@ unset($nr);
 
 //----------- check if same connection ---------------
 if($db_host ==$members_connector['db_host'] && $members_connector['db_username'] ==$db_username){
-$members_connector['same_connection'] =1 ;
+$members_connector['same_connection'] =true ;
 }else{
-$members_connector['same_connection'] =0 ;
+$members_connector['same_connection'] =false ;
 }
+//---------- check if same db ----------------------
+if($members_connector['db_name'] == $db_name && $members_connector['same_connection']){
+    $members_connector['same_db'] = true;
+}else{
+   $members_connector['same_db'] = false;   
+}
+
 
 
 
@@ -74,40 +78,33 @@ if($members_connector['time_type']=="timestamp"){
 //--------------- remote db connect ------------------
 function members_remote_db_connect(){
 global $members_connector,$db_host,$db_name,$db_username;
-if($members_connector['enable']){
-if($members_connector['db_name'] != $db_name || $db_host !=$members_connector['db_host'] ||  $members_connector['db_username'] !=$db_username){
+if($members_connector['enable'] && !$members_connector['same_db']){
+
 
 //----- connect -----
-if($db_host !=$members_connector['db_host'] || $members_connector['db_username'] !=$db_username){
-db_connect($members_connector['db_host'],$members_connector['db_username'],$members_connector['db_password'],$members_connector['db_name']);
+if($members_connector['same_connection']){
+db_select($members_connector['db_name'],$members_connector['db_charset']); 
 }else{
-if($members_connector['db_name'] != $db_name){
-mysql_select_db($members_connector['db_name']);
-}
+db_connect($members_connector['db_host'],$members_connector['db_username'],$members_connector['db_password'],$members_connector['db_name'],$members_connector['db_charset']);
 }
 //-------
 
-}
 }
 }
 
 function members_local_db_connect(){
-global $db_name,$members_connector,$db_host,$db_username,$db_password;
+global $db_name,$members_connector,$db_host,$db_username,$db_password,$db_charset;
 
-if($members_connector['enable']){
-if($members_connector['db_name'] != $db_name || $db_host !=$members_connector['db_host'] ||  $members_connector['db_username'] !=$db_username){
+if($members_connector['enable'] && !$members_connector['same_db']){
 
 //----- connect -----
-if($db_host !=$members_connector['db_host'] || $members_connector['db_username'] !=$db_username){
-db_connect($db_host,$db_username,$db_password,$db_name);
+if($members_connector['same_connection']){
+db_select($db_name,$db_charset); 
 }else{
-if($members_connector['db_name'] != $db_name){
-mysql_select_db($db_name);
-}
+db_connect($db_host,$db_username,$db_password,$db_name,$db_charset);
 }
 //-------
 
-}
 }
 
 }
@@ -118,8 +115,8 @@ $member_data = array();
 function check_member_login(){
       global $member_data,$members_connector ;
 
- $member_data['id'] = get_cookie('member_data_id');
- $member_data['password'] = get_cookie('member_data_password');
+ $member_data['id'] = get_session('member_data_id');
+ $member_data['password'] = get_session('member_data_password');
 
    if($member_data['id']){
 

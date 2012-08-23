@@ -36,7 +36,7 @@ $data_cat = db_qr_fetch("select name,id from store_products_cats where id='$data
         <description><![CDATA[<img src=\"$scripturl/".get_image($data['thumb'])."\" width=80 height=80><br>".$data["content"]."\n\n <br><br>
         <b>$phrases[the_price] : <b> $data[price] $settings[currency] ]]></description>"; 
                 print "
-        <link>".htmlentities($scripturl."/".str_replace(array('{cat}','{id}'),array('1',$data['id']),$links['links_product_details']))."</link>
+        <link>".htmlentities($scripturl."/".str_replace(array('{cat}','{id}'),array('1',$data['id']),$links['product_details']))."</link>
         <pubDate>$data[date]</pubDate>
        <category><![CDATA[$data_cat[name]]]></category>
      </item>\n";

@@ -1,16 +1,19 @@
 ﻿/*
-Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
 CKEDITOR.editorConfig = function( config )
 {
 	// Define changes to default configuration here. For example:
-//config.language = 'ar';
+	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
-    
-    
-config.toolbar = 'Full'; 
+
+config.toolbar = 'Full';
+
+config.extraPlugins = 'MediaEmbed';
+
+
 
 config.toolbar_Full =
 [
@@ -22,12 +25,15 @@ config.toolbar_Full =
     
     ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv'],
     ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
-    ['Link','Unlink'],
-    ['Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+    
     '/',
     ['Styles','Format','Font','FontSize'],['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
+    '/',
     ['TextColor','BGColor'], ['BidiLtr', 'BidiRtl'],
-    ['Maximize', 'ShowBlocks']
+    
+    ['Link','Unlink'],
+    ['Image','MediaEmbed','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'],
+    ['Maximize', 'ShowBlocks','About']
 ];
 
 config.toolbar_Basic =
@@ -35,5 +41,5 @@ config.toolbar_Basic =
     ['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink','-','About']
 ];
 
-
+      
 };

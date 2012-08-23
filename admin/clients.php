@@ -532,7 +532,7 @@ if($username && $email && $password){
  values('".db_escape($username)."','".db_escape($email)."','".db_escape($country)."','".connector_get_date("$date_y-$date_m-$date_d",'member_birth_date')."','$usr_group','".connector_get_date(date("Y-m-d H:i:s"),'member_reg_date')."')",MEMBER_SQL);
 
 
- $member_id=mysql_insert_id();
+ $member_id=db_inserted_id();
 
 //------------- Custom Fields  ------------------
    if(is_array($custom) && is_array($custom_id)){
@@ -739,9 +739,9 @@ return false ;
              elseif($data[members_fields_replace('usr_group')]==member_group_replace(2)){$chk2 = "" ; $chk1="";$chk3="selected";}
              elseif($data[members_fields_replace('usr_group')]==member_group_replace(0)){$chk2 = "" ; $chk1="selected";$chk3="";}
 
-            print " <select name=usr_group><option value=0 $chk1>ÛíÑ ãäÔØ</option>
-            <option value=1 $chk2>ãİÚá</option>
-            <option value=2 $chk3>ãÛáŞ</option>
+            print " <select name=usr_group><option value=0 $chk1>ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½</option>
+            <option value=1 $chk2>ï¿½ï¿½ï¿½ï¿½</option>
+            <option value=2 $chk3>ï¿½ï¿½ï¿½ï¿½</option>
             </select>";
             */
             print "</td>     </tr>

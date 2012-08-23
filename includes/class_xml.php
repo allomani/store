@@ -1,10 +1,11 @@
 <?php
 
 
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
 
 // Attempt to load XML extension if we don't have the XML functions
 // already loaded.
+/*
 if (!function_exists('xml_set_element_handler'))
 {
 	$extension_dir = ini_get('extension_dir');
@@ -28,7 +29,7 @@ if ($memory_limit AND ((strpos($memory_limit, 'M') AND intval($memory_limit) <= 
 {
 	@ini_set('memory_limit', 16 * 1024 * 1024);
 }
-
+*/
 /**
 * Standard XML Parsing Object
 *
@@ -325,7 +326,7 @@ class XMLparser
 
 		if (!is_array($find))
 		{
-			$find = array('«![CDATA[', ']]»', "\r\n", "\n");
+			$find = array('ï¿½![CDATA[', ']]ï¿½', "\r\n", "\n");
 			$replace = array('<![CDATA[', ']]>', "\n", "\r\n");
 		}
 
@@ -397,7 +398,7 @@ class XMLexporter
 		// I did not find any character sets which use these characters.
 		$xml = preg_replace('#[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]#', '', $xml);
 
-		return str_replace(array('<![CDATA[', ']]>'), array('«![CDATA[', ']]»'), $xml);
+		return str_replace(array('<![CDATA[', ']]>'), array('ï¿½![CDATA[', ']]ï¿½'), $xml);
 	}
 
 	function output()

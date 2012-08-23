@@ -1,156 +1,154 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 
 <hooks>
 
+
+    <hooktype type="Index">
+
+        <hook>site_before_header</hook>
+
+        <hook>site_after_header</hook>
 	
+        <hook>site_before_footer</hook>
+
+        <hook>site_after_footer</hook>
+
+    </hooktype>
 
 
-<hooktype type="Index">
 
-<hook>site_before_header</hook>
+    <hooktype type="Browse Products">
 
-<hook>site_after_header</hook>
+        <hook>browse_products_start</hook>
 	
-<hook>site_before_footer</hook>
+        <hook>browse_products_after_path_links</hook>
 
-<hook>site_after_footer</hook>
+        <hook>browse_products_before_cats_table</hook>
 
-</hooktype>
+        <hook>browse_products_after_cats_table</hook>
 
+        <hook>browse_products_end</hook>
 
+    </hooktype>
 
-<hooktype type="Browse Products">
+    <hooktype type="Product Details">
 
-<hook>browse_products_start</hook>
+        <hook>product_details_start</hook>
 	
-<hook>browse_products_after_path_links</hook>
+        <hook>product_details_after_path_links</hook>
 
-<hook>browse_products_before_cats_table</hook>
+        <hook>product_details_before_photos_table</hook>
 
-<hook>browse_products_after_cats_table</hook>
+        <hook>product_details_after_photos_table</hook>
 
-<hook>browse_products_end</hook>
+        <hook>product_details_end</hook>
 
-</hooktype>
+    </hooktype>
 
-<hooktype type="Product Details">
+    <hooktype type="Cart">
 
-<hook>product_details_start</hook>
+        <hook>cart_start</hook>
+
+        <hook>cart_end</hook>
+
+    </hooktype>
+
+
+    <hooktype type="Invoice">
+
+        <hook>invoice_start</hook>
 	
-<hook>product_details_after_path_links</hook>
+        <hook>invoice_end</hook>
 
-<hook>product_details_before_photos_table</hook>
-
-<hook>product_details_after_photos_table</hook>
-
-<hook>product_details_end</hook>
-
-</hooktype>
-
-<hooktype type="Cart">
-
-<hook>cart_start</hook>
-
-<hook>cart_end</hook>
-
-</hooktype>
+    </hooktype>
 
 
-<hooktype type="Invoice">
+    <hooktype type="Pages">
 
-<hook>invoice_start</hook>
-	
-<hook>invoice_end</hook>
+        <hook>pages_start</hook>
 
-</hooktype>
+        <hook>pages_before_data_table</hook>
 
+        <hook>pages_before_data_content</hook>
 
-<hooktype type="Pages">
+        <hook>pages_after_data_content</hook>
 
-<hook>pages_start</hook>
+        <hook>pages_after_data_table</hook>
 
-<hook>pages_before_data_table</hook>
+        <hook>pages_end</hook>
 
-<hook>pages_before_data_content</hook>
-
-<hook>pages_after_data_content</hook>
-
-<hook>pages_after_data_table</hook>
-
-<hook>pages_end</hook>
-
-</hooktype>
+    </hooktype>
 
 
 
-<hooktype type="News">
+    <hooktype type="News">
 
-<hook>news_start</hook>
+        <hook>news_start</hook>
 
-<hook>news_inside_start</hook>
+        <hook>news_inside_start</hook>
 
-<hook>news_inside_end</hook>
+        <hook>news_inside_end</hook>
 
-<hook>news_outside_start</hook>
+        <hook>news_outside_start</hook>
 
-<hook>news_outside_after_date</hook>
+        <hook>news_outside_after_date</hook>
 
-<hook>news_outside_before_pages</hook>
+        <hook>news_outside_before_pages</hook>
 
-<hook>news_outside_before_pages</hook>
+        <hook>news_outside_before_pages</hook>
 
-<hook>news_outside_end</hook>
+        <hook>news_outside_end</hook>
 
-<hook>news_end</hook>
+        <hook>news_end</hook>
 
-</hooktype>
-
-
-
-<hooktype type="Contact Us">
-
-<hook>contactus_start</hook>
-
-<hook>contactus_end</hook>
-
-</hooktype>
+    </hooktype>
 
 
 
-<hooktype type="Search">
+    <hooktype type="Contact Us">
+
+        <hook>contactus_start</hook>
+
+        <hook>contactus_end</hook>
+
+    </hooktype>
+
+
+
+    <hooktype type="Search">
 			
-<hook>search_start</hook>
+        <hook>search_start</hook>
 		
-<hook>search_end</hook>
+        <hook>search_end</hook>
 	
-</hooktype>
+    </hooktype>
 
 
 
 
 
 
-<hooktype type="Votes">
+    <hooktype type="Votes">
 			
-<hook>votes_start</hook>
+        <hook>votes_start</hook>
 	
-<hook>votes_end</hook>
+        <hook>votes_end</hook>
 	
-</hooktype>
+    </hooktype>
 
 
 
-<hooktype type="Register">
+    <hooktype type="Register">
 
-<hook>register_start</hook>
+        <hook>register_start</hook>
 				
-<hook>register_before_fields</hook>
+        <hook>register_before_fields</hook>
 	
-<hook>register_after_fields</hook>
+        <hook>register_after_fields</hook>
 	
-<hook>register_end</hook>
-</hooktype>
+        <hook>register_end</hook>
+    </hooktype>
 
 
 

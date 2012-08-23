@@ -7,103 +7,49 @@ $is_admin =1 ;
 include_once(CWD . "/global.php") ;
 header("Content-Type: text/html;charset=$settings[site_pages_encoding]");
 
-if(!check_login_cookies()){die("<center> $phrases[access_denied] </center>");}  
+if(!check_admin_login()){die("<center> $phrases[access_denied] </center>");}  
 
-
+    
 //----- Set Blocks Sort ---------//
 if($action=="set_blocks_sort"){
- //   file_put_contents("x.txt","d".$data[0]); 
  if_admin();
-if(is_array($blocks_list_r)){
-$sort_list = $blocks_list_r ;
-$pos="r";
-}elseif(is_array($blocks_list_c)){
-$sort_list = $blocks_list_c ;
-$pos="c";
-}else{
-$sort_list = $blocks_list_l ;
-$pos="l";
-}
- 
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-    db_query("UPDATE store_blocks SET ord = '$i',pos='$pos' WHERE `id` = $sort_list[$i]");
- }
-}
+
+ $blocks = (array) $blocks;
+ foreach($blocks as $pos=>$val_txt){
+    $vals = array();
+     parse_str($val_txt, $vals);
+     
+     foreach($vals['item'] as $ord=>$id){
+          db_query("update store_blocks set ord = '".intval($ord)."',pos='".db_escape($pos)."' WHERE `id` = ".intval($id));
+         }
+     }
+     
  }
  
- //------------ Set Banners Sort ---------------
-if($action=="set_banners_sort"){
-    if_admin("adv");
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-    db_query("UPDATE store_banners SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
-
-
  
- 
- //--------- Hot items Sort ------------
-if($action=="set_hot_items_sort"){
-   if_admin("hot_items");
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_hot_items SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
+ //-------- Set sort ------------//
+ if($action == "set_sort"){
+     
+   parse_str($_POST['list'], $vals);
+   $vals['item'] = (array) $vals['item'];
 
+    switch($op){
+        case "products_cats" : if_products_cat_admin($vals['item']); $sort_table = 'store_products_cats';break;
+        case "banners" :  if_admin("banners"); $sort_table = 'store_banners';break;
+        case "hot_items" :  if_admin("hot_items"); $sort_table = 'store_hot_items';break;
+         case "store_fields" :  if_admin("store_fields"); $sort_table = 'store_fields_sets';break;
+         case "store_fields_options" :  if_admin("store_fields"); $sort_table = 'store_fields_options';break;
+          case "payment_gateways" :  if_admin(); $sort_table = 'store_payment_gateways';break;
+        default: die();break;
+    }
+      
+     foreach($vals['item'] as $ord=>$id){
+         db_query("update $sort_table set ord = '".intval($ord)."' where id='".intval($id)."'");
+       
+         }
+         
+     }
 
-
- //--------- Products Cats  Sort ------------
-if($action=="set_products_cats_sort"){
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) { 
- if_products_cat_admin($sort_list[$i]);  
- 
-    db_query("UPDATE store_products_cats SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
- //--------- Store Fields  Sort ------------
-if($action=="set_store_fields_sort"){
-    if_admin("store_fields");  
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_fields_sets SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
-
- //---------Store Fields Options Sort ------------
-if($action=="set_store_fields_options_sort"){
-    if_admin("store_fields"); 
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_fields_options SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
-
- //--------- Payments gateways  Sort ------------
-if($action=="set_payment_gateways_sort"){
-    if_admin();  
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_payment_gateways SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
- 
  
  //--------- Payments Methods  Sort ------------
 if($action=="set_payment_methods_sort"){
@@ -138,6 +84,17 @@ if(is_array($sort_list)){
  for ($i = 0; $i < count($sort_list); $i++) {  
    
     db_query("UPDATE store_shipping_methods SET ord = '$i' WHERE `id` = $sort_list[$i]");
+ }
+}
+}
+
+ //---------Product Photos  Sort ------------
+if($action=="set_product_photos_sort"){ 
+    
+if(is_array($sort_list)){
+ for ($i = 0; $i < count($sort_list); $i++) {  
+   
+    db_query("UPDATE store_products_photos SET ord = '$i' WHERE `id` = $sort_list[$i]");
  }
 }
 }

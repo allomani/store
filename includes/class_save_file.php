@@ -14,7 +14,7 @@ class save_file {
   $this->status = false;
   
      if(!file_exists($save_path)){
-     $this->last_error_description = iif($phrases['err_wrong_uploader_folder'],$phrases['err_wrong_uploader_folder'],"Invalid Uplaod Folder") ;   
+     $this->last_error_description = $phrases['err_wrong_uploader_folder'] ;    
      $this->status=false;    
      }else{
     
@@ -48,13 +48,13 @@ class save_file {
 
    curl_close($ch);
    }else{
-   $this->last_error_description =  str_replace("{url}",$filename,iif($phrases['err_url_x_invalid'],$phrases['err_url_x_invalid'],"URL {url} is Invalid"));
+   $this->last_error_description =  str_replace("{url}",$filename,$phrases['err_url_x_invalid']);
               $this->status=false;    
    }
 } else {
   //----------- using fopen ----------//
    if (ini_get('allow_url_fopen') == 0){
- $this->last_error_description =  iif($phrases['cp_url_fopen_disabled_msg'],$phrases['cp_url_fopen_disabled_msg'],"url fopen is disabled") ;     
+ $this->last_error_description = $phrases['cp_url_fopen_disabled_msg'] ;    
  $this->status=false;
     }else{
     /* if ($filesize = fetch_remote_filesize($filename))
@@ -63,7 +63,7 @@ class save_file {
                @ini_set('user_agent', 'PHP');
                     if (!($handle = @fopen($filename, 'rb')))
                     {
-                    $this->last_error_description =  str_replace("{url}",$filename,iif($phrases['err_url_x_invalid'],$phrases['err_url_x_invalid'],"URL {url} is Invalid"));
+                    $this->last_error_description =  str_replace("{url}",$filename,$phrases['err_url_x_invalid']);
               $this->status=false;
                     }else{
                     while (!feof($handle))
@@ -89,7 +89,7 @@ if($fp){
   $this->saved_filename = $save_path."/".$save_name ;  
      $this->status=true;
 }else{
- $this->last_error_description = iif($phrases['err_wrong_uploader_folder'],$phrases['err_wrong_uploader_folder'],"Invalid Uplaod Folder or none Writable") ;  
+ $this->last_error_description = $phrases['err_wrong_uploader_folder'] ;    
  $this->status=false;
 }
 }else{

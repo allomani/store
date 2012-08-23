@@ -1,8 +1,8 @@
 <?
- if(!defined('IS_ADMIN')){die('No Access');} 
+require('./start.php');  
  
 //----------- Orders Statuss --------
-if($action=="orders_status" || $action=="orders_status_edit_ok" || $action=="orders_status_del" || 
+if(!$action || $action=="orders_status" || $action=="orders_status_edit_ok" || $action=="orders_status_del" || 
 $action=="orders_status_add_ok" || $action=="orders_status_enable" || $action=="orders_status_disable" ||
 $action=="orders_status_set_default" || $action=="orders_status_set_default_if_shipping"){
 $id = intval($id);
@@ -14,11 +14,11 @@ if($action=="orders_status_set_default"){
 db_query("update store_orders_status set `default`=1 where id='$id'");
 db_query("update store_orders_status set `default`=0 where id !='$id'");  
 }
-//----- set default if shipping ---//
+/*//----- set default if shipping ---//
 if($action=="orders_status_set_default_if_shipping"){
 db_query("update store_orders_status set `default_if_shipping`=1 where id='$id'"); 
 db_query("update store_orders_status set `default_if_shipping`=0 where id !='$id'");  
-}
+}  */
 
 //------ enable ----
 if($action=="orders_status_enable"){
@@ -57,7 +57,7 @@ if($action=="orders_status_add_ok"){
     print "<p align=center class=title>$pherases[orders_status]</p>";
 $qr = db_query("select * from store_orders_status order by ord asc");
 
-print "<img src='images/add.gif'>&nbsp;<a href='index.php?action=orders_status_add'>$phrases[add_button]</a><br><br>";  
+print "<img src='images/add.gif'>&nbsp;<a href='orders_status.php?action=orders_status_add'>$phrases[add_button]</a><br><br>";  
 
 if(db_num($qr)){
 print "<center><table width=100% class=grid>
@@ -69,17 +69,17 @@ print "<center><table width=100% class=grid>
      </span> 
       </td>
     <td width=20%><b>$phrases[the_name]</b></td>
-    
-    <td width=160 align=center><b>$phrases[default]</b><br><font color=#ACACAC size=1> $phrases[in_orders_without_shipping]</font></td>
-     <td width=160 align=center><b>$phrases[default]</b><br><font color=#ACACAC size=1> $phrases[in_orders_with_shipping] </font></td>
-   
-   
-    <td align=center><b>$phrases[the_options]</b></td></tr>
+    <td width=160 align=center><b>$phrases[default]</b><br><font color=#ACACAC size=1> $phrases[in_orders_without_shipping]</font></td>";
+// <td width=160 align=center><b>$phrases[default]</b><br><font color=#ACACAC size=1> $phrases[in_orders_with_shipping] </font></td>
+print "<td align=center><b>$phrases[the_options]</b></td></tr>
     </table></div>
     
 <div id=\"orders_status_data_list\">";
 while($data = db_fetch($qr)){
-    print "<div id=\"item_$data[id]\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\" onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
+
+    if($row_class == 'row_1'){$row_class = 'row_2';}else{  $row_class = 'row_1';}
+
+    print "<div id=\"item_$data[id]\" class='$row_class'>
 <table width=100%>
 <tr>
 <td width=25>
@@ -87,14 +87,14 @@ while($data = db_fetch($qr)){
       </td>
     <td width=20%><b>".iif($data['text_color'],"<font color=\"$data[text_color]\">$data[name]</font>",$data['name'])."</b></td>
     
-    <td width=160 align=center>".iif($data['default'],"<b>$phrases[default]</b>","<a href='index.php?action=orders_status_set_default&id=$data[id]'>$phrases[set_default]</a>")."</td>
-     <td width=160 align=center>".iif($data['default_if_shipping'],"<b>$phrases[default]</b>","<a href='index.php?action=orders_status_set_default_if_shipping&id=$data[id]'>$phrases[set_default]</a>")."</td>
+    <td width=160 align=center>".iif($data['default'],"<b>$phrases[default]</b>","<a href='orders_status.php?action=orders_status_set_default&id=$data[id]'>$phrases[set_default]</a>")."</td>";
+ //    <td width=160 align=center>".iif($data['default_if_shipping'],"<b>$phrases[default]</b>","<a href='orders_status.php?action=orders_status_set_default_if_shipping&id=$data[id]'>$phrases[set_default]</a>")."</td>
    
    
-    <td align=center>".iif($data['active'],"<a href='index.php?action=orders_status_disable&id=$data[id]'>$phrases[disable]</a>",
-    "<a href='index.php?action=orders_status_enable&id=$data[id]'>$phrases[enable]</a>")." - 
-    <a href=\"index.php?action=orders_status_edit&id=$data[id]\">$phrases[edit]</a> - 
-    <a href='index.php?action=orders_status_del&id=$data[id]' onClick=\"return confirm('".$phrases['are_you_sure']."');\">$phrases[delete]</a></td></tr>
+print "  <td align=center>".iif($data['active'],"<a href='orders_status.php?action=orders_status_disable&id=$data[id]'>$phrases[disable]</a>",
+    "<a href='orders_status.php?action=orders_status_enable&id=$data[id]'>$phrases[enable]</a>")." - 
+    <a href=\"orders_status.php?action=orders_status_edit&id=$data[id]\">$phrases[edit]</a> - 
+    <a href='orders_status.php?action=orders_status_del&id=$data[id]' onClick=\"return confirm('".$phrases['are_you_sure']."');\">$phrases[delete]</a></td></tr>
     </table></div>";
 }                         
 print "</div></td></tr></table></center>";
@@ -119,9 +119,9 @@ $qr = db_query("select * from store_orders_status where id='$id'");
 if(db_num($qr)){
 $data = db_fetch($qr);
 
-print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=orders_status'>$phrases[orders_status]</a> / $data[name] <br><br>  
+print "<img src='images/arrw.gif'>&nbsp;<a href='orders_status.php?action=orders_status'>$phrases[orders_status]</a> / $data[name] <br><br>  
 
-<form action=index.php method=post>
+<form action='orders_status.php' method=post>
 <input type=hidden name=action value='orders_status_edit_ok'>
 <input type=hidden name=id value='$id'>
 
@@ -148,9 +148,9 @@ if($action=="orders_status_add"){
 
     if_admin('orders_status');
     
-print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=orders_status'>$phrases[orders_status]</a> / $phrases[add] <br><br>  
+print "<img src='images/arrw.gif'>&nbsp;<a href='orders_status.php?action=orders_status'>$phrases[orders_status]</a> / $phrases[add] <br><br>  
 
-<form action=index.php method=post>
+<form action='orders_status.php' method=post>
 <input type=hidden name=action value='orders_status_add_ok'>
 
 
@@ -169,3 +169,6 @@ print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=orders_status'
 ";
   
 }
+
+//-----------end ----------------
+ require(ADMIN_DIR.'/end.php');
