@@ -370,4 +370,146 @@ $score = (int) $score;
    
 }
 
+
+
+
+//---------------------  Comments ---------------------------
+
+if($action=="comments_add"){
+if(check_member_login()){
+
+if(in_array($type,$comments_types)){
+    
+$content = trim($content);
+
+if($content){  
+
+db_query("insert into store_comments (uid,fid,comment_type,content,time,active) values ('".intval($member_data['id'])."','".intval($id)."','".db_escape($type)."','".db_escape($content)."','".time()."','".iif($settings['comments_auto_activate'],1,0)."')");
+
+   $new_id = mysql_insert_id();
+   
+if($settings['comments_auto_activate']){
+  //  print $content;   
+  $data_member = db_qr_fetch("select ".members_fields_replace('id')." as uid,".members_fields_replace('username')." as username from ".members_table_replace('store_clients')." where ".members_fields_replace('id')."='".intval($member_data['id'])."'",MEMBER_SQL);
+   
+  $data = $data_member;
+  $data['id'] = $new_id;
+  $data['time'] = time()-1;
+  $data['content'] = htmlspecialchars($content);
+  
+  
+  $rcontent =  get_comment($data);   
+   
+       print json_encode(array("status"=>1,"content"=>$rcontent));
+}else{
+     print json_encode(array("status"=>1,"content"=>"","msg"=>"$phrases[comment_is_waiting_admin_review]")); 
+}
+
+
+}else{
+    print json_encode(array("status"=>0,"msg"=>"$phrases[err_empty_comment]"));
+}
+}else{
+      print json_encode(array("status"=>0,"msg"=>"$phrases[err_wrong_url]")); 
+}
+        
+}else{
+  print json_encode(array("status"=>0,"msg"=>"$phrases[please_login_first]"));
+    
+}
+
+ 
+}
+
+//--------------------------
+if($action=="comments_delete"){
+    
+check_member_login();
+db_query("delete from store_comments where id='".intval($id)."'".iif(!check_admin_login()," and uid='".$member_data['id']."'"));    
+    
+}
+
+//------------------------------
+
+
+if($action=="comments_get"){
+
+      $offset = (int) $offset;
+      if(!$offset){$offset=1;}
+      $perpage =  intval($settings['commets_per_request']);
+      if(!$perpage){$perpage=10;}
+      $start = (($offset-1) * $perpage) ;
+      
+ 
+  $check_admin_login = check_admin_login();
+  $check_member_login =  check_member_login();
+   
+  $members_cache = array();
+   
+
+$qr = db_query("select * from store_comments where fid='".db_escape($id)."' and comment_type like '".db_escape($type)."' and active=1 order by id desc limit $start,$perpage");
+    
+if(db_num($qr)){
+   if($offset = 1){
+  print "<div id='no_comments'></div>";
+   }
+  
+ 
+   
+    $c=0;
+    while($data=db_fetch($qr)){                                                                    
+        $data_arr[$c] = $data;
+    
+    if($members_cache[$data['uid']]['username']){
+    $udata = $members_cache[$data['uid']];
+    }else{
+    $udata = db_qr_fetch("select ".members_fields_replace('username')." as username from ".members_table_replace('store_clients')." where ".members_fields_replace('id')."='$data[uid]'",MEMBER_SQL);
+    $members_cache[$data['uid']] =  $udata ;
+    }                                             
+    
+    $data_arr[$c]['username'] = $udata['username'];
+  
+    
+    
+    $c++;
+    }
+    
+   
+    
+    //--- first row id ----
+    $first_index = count($data_arr)-1;
+     $data_first_row = db_qr_fetch("select id from store_comments where fid='".db_escape($id)."' and comment_type like '".db_escape($type)."' and active=1 order by id limit 1");
+     if($data_arr[$first_index]['id'] != $data_first_row['id']){
+          print " <div id='comments_older_div' class='older_comments_div'><a href='javascript:;' onClick=\"comments_get('".$type."','".$id."');\"><img src=\"$style[images]/older_comments.gif\">&nbsp; $phrases[older_comments]</a></div> ";
+     }                                                        
+    //---------------------
+    
+    
+    
+    unset($data);
+    for($i=count($data_arr)-1;$i>=0;$i--){
+           //    print $i;
+        $data= $data_arr[$i];
+        
+    if($tr_class=="row_2"){
+        $tr_class="row_1";
+    }else{
+        $tr_class="row_2";
+    }
+           
+    print get_comment($data);
+    }
+   
+    
+}else{
+    if($offset == 1){ 
+    print "<div id='no_comments'>$phrases[no_comments]</div>";
+    }
+}
+
+
+ 
+}
+
+
 ?>

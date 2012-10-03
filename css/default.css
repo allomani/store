@@ -195,19 +195,25 @@ margin: 3px;
 display: inline-block;
 }
 
+
+.loading {
+    width:16px;
+    height:16px;
+    background-image: url('../images/loading.gif'); 
+}
 /*---------- TITLES FONT --------------*/
 .title {
-	FONT-SIZE: 10pt; BACKGROUND: ; COLOR: #458A00; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; font-weight:bold
+	FONT-SIZE: 10pt;COLOR: #458A00; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; font-weight:bold
 }
 
 /*---------- Price and Weight FONT --------------*/
 .price {
-	FONT-SIZE: 10pt; BACKGROUND: ; COLOR: #8bc41d; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; }
+	FONT-SIZE: 10pt;  COLOR: #8bc41d; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; }
 .price_small {
 	COLOR: #8bc41d; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; }
 
 .weight {
-	FONT-SIZE: 9pt; BACKGROUND: ; COLOR: #a95f26; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; }
+	FONT-SIZE: 9pt; COLOR: #a95f26; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; }
 
 .weight_small {
 	 COLOR: #a95f26; FONT-FAMILY: Tahoma; TEXT-DECORATION: none; }
@@ -696,3 +702,44 @@ align:center;
 .pagenavi span.current {
 	font-weight: bold;
 }
+
+
+/* ----- News ------ */
+
+.news_content {
+    
+}
+
+.news_img {
+    float:left;
+    text-align:center;
+    color:#808080;
+}
+
+.news_options {
+    float:left;
+    margin:10px;
+}
+
+
+/* ---- Comments box ---- */
+
+form[name="send_comment"] #content_mask {
+    color: #ACACAC;
+}
+
+form[name="send_comment"] #comment_controls {
+  width:263px;
+}
+
+form[name="send_comment"] #remaining_letters_div {
+    float:right;
+  
+}
+
+form[name="send_comment"] #comment_add_button {
+    float:left;
+    width:60px;
+    margin:2px;
+}
+

@@ -64,159 +64,7 @@
     }
 
 
-    //------------------------------------- Messages ---------------------------------------
-    if($action=="msgs" || $action=="msg_del"){
-        if(check_member_login()){ 
-            if($action == "msg_del"){
-                db_query("delete from store_clients_msgs where id='$id' and user='$member_data[id]'");
-            }
-
-            open_table($phrases['the_messages']);
-            $qr = db_query("select * from store_clients_msgs where user='$member_data[id]' order by id DESC");
-            $msgs_count = db_num($qr);
-            print "<table width=100%><tr><td align=right><a href='index.php?action=msg_snd'>
-            <img src='$style[images]/mail_send.gif' alt=' $phrases[send_new_msg]' border=0> &nbsp; $phrases[send_new_msg]</a></td><td align=left>$msgs_count / $settings[msgs_count_limit] $phrases[used_messages]</td></tr>";
-
-            if($msgs_count >= $settings['msgs_count_limit']){
-                print "<tr><td colspan=2 align=center><b><font color=#FF0000> $phrases[pm_box_full_warning] </font></b></td></tr>";
-            }
-
-            if(db_num($qr)){
-                print "<tr><td width=33%><b>$phrases[the_sender]</b></td><td width=33% align=center><b>$phrases[the_subject]</b></td><td width=33% align=center><b>$phrases[the_date]</b></td><td><b>  $phrases[the_options] </b></td></tr>";
-                while($data = db_fetch($qr)){
-
-                    if($tr_class == "row_1"){
-                        $tr_class = "row_2"; 
-                    }else{
-                        $tr_class = "row_1"; 
-                    }
-
-
-                    print "<tr class='$tr_class'><td height=30><a href='index.php?action=msg_view&id=$data[id]'>
-                    $data[sender]</a></td>
-                    <td align=center><a href='index.php?action=msg_view&id=$data[id]'>".htmlspecialchars($data['title']).iif(!$data['opened'],"&nbsp;<font color=red><b>$phrases[new]<b></font>")."</a></td>
-                    <td align=center> $data[date]</td>
-                    <td align=center><a href='index.php?action=msg_del&id=$data[id]' onclick=\"return confirm('".$phrases['are_you_sure']."')\" >$phrases[delete]</a></td></tr>";
-                }
-            }else{
-                print "<tr><td colspan=2 align=center>  $phrases[no_messages] </td></tr>" ;
-            }
-            print "</table>";
-            close_table();
-        }else{
-            login_redirect();
-        }
-    }
-    //-------------- view ----------------
-    if($action=="msg_view"){
-        if(check_member_login()){ 
-            $qr = db_query("select * from store_clients_msgs where id='$id' and user='$member_data[id]'");
-            open_table();
-            if(db_num($qr)){
-                $data = db_fetch($qr);
-                db_query("update store_clients_msgs set opened=1 where id='$id'");
-
-                print "<table width=100%>
-                <tr><td width=7%><b>  $phrases[the_sender] : </b></td><td>$data[sender]</td></tr>
-                <tr><td><b> $phrases[the_date] : </b></td><td>$data[date]</td></tr>
-                <tr><td><b> $phrases[the_subject] :</b> </td><td>".htmlspecialchars($data['title'])."</td></tr>
-                <tr><td colspan=2 height=25 align=center>
-
-                <table width=300><tr><td align=center>
-                <a href='index.php?action=msg_reply&msg_id=$data[id]'><img title='$phrases[reply]' src='$style[images]/mail_reply.gif' border=0><br>$phrases[reply]</a> 
-                </td>
-                <td align=center>
-                <a href='index.php?action=msg_snd'><img src='$style[images]/mail_send.gif' title='$phrases[send_new_msg]' border=0><br>$phrases[send_new_msg]</a> 
-                </td>
-                <td align=center>
-                <a href=\"index.php?action=msg_del&id=$data[id]\" onclick=\"return confirm('$phrases[are_you_sure]');\"><img src='$style[images]/mail_delete.gif' title='$phrases[delete]' border=0><br>$phrases[delete]</a>
-                </td></tr></table>
-
-                </td></tr>
-                <tr><td colspan=2 align=center>
-                <table width=96%><tr><td class='messages'>
-                ".nl2br(htmlspecialchars($data['content']))."
-                </td></tr></table>
-                </td></tr></table>";
-            }else{
-
-                print "<center> $phrases[err_wrong_url] </center>";
-
-            }
-            close_table();
-        }else{
-            login_redirect();
-        }
-    }
-    //-------------- snd ------------------
-    if($action=="msg_snd" || $action=="msg_reply"){
-        if(check_member_login()){ 
-            open_table();
-            if($msg_snd_ok){
-                $qr = db_query("select ".members_fields_replace("id")." from ".members_table_replace("store_clients")." where ".members_fields_replace("username")."='".db_escape($to_username)."'");
-                if(db_num($qr)){
-                    $data=db_fetch($qr);
-
-                    $data_count = db_qr_fetch("select count(id) as count from store_clients_msgs where user='$data[id]'");
-                    $msgs_count = $data_count['count'];
-                    if($msgs_count >= $settings['msgs_count_limit']){
-                        print "<center>  $phrases[err_sendto_pm_box_full] </center>";
-
-                    }else{
-
-                        db_query("insert into store_clients_msgs (user,sender,title,content,date) values('$data[id]','".db_escape($member_data['username'])."','".db_escape($to_subject)."','".db_escape($to_msg)."',now())");
-                        print "<center>  $phrases[pm_sent_successfully] </center>";
-                    }
-                }else{
-                    print "<center>  $phrases[err_sendto_username_invalid]  </center>";
-                }
-            }else{
-
-                if($action=="msg_reply"){
-                    $msg_id = (int)$msg_id;
-                    $id = (int) $id;
-
-
-                    $data = db_qr_fetch("select * from store_clients_msgs where id='$msg_id'");
-
-                    $recevie_user = $data['sender'];
-                    $to_subject = " $phrases[reply] : " .$data['title'];
-                    $to_msg = "\n\n -------------------------- \n $data[date] \n\n $data[content]";
-                }else{
-
-
-                    if($id){
-                        $from_data = db_qr_fetch("select ".members_fields_replace("username")." from ".members_table_replace("store_clients")." where ".members_fields_replace("id")."='$id'");
-                        $recevie_user = $from_data['username']  ;
-                    }else{
-                        $recevie_user = "";
-                        $to_subject = "";
-                        $to_msg = ""; 
-                    }
-
-                }
-
-
-
-
-                print "<form action=index.php method=post>
-                <input type=hidden name=msg_snd_ok value=1>
-                <input type=hidden name=action value='msg_snd'>
-                <table width=100%>
-                <tr><td width=100> $phrases[username] : </td><td><input type=text name='to_username' value='$recevie_user' size=25></td></tr>
-                <tr><td> $phrases[the_subject] : </td><td><input type=text size=25 name=to_subject value='$to_subject'></td></tr>
-                <tr><td> $phrases[the_message] : </td><td>
-                <textarea name='to_msg' cols=40 rows=10>$to_msg</textarea>
-
-                </td></tr>
-                <tr><td colspan=2 align=center><input type=submit value=' $phrases[send] '></td></tr>
-                </table></form>";
-            }
-            close_table();
-        }else{
-            login_redirect();
-        }
-    }
+   
     //------------------- Profile -------------------------------
     if($action=="profile" || $action=="profile_edit"){
         if(check_member_login()){ 
@@ -403,7 +251,12 @@
             }
 
             print "</table>
-            </fieldset>";
+            </fieldset><br>
+            
+        
+           <fieldset style=\"padding: 2\">
+           <input type='checkbox' name='pm_email_notify' value='1' ".iif($data['pm_email_notify'],"checked")."> $phrases[new_pm_email_notify] <br>
+           </fieldset>    <br>";
 
 
             print "<br><fieldset style=\"padding: 2\"><table width=100%>

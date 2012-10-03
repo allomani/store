@@ -68,6 +68,11 @@ $admin_menu_content .= "<tr><td width=24><img src='images/news.gif' width=24></t
 if(if_admin("",true)){
 $admin_menu_content .= "<tr><td width=24><img src='images/pages.gif' width=24></td><td class=row_2><a href='pages.php'> $phrases[the_pages] </a></td></tr>";
 }
+
+if(if_admin("comments",true)){
+$admin_menu_content .= "<tr><td width=24><img src='images/comments.gif' width=24></td><td class=row_1><a href='comments.php'> $phrases[the_comments]</a></td></tr>\n";
+}
+
 //--------------------
 if($admin_menu_content){
 print "<br>

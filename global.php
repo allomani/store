@@ -143,7 +143,8 @@ while ($data = db_fetch($qr)) {
 
     $phrases["$data[name]"] = $data['value'];
 }
-//------------------------------       
+//------------------------------  
+       
 //-------- fields in short details count ----//
 $data = db_qr_fetch("select count(*) as count from store_fields_sets where in_short_details=1 and active=1");
 $short_details_fields_count = intval($data['count']);
@@ -171,6 +172,7 @@ $permissions_checks = array(
     "$phrases[the_banners]" => 'adv',
     "$phrases[the_votes]" => 'votes',
     "$phrases[the_clients]" => 'clients',
+    "$phrases[the_comments]" => 'comments',
     "$phrases[the_orders]" => 'orders',
     "$phrases[orders_status]" => 'orders_status'
 );
@@ -193,6 +195,12 @@ $orderby_checks = array(
     "$phrases[availability]" => 'available'
 );
 
+//---- comments --------
+$comments_types_phrases = array(
+"product"=>"$phrases[the_products]",
+"news"=>"$phrases[the_news]");
+
+$comments_types = array_keys($comments_types_phrases);
 
 $rating_types = array('news');
 
@@ -273,6 +281,9 @@ require(CWD . "/includes/functions_clients.php");
 init_members_connector();
 
 require(CWD . '/includes/class_tabs.php');
+
+require(CWD . '/includes/functions_comments.php') ; 
+
 
 function if_admin($dep = "", $continue = 0) {
     global $user_info, $phrases;

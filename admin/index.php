@@ -66,6 +66,15 @@ print "<center><table width=50% class=grid><tr><td align=center><b>$phrases[welc
    
    print "</td></tr></table>";
 
+   
+      if(if_admin("comments",true)){   
+  print "<br>";  
+ $comments_cnt = db_qr_fetch("select count(*) as count from store_comments where active=0");  
+ print_admin_table("$phrases[comments_waiting_admin_review] : <a href='comments.php'>$comments_cnt[count]</a>");
+    }
+ 
+    
+    
 
   print "<br><center><table width=50% class=grid><td align=center>
   <p><b> $phrases[cp_addons] </b></p>";

@@ -21,30 +21,30 @@ function add2fav(id)
 }
 
 
-function CheckAll(form_id)
-{
+function CheckAll(form_name){
 
-    count = document.getElementById(form_id).elements.length;
-    for (i=0; i < count; i++) 
-    {
-        if((document.getElementById(form_id).elements[i].checked == 1) ||(document.getElementById(form_id).elements[i].checked == 0))
-        {
-            document.getElementById(form_id).elements[i].checked = 1;
-        }
-  
+    
+    if(form_name){
+        $('form[name="'+form_name+'"] INPUT[type=checkbox]').attr('checked', true);
+    }else{
+        $('form INPUT[type=checkbox]').attr('checked', true);
     }
 }
-function UncheckAll(form_id){
-    count = document.getElementById(form_id).elements.length;
-    for (i=0; i < count; i++) 
-    {
-        if((document.getElementById(form_id).elements[i].checked == 1) || (document.getElementById(form_id).elements[i].checked == 0))
-        {
-            document.getElementById(form_id).elements[i].checked = 0;
-        }
+function UncheckAll(form_name){
 
+    /*  if(form_name===undefined){
+        var form_name = 'submit_form';
+    } */
+
+    if(form_name){
+        $('form[name="'+form_name+'"] INPUT[type=checkbox]').attr('checked', false);
+    }else{
+        $('form INPUT[type=checkbox]').attr('checked', false);
     }
+           
 }
+
+
 
 function enlarge_pic(sPicURL,title) { 
     msgwindow=window.open("enlarge_pic.php?url="+sPicURL+"&title="+title, "","resizable=1,scrollbars=1,HEIGHT=10,WIDTH=10"); 
@@ -275,4 +275,113 @@ function rating_send(type,id,score){
 
     }); 
  
+}
+
+
+//---------- Comments Functions -------------------------------
+
+function comments_add(type,id){
+    $('#comment_add_button').attr('disabled','disabled');
+    $('#comment_content').attr('disabled','disabled');
+
+    $.post("ajax.php",
+    {
+        action:'comments_add',
+        type: type,
+        id: id,
+        content: $('#comment_content').val()
+        },
+    function(data){
+        $('#comment_add_button').removeAttr('disabled');
+        $('#comment_content').removeAttr('disabled');
+
+        if(data.status == 1){
+            $('#comment_content').val(''); 
+            $('#comment_content').focus();
+            $('#no_comments').css('display','none');
+
+            if(data.content == ""){
+                //$('comment_status').innerHTML = json.msg;
+                alert(data.msg); 
+            }else{
+                $('#comments_div').append(data.content);
+            }
+        }else{
+            alert(data.msg);
+        //$('comment_status').innerHTML = json.msg;
+        }
+    },'json');
+    
+}
+
+
+function comments_delete(id){
+
+    $.post("ajax.php",{
+        action:'comments_delete', 
+        id: id
+    },function(){
+        $('#comment_'+id).css('display','none');    
+    });
+
+}
+    
+var comments_offset = 1;
+
+function comments_get(type,id){
+    $('#comments_loading_div').css('display',''); 
+    $('#comments_older_div').css('display','none');    
+
+    $.post("ajax.php",{
+        action:'comments_get',
+        type: type,
+        id: id,
+        offset: comments_offset
+    },function(data){
+    
+        $('#comments_div').append(data); 
+   $('#comments_loading_div').css('display','none'); 
+        comments_offset++;  
+ 
+    });
+}
+
+
+function comments_init(){
+
+    $('#content_mask').focus(function(){
+        $('#comment_controls').css('display',''); 
+        $('#content_mask').css('display',"none"); 
+        $('#comment_content').css('display','');   
+        $('#comment_content').focus();
+    });
+
+    $('#comment_content').blur(function(){
+        if($('#comment_content').val().length == 0){
+            $('#comment_controls').css('display',"none"); 
+            $('#content_mask').css('display',''); 
+            $('#comment_content').css('display',"none"); 
+        }
+    });
+    
+  
+    $('#comment_content').keydown(function(){
+        comments_remaining_letters();
+    });
+    $('#comment_content').keyup(function(){
+        comments_remaining_letters();
+    });
+}
+
+
+function comments_remaining_letters(){
+    var len = $('#comment_content').val().length;
+                             
+    if (len > comments_max_letters) {
+  
+        $('#comment_content').val($('#comment_content').val().substring(0,comments_max_letters));
+        len = comments_max_letters;
+    }
+    $('#remaining_letters').html((comments_max_letters - len));
+    
 }

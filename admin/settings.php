@@ -175,6 +175,31 @@ print "<option value='asc' $chk1>$phrases[asc]</option>
   </fieldset>
   
   
+    <br> 
+<fieldset style=\"width:70%\">
+<legend><b>$phrases[the_comments]</b></legend> 
+<table width=100%> 
+     <tr><td> $phrases[max_letters] : </td><td><input type=text name=stng[comments_max_letters] size=5 value='$settings[comments_max_letters]'>  </td></tr>
+ <tr><td> $phrases[commets_per_request] : </td><td><input type=text name=stng[commets_per_request] size=5 value='$settings[commets_per_request]'>  </td></tr>
+
+ <tr><td>  $phrases[products_comments] : </td><td>";
+     print_select_row("stng[enable_product_comments]",array("0"=>"$phrases[disabled]","1"=>"$phrases[enabled]"),$settings['enable_product_comments']);
+   print " </td></tr>
+       
+
+ <tr><td>  $phrases[news_comments] : </td><td>";
+     print_select_row("stng[enable_news_comments]",array("0"=>"$phrases[enabled]","1"=>"$phrases[disabled]"),$settings['enable_news_comments']);
+   print " </td></tr>
+
+         <tr><td>  $phrases[comments_auto_activate]  : </td><td>" ;
+         print_select_row("stng[comments_auto_activate]",array("0"=>"$phrases[no]","1"=>"$phrases[yes]"),$settings['comments_auto_activate']);
+print "</td></tr>  
+
+ 
+   
+   
+ </table>
+ </fieldset>  
                       <br>
  <table width=70% class=grid>
 
