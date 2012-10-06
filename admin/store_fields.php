@@ -49,7 +49,7 @@ if (!$action || $action == "edit_ok" || $action == "add_ok" ||
 
     print "<p align=center class=title> $phrases[products_fields] </p>
 
-<p align=$global_align><a href='store_fields.php?action=add'><img src='images/add.gif' border=0> $phrases[store_field_add] </a></p>
+<p align=$global_align><a href='store_fields.php?action=add' class='add'>$phrases[store_field_add] </a></p>
 
 <center>";
 

@@ -24,7 +24,7 @@ if($action=="product_options_add_ok"){
 //------------------------------------
 
    
-  print "<br><img src='images/add.gif'>&nbsp;<a href='products_options.php?action=product_options_add&id=$id'>Add field</a><br><br>";
+  print "<p><a href='products_options.php?action=product_options_add&id=$id' class='add'>Add field</a></p>";
    
    $qr = db_query("select * from store_products_options where product_id='$id'");
    

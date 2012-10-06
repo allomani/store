@@ -42,9 +42,9 @@ print "<br>
 <fieldset style=\"padding: 2\">
 <legend>$phrases[payment_and_shipping]</legend>
 <table width=100%>";
-print "<tr><td width=24><img src='images/payment_methods.gif' width=24></td><td class=row_1><a href='index.php?action=payment_methods'>$phrases[payment_methods]</a></td></tr>";
+print "<tr><td width=24><img src='images/payment_methods.gif' width=24></td><td class=row_1><a href='payment_methods.php'>$phrases[payment_methods]</a></td></tr>";
 print "<tr><td width=24><img src='images/gateways.gif' width=24></td><td class=row_2><a href='payment_gateways.php'>$phrases[payment_gateways]</a></td></tr>";
-print "<tr><td width=24><img src='images/shipping_methods.gif' width=24></td><td class=row_1><a href='index.php?action=shipping_methods'>$phrases[shipping_methods]</a></td></tr>";
+print "<tr><td width=24><img src='images/shipping_methods.gif' width=24></td><td class=row_1><a href='shipping_methods.php'>$phrases[shipping_methods]</a></td></tr>";
 
 print "</table></fieldset>"; 
 }
@@ -58,7 +58,7 @@ $admin_menu_content .= "<tr><td width=24><img src='images/blocks.gif' width=24><
 
 
 if(if_admin("votes",true)){
-$admin_menu_content .= "<tr><td width=24><img src='images/votes.gif' width=24></td><td class=row_2><a href='index.php?action=votes'> $phrases[the_votes] </a></td></tr>";
+$admin_menu_content .= "<tr><td width=24><img src='images/votes.gif' width=24></td><td class=row_2><a href='votes.php'> $phrases[the_votes] </a></td></tr>";
 }
 
 if(if_admin("news",true)){
@@ -140,7 +140,7 @@ $admin_menu_content .= "<tr><td width=24><img src='images/templates.gif' width=2
 }
 
 if(if_admin("phrases",true)){
-$admin_menu_content .= "<tr><td width=24><img src='images/phrases.gif' width=24></td><td class=row_2><a href='index.php?action=phrases'>$phrases[the_phrases]</a></td></tr>";
+$admin_menu_content .= "<tr><td width=24><img src='images/phrases.gif' width=24></td><td class=row_2><a href='phrases.php'>$phrases[the_phrases]</a></td></tr>";
 }
 
 
@@ -150,7 +150,7 @@ $admin_menu_content .= "<tr><td width=24><img src='images/seo_settings.gif' widt
 
 
 if(if_admin("",true)){  
-$admin_menu_content .= "<tr><td width=24><img src='images/hooks.gif' width=24></td><td class=row_1><a href='index.php?action=hooks'>$phrases[cp_hooks]</a></td></tr>\n";
+$admin_menu_content .= "<tr><td width=24><img src='images/hooks.gif' width=24></td><td class=row_1><a href='hooks.php'>$phrases[cp_hooks]</a></td></tr>\n";
 
 
 
@@ -172,7 +172,7 @@ print "</table></fieldset>";
 print "<br> 
 <fieldset style=\"padding: 2\"> 
 <table width=100%>";
-print "<tr><td width=24><img src='images/users2.gif' width=24></td><td class=row_1><a href='index.php?action=users'>$phrases[users_and_permissions]</a></td></tr>";
+print "<tr><td width=24><img src='images/users2.gif' width=24></td><td class=row_1><a href='users.php'>$phrases[users_and_permissions]</a></td></tr>";
 
 if(if_admin("",true)){ 
 print "<tr><td width=24><img src='images/access_log.gif' width=24></td><td class=row_2><a href='index.php?action=access_log'>$phrases[access_log]</a></td></tr>";

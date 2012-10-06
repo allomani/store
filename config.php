@@ -11,8 +11,6 @@ $db_charset = "utf8";
 //---------- Script Settings ---------- 
 $blocks_width = "17%" ;
 
-$editor_path  = "ckeditor";       // no_editor : to remove editor 
-
 $global_lang = "arabic" ;
 
 $copyrights_lang = "arabic";
@@ -36,6 +34,11 @@ $admin_referer_check = true;
 
 //$disable_backup = "عفوا , هذه الخاصية غير مفعلة في النسخة التجريبية" ;
 //$disable_repair = "عفوا , هذه الخاصية غير مفعلة في النسخة التجريبية" ;
+
+//--------- Editors ---------------
+$wysiwyg_editor_path  = "editors/ckeditor";       // no_editor : to remove editor 
+$code_editor_path = "editors/codemirror";
+
 
 
 //------------ Cache --------------

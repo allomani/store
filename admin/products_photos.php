@@ -48,7 +48,7 @@ if(!defined('IS_ADMIN')){die('No Access');}
  
  
          if($_FILES['img']['name'][$i]){
-     $imtype = file_extension($_FILES['img']['name'][$i]);
+     $imtype = strtolower(file_extension($_FILES['img']['name'][$i]));
 
 if(in_array($imtype,$upload_types)){
 
@@ -95,7 +95,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
   
      
     
-          print "<p align=$global_align><a href='index.php?action=products_photos_add&cat=$id'><img src='images/add.gif' border=0>&nbsp; $phrases[add_photos] </a></p>
+          print "<p align=$global_align><a href='index.php?action=products_photos_add&cat=$id' class='add'>$phrases[add_photos] </a></p>
                               
                               ";
                        $qr=db_query("select * from store_products_photos where product_id='$id' order by ord asc");

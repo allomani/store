@@ -207,7 +207,7 @@ db_query("insert into store_clients_sets  (name,details,required,type,value,styl
 
 print "<p align=center class=title> $phrases[members_custom_fields]</p>
 
-<p align=$global_align><a href='index.php?action=clients_fields_add'><img src='images/add.gif' border=0> $phrases[add_member_custom_field] </a></p>
+<p align=$global_align><a href='index.php?action=clients_fields_add' class='add'>$phrases[add_member_custom_field]</a></p>
 
 <center><table width=90% class=grid>";
 
@@ -615,7 +615,7 @@ if(db_num($qr)){
 
 //---------- show members search form ---------
 print "<p align=center class=title> $phrases[the_members] </p>
-        <p align=$global_align><a href='index.php?action=client_add'><img src='images/add.gif' border=0> $phrases[add_member] </a></p>
+        <p align=$global_align><a href='index.php?action=client_add' class='add'>$phrases[add_member] </a></p>
               <center>
      <form action=index.php method=get>
       <fieldset style=\"width:80%;padding: 2\">

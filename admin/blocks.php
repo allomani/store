@@ -2,12 +2,12 @@
  require('./start.php'); 
  
 // -------------- Blocks ----------------------------------
-if (!$action || $action == "blocks" or $action=="del_block" or $action=="edit_block_ok" or $action=="add_block"
-|| $action=="block_disable" || $action=="block_enable" || $action=="block_order" || $action=="blocks_fix_order"){
+if (!$action || $action == "blocks" || $action=="del" || $action=="edit_ok" || $action=="add_ok"
+|| $action=="disable" || $action=="enable" || $action=="order" || $action=="fix_order"){
 
 
 if_admin();
-if($action=="blocks_fix_order"){
+if($action=="fix_order"){
 
    $qr=db_query("select * from store_blocks where pos='r' order by ord ASC");
     if(db_num($qr)){
@@ -37,22 +37,22 @@ if($action=="blocks_fix_order"){
      }
         }
 
-if($action=="block_order"){
+if($action=="order"){
         db_query("update store_blocks set ord='$ord' where id = '$idrep'");
         db_query("update store_blocks set ord='$ordrep' where id = '$id'");
         }
 
 
-if($action=="block_disable"){
+if($action=="disable"){
         db_query("update store_blocks set active=0 where id='$id'");
         }
 
-if($action=="block_enable"){
+if($action=="enable"){
 
        db_query("update store_blocks set active=1 where id='$id'");
         }
 //---------------------------------------------------------
-if($action=="add_block"){
+if($action=="add_ok"){
 if($pages){
 foreach ($pages as $value) {
        $pg_view .=  "$value," ;
@@ -74,11 +74,11 @@ values(
 '".db_escape($pg_view)."','".db_escape($hide_title)."','$cat')");
         }
 //------------------------------------------------------------
-if ($action=="del_block"){
+if ($action=="del"){
           db_query("delete from store_blocks where id='$id'");
             }
 //----------------------------------------------------------------
-if ($action=="edit_block_ok"){
+if ($action=="edit_ok"){
 if($pages){
 foreach ($pages as $value) {
        $pg_view .=  "$value," ;
@@ -102,7 +102,7 @@ pages='".db_escape($pg_view)."',hide_title='".db_escape($hide_title)."',cat='$ca
 //------------------------------------------------------------
 
 print "<p align=center class=title>$phrases[the_blocks]</p><br>
-<img src='images/add.gif'><a href='blocks.php?action=block_add'>$phrases[add_button]</a><br><br>";
+<a href='blocks.php?action=add' class='add'>$phrases[add_button]</a><br><br>";
 
 
 
@@ -142,8 +142,8 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
      print "<li id=\"item_$data[id]\" class='".iif($data['active'],"active","inactive")."'><center>
      <table width=100%>
      <tr>
-     <td  align=$global_align width=25>
-      <span style=\"cursor: move;\" class=\"handle\"><img alt='$phrases[click_and_drag_to_change_order]' src='images/move.gif'></span> 
+     <td class=\"handle\">
+     
       </td>
      
      
@@ -166,13 +166,13 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
                 <td align=center colspan=3>";
 
                 if($data['active']){
-                        print "<a href='blocks.php?action=block_disable&id=$data[id]'>$phrases[disable]</a>" ;
+                        print "<a href='blocks.php?action=disable&id=$data[id]'>$phrases[disable]</a>" ;
                         }else{
-                        print "<a href='blocks.php?action=block_enable&id=$data[id]'>$phrases[enable]</a>" ;
+                        print "<a href='blocks.php?action=enable&id=$data[id]'>$phrases[enable]</a>" ;
                         }
 
                 print "- <a href='blocks.php?action=edit_block&id=$data[id]'>$phrases[edit] </a>
-                - <a href='blocks.php?action=del_block&id=$data[id]' onClick=\"return confirm('Are you sure you want to delete ?');\">$phrases[delete] </a></td>
+                - <a href='blocks.php?action=del&id=$data[id]' onClick=\"return confirm('Are you sure you want to delete ?');\">$phrases[delete] </a></td>
         </tr>
         </table></center></li>";
             //    $i++;
@@ -193,8 +193,8 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
                 
               /*
                 print "<br><form action='blocks.php' method=post>
-                <input type=hidden name=action value='blocks_fix_order'>
-                <input type=submit value=' $phrases[cp_blocks_fix_order] '>
+                <input type=hidden name=action value='fix_order'>
+                <input type=submit value=' $phrases[cp_fix_order] '>
                 </form><br>";
                  */
                 }else{
@@ -209,37 +209,11 @@ if($action == "edit_block"){
   $data=db_qr_fetch("select * from store_blocks where id='$id'");
       $data['file'] = htmlspecialchars($data['file']) ;
 
-?>
-    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-    <script src="codemirror/lib/codemirror.js"></script>
-    <script src="codemirror/mode/php/php.js"></script>
-    <script src="codemirror/mode/clike/clike.js"></script> 
-    <script src="codemirror/mode/xml/xml.js"></script> 
-    <script src="codemirror/mode/css/css.js"></script> 
-    <script src="codemirror/mode/javascript/javascript.js"></script> 
-        
-   
-
-    <style type="text/css">
-      .CodeMirror {
-        border: 1px solid #ccc;
-        direction:ltr;
-        text-align:left;
-       width:99%;
-      }
-      .CodeMirror-scroll {
-        height: 300px;
-        overflow-y: auto;
-        overflow-x: scroll;
-        width: 100%;
-      }
-    </style>
-<?
 
  print "<img src='images/arrw.gif'>&nbsp;<a href='blocks.php?action=blocks'>$phrases[the_blocks]</a> / $data[title] <br><br>
  
  <form method=\"POST\" action=\"blocks.php\">  
- <input type=hidden name=\"action\" value='edit_block_ok'>
+ <input type=hidden name=\"action\" value='edit_ok'>
  <input type=hidden name=\"id\" value='$id'>
                        
  <center><table border=\"0\" width=\"99%\"  class=\"grid\" >
@@ -336,26 +310,13 @@ $i++;
 </table>
  </center>
 </form>";
-?>
-<script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("file"), {
-       matchBrackets: true,
-        mode: "application/x-httpd-php",
-        indentUnit: 4,
-        indentWithTabs: true,
-        enterMode: "keep",
-        tabMode: "shift",
-        lineNumbers: true,
-        lineWrapping: true,
-        fixedGutter : true
-      });
-    </script>
-    <?
+
+           code_editor_init('file');
 
         }
         
 //------------ Block Add ------------
-if($action=="block_add"){
+if($action=="add"){
      print "<img src='images/arrw.gif'>&nbsp;<a href='blocks.php?action=blocks'>$phrases[the_blocks]</a> / $phrases[add_button] <br><br>";     
 ?>
     <link rel="stylesheet" href="codemirror/lib/codemirror.css">
@@ -385,7 +346,7 @@ if($action=="block_add"){
 <?    
    print "
     <form method=\"POST\" action=\"blocks.php\" name=submit_form>
-    <input type=hidden name=\"action\" value='add_block'>
+    <input type=hidden name=\"action\" value='add_ok'>
                 
                 
     <center>

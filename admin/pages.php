@@ -28,7 +28,7 @@ if($action=="pages_add_ok"){
                     }
                     //================================================
   print "<p align=center class=title>$phrases[the_pages]</p>
-                <p align=$global_align><a href='pages.php?action=pages_add'><img src='images/add.gif' border=0>$phrases[pages_add]</a></p>";
+                <p align=$global_align><a href='pages.php?action=pages_add' class='add'>$phrases[pages_add]</a></p>";
 
 
        $qr=db_query("select * from store_pages order by id DESC")   ;

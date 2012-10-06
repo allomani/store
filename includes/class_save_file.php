@@ -20,7 +20,7 @@ class save_file {
     
     $save_name = iif($save_name,$save_name,basename($filename));
     
-    $imtype = file_extension($save_name);
+    $imtype = strtolower(file_extension($save_name));
     $save_name = convert2en($save_name);
     $save_name = strtolower($save_name);
     $save_name= str_replace(" ","_",$save_name);

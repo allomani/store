@@ -109,7 +109,7 @@ if($continue){
 //-------------- cats ----------
 $no_cats = false;
 if(!$cat){
-print "<p align='$global_align'><a href='news.php?action=news_cats_add'><img src='images/add.gif' border=0>$phrases[add_cat]</a></p>";
+print "<p align='$global_align'><a href='news.php?action=news_cats_add' class='add'>$phrases[add_cat]</a></p>";
  $qr = db_query("select * from  store_news_cats order by ord asc");
  if(db_num($qr)){
  print "<center>
@@ -147,7 +147,7 @@ print "<p align='$global_align'><a href='news.php?action=news_cats_add'><img src
 //-------------------------------
 
 
- print "<p align='$global_align'><a href='news.php?action=news_add&cat=$cat'><img src='images/add.gif' border=0>$phrases[news_add]</a></p>";
+ print "<p align='$global_align'><a href='news.php?action=news_add&cat=$cat' class='add'>$phrases[news_add]</a></p>";
  
  
  //----------------- start pages system ----------------------

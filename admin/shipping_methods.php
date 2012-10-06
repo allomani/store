@@ -1,30 +1,27 @@
 <?
-
-if (!defined('IS_ADMIN')) {
-    die('No Access');
-}
+require('./start.php'); 
 
 //----------- Payment Methods --------
-if ($action == "shipping_methods" || $action == "shipping_methods_edit_ok" || $action == "shipping_methods_del" ||
-        $action == "shipping_methods_add_ok" || $action == "shipping_methods_enable" || $action == "shipping_methods_disable") {
+if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action == "del" ||
+        $action == "add_ok" || $action == "enable" || $action == "disable") {
     if_admin();
     $id = intval($id);
 
     //------ enable ----
-    if ($action == "shipping_methods_enable") {
+    if ($action == "enable") {
         db_query("update store_shipping_methods set active=1 where id='$id'");
     }
 //------ disable ----
-    if ($action == "shipping_methods_disable") {
+    if ($action == "disable") {
         db_query("update store_shipping_methods set active=0 where id='$id'");
     }
     //---- del ----
-    if ($action == "shipping_methods_del") {
+    if ($action == "del") {
         db_query("delete from  store_shipping_methods where id='$id'");
         db_query("delete from  store_shipping_methods_settings where cat='$id'");
     }
     //--- edit ----
-    if ($action == "shipping_methods_edit_ok") {
+    if ($action == "edit_ok") {
 
         if ($geo_zones_all) {
             $geo_zones_txt = '';
@@ -61,14 +58,14 @@ $shipping_settings = (array) $shipping_settings;
     }
 
     //--- add ----
-    if ($action == "shipping_methods_add_ok") {
+    if ($action == "add_ok") {
         db_query("insert store_shipping_methods (class,name,active) values ('" . db_escape($class) . "','" . db_escape($name) . "','1')");
 
         $new_id = db_inserted_id();
         if ($new_id) {
             $ord = db_qr_first("select max(ord) from store_shipping_methods") + 1;
             db_query("update store_shipping_methods set ord = $ord where id='$new_id'");
-            print "<script>window.location = 'index.php?action=shipping_methods_edit&id=$new_id';</script>";
+            print "<script>window.location = 'shipping_methods.php?action=edit&id=$new_id';</script>";
         }
     }
 
@@ -76,8 +73,7 @@ $shipping_settings = (array) $shipping_settings;
     print "<p align=center class=title>$phrases[shipping_methods]</p>";
     $qr = db_query("select * from store_shipping_methods order by ord asc");
 
-    print "
-<img src='images/add.gif'>&nbsp;<a href='index.php?action=shipping_methods_add'>$phrases[add_button]</a><br><br>";
+    print "<a href='shipping_methods.php?action=add' class='add'>$phrases[add_button]</a><br><br>";
     if (db_num($qr)) {
         print "<center><table width=100% class=grid>
 <tr><td width=100%>
@@ -90,20 +86,18 @@ $shipping_settings = (array) $shipping_settings;
             print "<div id=\"item_$data[id]\" class='$row_class'>
 <table width=100%>
 <tr>
-<td width=25>
-      <span style=\"cursor: move;\" class=\"handle\"><img src='images/move.gif' title='$phrases[click_and_drag_to_change_order]'></span> 
-      </td>
+<td class=\"handle\"></td>
       <td width=75%>$data[name]</td>
-    <td>" . iif($data['active'], "<a href='index.php?action=shipping_methods_disable&id=$data[id]'>$phrases[disable]</a>", "<a href='index.php?action=shipping_methods_enable&id=$data[id]'>$phrases[enable]</a>") . " -
-    <a href='index.php?action=shipping_methods_edit&id=$data[id]'>$phrases[edit]</a> - 
-    <a href='index.php?action=shipping_methods_del&id=$data[id]' onClick=\"return confirm('" . $phrases['are_you_sure'] . "');\">$phrases[delete]</a></td></tr>
+    <td align='$global_align_x'>" . iif($data['active'], "<a href='shipping_methods.php?action=disable&id=$data[id]'>$phrases[disable]</a>", "<a href='shipping_methods.php?action=enable&id=$data[id]'>$phrases[enable]</a>") . " -
+    <a href='shipping_methods.php?action=edit&id=$data[id]'>$phrases[edit]</a> - 
+    <a href='shipping_methods.php?action=del&id=$data[id]' onClick=\"return confirm('" . $phrases['are_you_sure'] . "');\">$phrases[delete]</a></td></tr>
     </table></div>";
         }
 
         print "</div></td></tr></table></center>";
 
         print "<script type=\"text/javascript\">
-        init_sortlist('shipping_methods_data_list','set_shipping_methods_sort');
+        init_sortlist('shipping_methods_data_list','shipping_methods');
 </script>";
     } else {
         print_admin_table("<center>  $phrases[no_data] </center>");
@@ -111,7 +105,7 @@ $shipping_settings = (array) $shipping_settings;
 }
 
 ///----------- Edit ------------
-if ($action == "shipping_methods_edit") {
+if ($action == "edit") {
     if_admin();
     $id = intval($id);
 
@@ -125,18 +119,21 @@ if ($action == "shipping_methods_edit") {
             $geo_zones = array();
         }
 
-        print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=shipping_methods'>$phrases[shipping_methods]</a> / $data[name] <br><br>   
+        print "<img src='images/arrw.gif'>&nbsp;<a href='shipping_methods.php'>$phrases[shipping_methods]</a> / $data[name] <br><br>   
         
-        <center><form action=index.php method=post>
+        <center><form action=shipping_methods.php method=post>
         <input type=hidden name=id value='$id'>
-        <input type=hidden name=action value='shipping_methods_edit_ok'>
+        <input type=hidden name=action value='edit_ok'>
         <table width=90% class=grid>
         <tr><td><b>$phrases[the_type]</b></td><td><input type=text name='class' size=30 value=\"$data[class]\"></td></tr>    
         <tr><td><b>$phrases[the_name]</b></td><td><input type=text name=name value=\"$data[name]\" size=30></td></tr>
        
        <tr><td><b>Geo Zones</b></td><td>
-       <input type='radio' id='geo_zones_all_yes' name='geo_zones_all' value=1 onClick=\"\$('geo_zones_div').style.display='none';\" " . iif(!count($geo_zones), " checked") . "><label for='geo_zones_all_yes'>جميع المناطق</label><br>
-       <input type='radio' id='geo_zones_all_no' name='geo_zones_all' value=0 onClick=\"\$('geo_zones_div').style.display='inline';\"" . iif(count($geo_zones), " checked") . "><label for='geo_zones_all_no'>مناطق محددة</label>
+       <input type='radio' id='geo_zones_all_yes' name='geo_zones_all' value=1 onClick=\"\$('#geo_zones_div').css('display','none');\" " . iif(!count($geo_zones), " checked") . ">
+           <label for='geo_zones_all_yes'>جميع المناطق</label><br>
+           
+       <input type='radio' id='geo_zones_all_no' name='geo_zones_all' value=0 onClick=\"\$('#geo_zones_div').css('display','');\"" . iif(count($geo_zones), " checked") . ">
+           <label for='geo_zones_all_no'>مناطق محددة</label>
        <br><br>
        <div id='geo_zones_div'" . iif(!count($geo_zones), "style=\"display:none;\"") . ">
        ";
@@ -308,15 +305,15 @@ $arr = categoriesToTree($categories);
 }
 
 ///----------- Add ------------
-if ($action == "shipping_methods_add") {
+if ($action == "add") {
     if_admin();
 
     print "
-        <img src='images/arrw.gif'>&nbsp;<a href='index.php?action=shipping_methods'>$phrases[shipping_methods]</a> / $phrases[add] <br><br>
+        <img src='images/arrw.gif'>&nbsp;<a href='shipping_methods.php'>$phrases[shipping_methods]</a> / $phrases[add] <br><br>
         
-        <center><form action=index.php method=post>
+        <center><form action='shipping_methods.php' method=post>
         <input type=hidden name=id value='$id'>
-        <input type=hidden name=action value='shipping_methods_add_ok'>
+        <input type=hidden name=action value='add_ok'>
         <table width=90% class=grid>
         <tr><td><b>$phrases[the_name]</b></td><td><input type=text name=name value=\"$data[name]\" size=30></td></tr>
          
@@ -326,3 +323,6 @@ if ($action == "shipping_methods_add") {
         </form>
         </center>";
 }
+
+//-----------end ----------------
+ require(ADMIN_DIR.'/end.php');

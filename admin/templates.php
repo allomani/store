@@ -91,7 +91,7 @@ print "<p align=$global_align><img src='images/link.gif'><a href='templates.php'
 
          $qr = db_query("select a.*,b.name as group_name from store_templates a,store_templates_groups b where a.cat = '$cat' and b.id = a.group_id order by b.ord , a.id");
         if (db_num($qr)){
-      print "<p align='$global_align'><img src='images/add.gif'> <a href='templates.php?action=add&cat=$cat'> $phrases[cp_add_new_template] </a></p>
+      print "<p align='$global_align'><a href='templates.php?action=add&cat=$cat' class='add'>$phrases[cp_add_new_template] </a></p>
       <br>" ;
 
    $trx = 1;
@@ -124,7 +124,7 @@ print "<p align=$global_align><img src='images/link.gif'><a href='templates.php'
 
 }else{
     $qr = db_query("select * from store_templates_cats order by id asc");
-     print "<p align='$global_align'><img src='images/add.gif'> <a href='templates.php?action=cat_add'> $phrases[add_style] </a></p>
+     print "<p align='$global_align'><a href='templates.php?action=cat_add' class='add'>$phrases[add_style] </a></p>
       <br>
     <center><table width=90% class=grid>";
     while($data =db_fetch($qr)){
@@ -208,33 +208,7 @@ print "<center>
    $id=intval($id);
 $qr = db_query("select * from store_templates where id='$id'");
       if(db_num($qr)){
-          
-?>
-    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-    <script src="codemirror/lib/codemirror.js"></script>
-    <script src="codemirror/mode/php/php.js"></script>
-    <script src="codemirror/mode/clike/clike.js"></script> 
-    <script src="codemirror/mode/xml/xml.js"></script> 
-    <script src="codemirror/mode/css/css.js"></script> 
-    <script src="codemirror/mode/javascript/javascript.js"></script> 
-        
-   
 
-    <style type="text/css">
-      .CodeMirror {
-        border: 1px solid #ccc;
-        direction:ltr;
-        text-align:left;
-       width:99%;
-      }
-      .CodeMirror-scroll {
-        height: 500px;
-        overflow-y: auto;
-        overflow-x: scroll;
-        width: 100%;
-      }
-    </style>
-<?
       $data = db_fetch($qr);
       
 
@@ -275,21 +249,8 @@ print "</select></td></tr>
         </center>
 </form></center>\n";
 
-?>
-<script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("content"), {
-       matchBrackets: true,
-        mode: "<?php print iif($data['name']=="CSS","text/css","application/x-httpd-php");?>",
-        indentUnit: 4,
-        indentWithTabs: true,
-        enterMode: "keep",
-        tabMode: "shift",
-        lineNumbers: true,
-        lineWrapping: true,
-        fixedGutter : true
-      });
-    </script>
-<?
+code_editor_init("content");
+
 }else{
 print_admin_table($phrases['err_wrong_url']);
         }
@@ -302,33 +263,6 @@ if_admin("templates");
  $cat_data = db_qr_fetch("select name from store_templates_cats where id='$cat'");
 print "<p align=$global_align><img src='images/link.gif'><a href='templates.php'>$phrases[the_templates] </a> / <a href='templates.php?cat=$cat'>$cat_data[name]</a> / $phrases[add_new_template]</p>";
 
-
-?>
-    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-    <script src="codemirror/lib/codemirror.js"></script>
-    <script src="codemirror/mode/php/php.js"></script>
-    <script src="codemirror/mode/clike/clike.js"></script> 
-    <script src="codemirror/mode/xml/xml.js"></script> 
-    <script src="codemirror/mode/css/css.js"></script> 
-    <script src="codemirror/mode/javascript/javascript.js"></script> 
-        
-   
-
-    <style type="text/css">
-      .CodeMirror {
-        border: 1px solid #ccc;
-        direction:ltr;
-        text-align:left;
-       width:99%;
-      }
-      .CodeMirror-scroll {
-        height: 500px;
-        overflow-y: auto;
-        overflow-x: scroll;
-        width: 100%;
-      }
-    </style>
-<?
 
 print "
   <center>
@@ -357,21 +291,7 @@ print "</select></td></tr>
         
 </form>\n";
 
-?>
-<script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("content"), {
-       matchBrackets: true,
-        mode: "application/x-httpd-php",
-        indentUnit: 4,
-        indentWithTabs: true,
-        enterMode: "keep",
-        tabMode: "shift",
-        lineNumbers: true,
-        lineWrapping: true,
-        fixedGutter : true
-      });
-    </script>
-    <?
+code_editor_init("content");
  }
 
  //-----------end ----------------

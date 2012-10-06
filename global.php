@@ -1043,7 +1043,7 @@ function create_thumb($filename, $width = 65, $height = 65, $fixed = false, $suf
 
 
 
-        $imtype = file_extension(CWD . "/$filename");
+        $imtype = strtolower(file_extension(CWD . "/$filename"));
         if ($save_filename) {
             $save_name = $save_filename;
             $save_path = str_replace("/" . basename($filename), '', $filename);
@@ -1051,7 +1051,7 @@ function create_thumb($filename, $width = 65, $height = 65, $fixed = false, $suf
             $save_name = basename($filename);
             $save_path = str_replace("/" . $save_name, '', $filename);
 
-            $imtype = file_extension($save_name);
+            $imtype = strtolower(file_extension($save_name));
             $save_name = convert2en($save_name);
             $save_name = strtolower($save_name);
             $save_name = str_replace(" ", "_", $save_name);

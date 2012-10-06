@@ -68,7 +68,7 @@ die();
    }else{
  
   //---- extension check -----
-  $imtype = file_extension($url);
+  $imtype = strtolower(file_extension($url));
   if(in_array($imtype,$upload_types)){
 
   $fl = new save_file($url,$upload_folder);

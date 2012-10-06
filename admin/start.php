@@ -111,7 +111,8 @@ $result_bk = $backup_obj->Execute($task, $filename, $use_gzip);
 
 
 //---------- load editor --------//
-require (CWD."/".$editor_path."/editor_init_functions.php") ;
+require(CWD."/".$code_editor_path."/functions.php");
+require (CWD."/".$wysiwyg_editor_path."/editor_init_functions.php") ;
 editor_init();
 
 
@@ -137,11 +138,11 @@ print "<META http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
 
 <script src=\"$scripturl/js/jquery.js\" type=\"text/javascript\"></script>
 <script src=\"$scripturl/js/jquery-ui.min.js\" type=\"text/javascript\"></script>
-<script src=\"jquery/jquery.cookie.js\" type=\"text/javascript\"></script>";
+<script src=\"$scripturl/js/jquery.cookie.js\" type=\"text/javascript\"></script>";
 ?>
 
-    <link href="src/skin-vista/ui.dynatree.<?=$global_dir;?>.css" rel="stylesheet" type="text/css" id="skinSheet">
-    <script src="src/jquery.dynatree.min.js" type="text/javascript"></script>
+    <link href="css/ui.dynatree.<?=$global_dir;?>.css" rel="stylesheet" type="text/css" id="skinSheet">
+    <script src="<?=$scripturl;?>/js/jquery.dynatree.min.js" type="text/javascript"></script>
         
 <?        
 print "

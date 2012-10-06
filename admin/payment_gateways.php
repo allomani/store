@@ -57,7 +57,7 @@ if($action=="add_ok"){
     print "<p align=center class=title>$phrases[payment_gateways]</p>";
 $qr = db_query("select * from store_payment_gateways order by ord asc");
 
-print "<img src='images/add.gif'>&nbsp;<a href='payment_gateways.php?action=add'>$phrases[add_button]</a><br><br>";  
+print "<a href='payment_gateways.php?action=add' class='add'>$phrases[add_button]</a><br><br>";  
 
 if(db_num($qr)){
 print "<table width=100% class=grid>
@@ -70,7 +70,7 @@ while($data = db_fetch($qr)){
 <tr>
 <td class=\"handle\"></td>
     <td width=30%>$data[class]</td><td width=30%>$data[name]</td>
-    <td>".iif($data['active'],"<a href='payment_gateways.php?action=disable&id=$data[id]'>$phrases[disable]</a>",
+    <td align='$global_align_x'>".iif($data['active'],"<a href='payment_gateways.php?action=disable&id=$data[id]'>$phrases[disable]</a>",
     "<a href='payment_gateways.php?action=enable&id=$data[id]'>$phrases[enable]</a>")." - 
     <a href=\"payment_gateways.php?action=edit&id=$data[id]\">$phrases[edit]</a> - 
     <a href='payment_gateways.php?action=del&id=$data[id]' onClick=\"return confirm('".$phrases['are_you_sure']."');\">$phrases[delete]</a></td></tr>

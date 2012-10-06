@@ -301,7 +301,7 @@ $details = $Filter->process($details);    */
 if($_FILES['imgfile']['name']){
 if($settings['uploader']){
 require_once(CWD. "/includes/class_save_file.php"); 
-$imtype = file_extension($_FILES['imgfile']['name']);
+$imtype = strtolower(file_extension($_FILES['imgfile']['name']));
 
 if(in_array($imtype,$upload_types)){
 
@@ -394,7 +394,7 @@ delete_file($old_img['thumb']);
 
 
 require_once(CWD. "/includes/class_save_file.php"); 
-$imtype = file_extension($_FILES['imgfile']['name']);
+$imtype = strtolower(file_extension($_FILES['imgfile']['name']));
 
 if(in_array($imtype,$upload_types)){
 
@@ -527,7 +527,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
  if($cat > 0){
 
  print "<p class=title align=center>$phrases[the_products]</p>      
-<p><img src='images/add.gif'><a href='products.php?action=product_add&cat=$cat'>$phrases[add_product]</a></p>";
+<p><a href='products.php?action=product_add&cat=$cat' class='add'>$phrases[add_product]</a></p>";
 
     }
 

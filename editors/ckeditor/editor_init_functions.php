@@ -9,9 +9,9 @@ function encodeHTML($sHTML)
 		}
 
 function editor_html_init(){
-global $scripturl ;
+global $scripturl,$wysiwyg_editor_path ;
 
-print "<script language=JavaScript src='".$scripturl."/ckeditor/ckeditor.js'></script>" ;
+print "<script language=JavaScript src='".$scripturl."/".$wysiwyg_editor_path."/ckeditor.js'></script>" ;
 
 }
 

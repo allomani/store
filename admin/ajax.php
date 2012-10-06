@@ -40,6 +40,9 @@ if($action=="set_blocks_sort"){
          case "store_fields" :  if_admin("store_fields"); $sort_table = 'store_fields_sets';break;
          case "store_fields_options" :  if_admin("store_fields"); $sort_table = 'store_fields_options';break;
           case "payment_gateways" :  if_admin(); $sort_table = 'store_payment_gateways';break;
+            case "payment_methods" :  if_admin(); $sort_table = 'store_payment_methods';break;
+              case "shipping_methods" :  if_admin(); $sort_table = 'store_shipping_methods';break;
+               case "orders_status" :  if_admin('orders_status'); $sort_table = 'store_orders_status';break;
         default: die();break;
     }
       
@@ -50,43 +53,7 @@ if($action=="set_blocks_sort"){
          
      }
 
- 
- //--------- Payments Methods  Sort ------------
-if($action=="set_payment_methods_sort"){
-    if_admin();  
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_payment_methods SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
 
- //--------- Payments Methods  Sort ------------
-if($action=="set_orders_status_sort"){
-    if_admin('orders_status');  
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_orders_status SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
-
-
- //---------Shipping Methods  Sort ------------
-if($action=="set_shipping_methods_sort"){
-    if_admin();  
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_shipping_methods SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}
 
  //---------Product Photos  Sort ------------
 if($action=="set_product_photos_sort"){ 

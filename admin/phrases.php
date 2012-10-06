@@ -1,15 +1,13 @@
 <?
-  if(!defined('IS_ADMIN')){die('No Access');}   
-
-  
+require('./start.php'); 
   //------------------------------ Phrases -------------------------------------
-if($action=="phrases" || $action=="phrases_add_ok" || $action=="phrases_update"){
+if(!$action || $action=="add_ok" || $action=="update"){
 
 if_admin("phrases");
 
 $cat = intval($cat);
 
-if($action=="phrases_update"){
+if($action=="update"){
         $i = 0;
         foreach($phrases_ids  as $id){
             $phrases_ids[$i] = intval($phrases_ids[$i]);
@@ -19,7 +17,7 @@ if($action=="phrases_update"){
                 }
      }
      
-if($action=="phrases_add_ok"){
+if($action=="add_ok"){
     $name=trim($name);
     $value=trim($value);
     if($name && $value){
@@ -39,17 +37,17 @@ if($group){
  
 $cat_data = db_qr_fetch("select name from store_phrases_cats where id='".db_escape($group)."'");
 
-print "<p align=$global_align><img src='images/link.gif'><a href='index.php?action=phrases'>$phrases[the_phrases] </a> / $cat_data[name]</p>";
+print "<p align=$global_align><img src='images/link.gif'><a href='phrases.php'>$phrases[the_phrases] </a> / $cat_data[name]</p>";
 
 
          $qr = db_query("select * from store_phrases where cat='".db_escape($group)."'");
          print "<center>
-         <form action='index.php' method=post>
-         <input type=hidden name='action' value='phrases_add_ok'>
+         <form action='phrases.php' method=post>
+         <input type=hidden name='action' value='add_ok'>
          <input type=hidden name='group' value='".htmlspecialchars($group)."'>
            
           
-         <table width=70% class=grid>
+         <table width=100% class=grid>
          <tr><td><b>$phrases[the_name]</b></td><td><input type=text size=30 name='name'></td>
          <td rowspan=2><input type=submit value='$phrases[add]'></td></tr>
          <tr><td><b>$phrases[the_value]</b></td><td><input type=text size=30 name='value'></td></tr>
@@ -57,19 +55,14 @@ print "<p align=$global_align><img src='images/link.gif'><a href='index.php?acti
          
         if (db_num($qr)){
 
-        print "<form action=index.php method=post>
-        <input type=hidden name=action value='phrases_update'>
+        print "<form action=phrases.php method=post>
+        <input type=hidden name=action value='update'>
         <input type=hidden name=group value='".htmlspecialchars($group)."'>
-        <center><table width=90% class=grid>";
+        <center><table width='100%' class=grid>";
 
         $i = 0;
         while($data=db_fetch($qr)){
-            
-        if($tr_class == "row_1"){
-            $tr_class = "row_2";
-        }else{
-            $tr_class = "row_1";
-        }
+            toggle_tr_class();
         
          print "<tr class='$tr_class'><td>$data[name]</td><td>
          <input type=hidden name=\"phrases_ids[$i]\" value='$data[id]'>
@@ -88,8 +81,11 @@ print "<p class=title align=center> $phrases[the_phrases] </p><br>  ";
     $qr = db_query("select * from store_phrases_cats order by id asc");
      print "<center><table width=60% class=grid>";
     while($data =db_fetch($qr)){
-    print "<tr><td><a href='index.php?action=phrases&group=$data[id]'>$data[name]</a></td></tr>";
+    print "<tr><td><a href='phrases.php?group=$data[id]'>$data[name]</a></td></tr>";
     }
     print "</table></center>";
 }
 }
+
+//-----------end ----------------
+ require(ADMIN_DIR.'/end.php');

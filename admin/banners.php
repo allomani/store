@@ -63,7 +63,7 @@ if($action=="banner_enable"){
 //-------------------------------------
 
 print "<p align=center class=title>$phrases[the_banners]</p>";
-  print "<img src='images/add.gif'>&nbsp; <a href='banners.php?action=add'>$phrases[add_button]</a><br><br>";
+  print "<a href='banners.php?action=add' class='add'>$phrases[add_button]</a><br><br>";
      
 //------------Bannners List -----------//
 
