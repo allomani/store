@@ -1,9 +1,8 @@
 <?
-
-if(!defined('IS_ADMIN')){die('No Access');}
+require('./start.php');
 
 //------------ Products Photos ---------//
- if($action=="products_photos" || $action=="products_photos_add_ok" || $action=="products_photos_edit_ok" || $action=="products_photos_del"){
+ if(!$action || $action=="products_photos" || $action=="add_ok" || $action=="edit_ok" || $action=="del"){
  
      
         $qr=db_query("select id,cat,name from store_products_data where id='$id'");
@@ -13,16 +12,16 @@ if(!defined('IS_ADMIN')){die('No Access');}
         $data=db_fetch($qr);
         
     if_products_cat_admin($data['cat']);
-    print_admin_path_links($data['cat'],"<a href='index.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / $phrases[product_photos]");
+    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / $phrases[product_photos]");
     
  //----------- edit ---------//
- if($action=="products_photos_edit_ok"){
+ if($action=="edit_ok"){
      $pic_id = (int) $pic_id;
      
      db_query("update store_products_photos set name='".db_escape($name)."' where id='$pic_id'");  
  }
  //----------- del ----------//
- if($action=="products_photos_del"){
+ if($action=="del"){
      $pic_id = (array) $pic_id;
    
    foreach($pic_id as $iid){ 
@@ -35,7 +34,7 @@ if(!defined('IS_ADMIN')){die('No Access');}
    }
  }
   //------------ photos add -----------//
-  if($action=="products_photos_add_ok"){  
+  if($action=="add_ok"){  
  if($settings['uploader']){   
     require_once(CWD. "/includes/class_save_file.php");                          
    $upload_folder = "$settings[uploader_path]/products_photos";
@@ -61,7 +60,7 @@ if($default_uploader_chmod){@chmod(CWD . "/". $img_saved,$default_uploader_chmod
 
 
 //------- thumb --------
-$thumb_saved =  create_thumb($img_saved,$settings['products_photos_thumb_width'],$settings['products_photos_thumb_height'],$settings['products_photos_thumb_fixed'],'thumb');
+$thumb_saved =  create_thumb($img_saved,$settings['thumb_width'],$settings['thumb_height'],$settings['thumb_fixed'],'thumb');
 if($default_uploader_chmod){@chmod(CWD . "/".$thumb_saved ,$default_uploader_chmod);}
  
     
@@ -95,31 +94,31 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
   
      
     
-          print "<p align=$global_align><a href='index.php?action=products_photos_add&cat=$id' class='add'>$phrases[add_photos] </a></p>
+          print "<p align=$global_align><a href='products_photos.php?action=add&cat=$id' class='add'>$phrases[add_photos] </a></p>
                               
                               ";
                        $qr=db_query("select * from store_products_photos where product_id='$id' order by ord asc");
                        if(db_num($qr)){
                      //      print "<center><table width=90% class=grid><tr>";
-    $photos_main_div_width = ((($settings['products_photos_thumb_width']+60)*4)+60);
+    $photos_main_div_width = ((($settings['thumb_width']+60)*4)+60);
                      print " <center>
-        <form action='index.php' method='post' name='submit_form'>
+        <form action='products_photos.php' method='post' name='submit_form'>
         <input type=hidden name='id' value='$id'>    
         
          <div id=\"product_photos_list\" style=\"width:100%;\" >";
                        
                        while($data=db_fetch($qr)){
                        
-                        print "<div id=\"item_$data[id]\" style=\"float: $global_align;width:".($settings['products_photos_thumb_width']+60).";height:".($settings['products_photos_thumb_height']+80).";border: #CCC 1px dashed; margin:10px;\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\" onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
+                        print "<div id=\"item_$data[id]\" style=\"float: $global_align;width:".($settings['thumb_width']+60).";height:".($settings['thumb_height']+80).";border: #CCC 1px dashed; margin:10px;\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\" onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
   
-    <div style=\"cursor: move;text-align:right;\" class=\"handle\"><img title='$phrases[click_and_drag_to_change_order]' src='images/move.gif'></div>  
+    <div style=\"cursor: move;text-align:right;\" class=\"handle\"></div>  
   
     <br>
    <img src=\"$scripturl/".get_image($data['thumb'])."\" title=\"$data[name]\"><br>
    <br>
    <input type='checkbox' name='photo_id[]' value='$data[id]'>
-   <a href='index.php?action=products_photos_edit&pic_id=$data[id]&id=$id'>$phrases[edit]</a> - 
-   <a href='index.php?action=products_photos_del&pic_id=$data[id]&id=$id' onclick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a>
+   <a href='products_photos.php?action=edit&pic_id=$data[id]&id=$id'>$phrases[edit]</a> - 
+   <a href='products_photos.php?action=del&pic_id=$data[id]&id=$id' onclick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a>
    
    </div> ";
  
@@ -139,8 +138,8 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
           &nbsp;  &nbsp;
           
          <select name='action'>
-          <option value='products_photos_edit'>$phrases[edit]</option>
-         <option value='products_photos_del'>$phrases[delete]</option>
+          <option value='edit'>$phrases[edit]</option>
+         <option value='del'>$phrases[delete]</option>
          </select>
         <input type=submit value=\"$phrases[do_button]\" onClick=\"return confirm('$phrases[are_you_sure]');\">
          </td></tr></table></div>
@@ -149,7 +148,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
          </form> ";    
           
            print "<script type=\"text/javascript\">
-                    init_sortlist('product_photos_list','set_product_photos_sort');
+                    init_sortlist('product_photos_list','product_photos');
                   </script>";
 
 
@@ -162,7 +161,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
     }                     
 }
 //------------ Products Photos Add ---------
-if($action=="products_photos_add"){
+if($action=="add"){
     $cat=intval($cat);
     
     
@@ -174,10 +173,10 @@ if($action=="products_photos_add"){
         $data=db_fetch($qr);
         
     if_products_cat_admin($data['cat']);
-    print_admin_path_links($data['cat'],"<a href='index.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / $phrases[product_photos]");
+    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / $phrases[product_photos]");
      
-   print "<form action=index.php method=post enctype=\"multipart/form-data\">
-   <input type=hidden name=action value='products_photos_add_ok'>
+   print "<form action=products_photos.php method=post enctype=\"multipart/form-data\">
+   <input type=hidden name=action value='add_ok'>
    <input type=hidden name=id value='$cat'>";
          
     for($i=0;$i<10;$i++){
@@ -198,7 +197,7 @@ if($action=="products_photos_add"){
 
 
 //------------ Products Photos Add ---------
-if($action=="products_photos_edit"){
+if($action=="edit"){
     $pic_id=intval($pic_id);
   
     
@@ -212,10 +211,10 @@ if($action=="products_photos_edit"){
         
         
     if_products_cat_admin($data['cat']);
-    print_admin_path_links($data['cat'],"<a href='index.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / <a href='index.php?action=products_photos&id=$data[id]'>$phrases[product_photos]</a> / $datap[name]");
+    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / <a href='products_photos.php?action=products_photos&id=$data[id]'>$phrases[product_photos]</a> / $datap[name]");
      
-   print "<form action=index.php method=post >
-   <input type=hidden name=action value='products_photos_edit_ok'>
+   print "<form action=products_photos.php method=post >
+   <input type=hidden name=action value='edit_ok'>
    <input type=hidden name=id value='$data[id]'>
     <input type=hidden name=pic_id value='$datap[id]'> 
           
@@ -233,3 +232,6 @@ if($action=="products_photos_edit"){
         print_admin_table("<center>$phrases[err_wrong_url]</center>");
     }
 }
+
+//-----------end ----------------
+require(ADMIN_DIR . '/end.php');

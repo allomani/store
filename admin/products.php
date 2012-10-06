@@ -13,7 +13,7 @@ if_products_cat_admin($cat,false);
  print "<form action='products.php' method=post name=sender>
  <input type=hidden name=action value='products_move_ok'>
  <input type=hidden name=from_cat value='$cat'>
- <center><table width=60% class=grid><tr><td colspan=2><b>$phrases[move_from] : </b>";
+ <table width=60% class=grid><tr><td colspan=2><b>$phrases[move_from] : </b>";
 
 //-----------------------------------------
 $data_from['cat'] = $cat ;
@@ -59,7 +59,7 @@ while($dir_data['cat']!=0){
  <tr><td colspan=2 align=center><input type=submit value=' $phrases[move_the_products] '></td></tr>
  </table>";
  }else{
-                print "<center>  $phrases[please_select_products_first] </center>";
+                print "  $phrases[please_select_products_first] ";
                 }
         }
   
@@ -76,7 +76,7 @@ if_products_cat_admin($cat,false);
  print "<form action='products.php' method=post name=sender>
  <input type=hidden name=action value='products_cat_move_ok'>
  <input type=hidden name=from_cat value='$cat'>
- <center><table width=60% class=grid><tr><td colspan=2><b> $phrases[move_from] : </b>";
+ <table width=60% class=grid><tr><td colspan=2><b> $phrases[move_from] : </b>";
 
 //-----------------------------------------
 $data_from['cat'] = $cat ;
@@ -125,7 +125,7 @@ while($dir_data['cat']!=0){
  <tr><td colspan=2 align=center><input type=submit value=' $phrases[move_the_cats] '></td></tr>
  </table>";
  }else{
-                print "<center>  $phrases[please_select_cats_first] </center>";
+                print "  $phrases[please_select_cats_first] ";
                 }
         }      
         
@@ -323,15 +323,15 @@ $thumb =  create_thumb($img_full,$settings['products_thumb_width'],$settings['pr
 //------------------------
    
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");   
+print_admin_table("".$fl->last_error_description."");   
 }
 
       
 }else{
-print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+print_admin_table("$phrases[this_filetype_not_allowed]");
 }
 }else{
-      print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
+      print_admin_table("  $settings[uploader_msg]  ","90%") ;  
 }
 }
 
@@ -416,14 +416,14 @@ $thumb =  create_thumb($img_full,$settings['products_thumb_width'],$settings['pr
 //------------------------
    
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");   
+print_admin_table("".$fl->last_error_description."");   
 }
       
 }else{
-print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+print_admin_table("$phrases[this_filetype_not_allowed]");
 }
  }else{
-     print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
+     print_admin_table("  $settings[uploader_msg]  ","90%") ;  
  }
 }
 //--------------End Save New Picture----------------
@@ -452,14 +452,14 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
       
 
  if(db_num($qr)){
- print "<center>
- <p class=title>$phrases[the_cats]</p>
+ print "
+ <p class=title align=center>$phrases[the_cats]</p>
  <form action='products.php' name=cats_form method=post>
  <input type=hidden name=cat value='$cat'>
  <input type=hidden name='start' value='$start'>
      
  
-<table width=80% class=grid><tr><td>
+<table width=100% class=grid><tr><td>
 <div id=\"products_cats_list\" >";
  while($data = db_fetch($qr)){
      toggle_tr_class();
@@ -510,7 +510,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
       
        
         
-          </center><br>
+          <br>
           </form>
        
        <script type=\"text/javascript\">
@@ -541,7 +541,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
           
         $items_count = valueof(db_qr_fetch("select count(*) as count from store_products_data where cat='$cat'"),'count');
         
-            print "<center>
+            print "
             <form action='products.php' method=post name='products_form'>
             <input type=hidden name=cat value='$cat'>
             <table class=grid width=90%><tr><td>
@@ -590,7 +590,7 @@ toggle_tr_class();
             print_pages_links($start, $items_count, $perpage, $page_string);
               }else{
                 if($cat > 0 || $no_cats){
-                      print_admin_table("<center>$phrases[no_products]</center>");
+                      print_admin_table("$phrases[no_products]");
                 }
                       }
 
@@ -603,13 +603,13 @@ if($action=="products_cat_add"){
   print_admin_path_links($cat);  
   
   
-print "<center><p class=title>$phrases[add_cat] </p>
+print "<p class=title align=center>$phrases[add_cat] </p>
    <form method=\"POST\" action=\"products.php\" name='sender'>
    <input type=hidden name='action' value='products_cat_add_ok'>
       <input type=hidden name='cat' value='$cat'>
       
       
-   <table width=90% class=grid><tr>
+   <table width=100% class=grid><tr>
    <td> <b>$phrases[the_name] </b></td><td>
     
    <input type=text name=name size=30>
@@ -621,7 +621,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
    </td></tr>
    </table> <br>";
    //------------ Fields ----------//
-    print "<table width=90% class=grid>
+    print "<table width=100% class=grid>
     <tr><td><b>$phrases[products_fields]</b></td>
                        <td>
                        <table width=100%><tr>";
@@ -644,7 +644,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                                        </table><br>";
                                        
     //-------------------- Shipping Methods --------------//
-    print "<table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+    print "<table border=0 width=\"100%\"  class=grid>
     
                        <tr><td><b>$phrases[shipping_methods]</b></td>
                        <td>
@@ -669,7 +669,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                        if(if_admin("",true)){
                        
                        print "
-                        <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+                        <table border=0 width=\"100%\"   class=grid>
                         <tr><td><b>$phrases[the_moderators]</b></td>
                        <td>";
                        
@@ -699,7 +699,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                        }
   //-------------- Tags --------------//                     
                               print "
-                              <fieldset style=\"width:90%;\">
+                              <fieldset style=\"width:100%;\">
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -714,7 +714,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                               
                               </table>
                               </fieldset><br><br>
-                               <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+                               <table border=0 width=\"100%\"   class=grid>
                               
    <tr>
     <td align=center><input type=submit value='$phrases[add_button]'></td>
@@ -722,7 +722,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
 
     </form>
 
-   </center>";
+   ";
    
    }
  //------------------------- Cat Edit------------------------
@@ -735,9 +735,9 @@ print "<center><p class=title>$phrases[add_cat] </p>
           if_products_cat_admin($id);
            
            $data=db_fetch($qr); 
-               print "<center>
+               print "
 
-                <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid><tr>
+                <table border=0 width=\"100%\"   class=grid><tr>
 
                 <form method=\"POST\" action=\"products.php\" name='sender'>
 
@@ -763,7 +763,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
    </table>
    <br>";
    //-------------------- Fields --------------//
-    print "<table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+    print "<table border=0 width=\"100%\"   class=grid>
     
                        <tr><td><b>$phrases[products_fields]</b></td>
                        <td>
@@ -785,7 +785,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                        print "</table></td></tr>
                        </table><br>";
    //-------------------- Shipping Methods --------------//
-    print "<table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+    print "<table border=0 width=\"100%\"   class=grid>
     
                        <tr><td><b>$phrases[shipping_methods]</b></td>
                        <td>
@@ -810,7 +810,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                        if(if_admin("",true)){
                        
                        print "
-                        <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+                        <table border=0 width=\"100%\"   class=grid>
                         <tr><td><b>$phrases[the_moderators]</b></td>
                        <td>";
                        $users_array = get_product_cat_users($id);
@@ -838,7 +838,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
                        }
     //-------------- Tags ------------//                 
                               print "
-                              <fieldset style=\"width:90%;\">
+                              <fieldset style=\"width:100%;\">
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -853,19 +853,19 @@ print "<center><p class=title>$phrases[add_cat] </p>
                               
                               </table>
                               </fieldset><br><br>
-                               <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>
+                               <table border=0 width=\"100%\"   class=grid>
                                <tr>
                                 <td>
-                <center><input type=\"submit\" value=\"$phrases[edit]\">
+                <input type=\"submit\" value=\"$phrases[edit]\">
                         </td>
                         </tr>
                         </table>
 
                   
 
-</form>    </center>\n";
+</form>    ";
 }else{
-     print_admin_table("<center> $phrases[err_wrong_url]</center>");
+     print_admin_table(" $phrases[err_wrong_url]");
      
  }
                       }
@@ -889,7 +889,7 @@ if($action == "product_edit"){
  
   
    
-   print " <center>
+   print " 
    
    <table class=grid><tr>
    <td align=center><a href='products_fields.php?id=$id'>Fields</a></td>
@@ -904,7 +904,7 @@ if($action == "product_edit"){
        <input type=hidden name='id' value='$id'>
        <input type=hidden name='start' value='$start'>
     
-                <table border=0 width=\"90%\" class=grid><tr>
+                <table border=0 width=\"100%\" class=grid><tr>
 
              
                         <tr>
@@ -943,7 +943,7 @@ if($action == "product_edit"){
                 print_select_row("can_shipping",array($phrases['no'],$phrases['yes']),$data['can_shipping'],''); 
                 print "</td></tr>
                 </table><br>
-               <table border=0 width=\"90%\" class=grid><tr>  
+               <table border=0 width=\"100%\" class=grid><tr>  
 
 
                                     <tr> <td width=\"50\">
@@ -968,7 +968,7 @@ if($action == "product_edit"){
           
          
          print " 
-                              <fieldset style=\"width:90%;\">
+                              <fieldset style=\"width:100%;\">
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -986,22 +986,22 @@ if($action == "product_edit"){
             //------------ Photos -----------//
            /* $count_photos = db_qr_fetch("select count(id) as count from store_products_photos where product_id='$id'");
             
-            print "<fieldset style=\"width:90%;\">
+            print "<fieldset style=\"width:100%;\">
                               <legend><b>$phrases[product_photos]</b></legend>
-                              <center><b> $phrases[photos_count] : </b> ".intval($count_photos['count'])." [<a href='index.php?action=products_photos&id=$id'> $phrases[manage_product_photos] </a>]</center>
+                              <b> $phrases[photos_count] : </b> ".intval($count_photos['count'])." [<a href='index.php?action=products_photos&id=$id'> $phrases[manage_product_photos] </a>]
                               <br>
                               </fieldset><br><br>";*/
                                               
             //-------------------------------------                  
-               print "<table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>                              
+               print "<table border=0 width=\"100%\"   class=grid>                              
       <tr><td  align=center>  <input type=\"submit\" value=\"$phrases[edit]\">  </td></tr>
 </table>
 
-</form>    </center>";
+</form>    ";
 
 
  }else{
-     print_admin_table("<center> $phrases[err_wrong_url]</center>");
+     print_admin_table(" $phrases[err_wrong_url]");
      
  }
         }
@@ -1012,7 +1012,7 @@ if($action=="product_add"){
     if_products_cat_admin($cat,false);
     print_admin_path_links($cat);
     
-   print "<center>
+   print "
                
                    
                 <form name=sender method=\"POST\" action=\"products.php\" enctype=\"multipart/form-data\">
@@ -1022,7 +1022,7 @@ if($action=="product_add"){
 
 
 
-                                       <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid><tr>
+                                       <table border=0 width=\"100%\"   class=grid><tr>
 
               
 
@@ -1057,7 +1057,7 @@ if($action=="product_add"){
                 print_select_row("can_shipping",array($phrases['no'],$phrases['yes']),$data['can_shipping'],''); 
                 print "</td></tr>               
                   </table><br>
-                  <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>  
+                  <table border=0 width=\"100%\"   class=grid>  
                                     <tr> <td width=\"50\">
                 <b>$phrases[the_details]</b></td>
                                 <td>";
@@ -1081,7 +1081,7 @@ if($action=="product_add"){
                       //------- fields ------//
                       $fields_array = get_product_cat_fields($cat,true);
                       if(count($fields_array)){ 
-                      print "  <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>  ";
+                      print "  <table border=0 width=\"100%\"   class=grid>  ";
                          
                         $qro = db_query("select * from store_fields_sets where id IN (".implode(",",$fields_array).") and active=1 order by ord");  
                        $i=0;
@@ -1121,7 +1121,7 @@ if($action=="product_add"){
                       }
                       //---------------------// 
                 print " 
-                              <fieldset style=\"width:90%;\">
+                              <fieldset style=\"width:100%;\">
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -1136,13 +1136,13 @@ if($action=="product_add"){
                               
                               </table>
                               </fieldset><br><br>
-                 <fieldset style=\"width:90%;\">
+                 <fieldset style=\"width:100%;\">
                               <legend><b>$phrases[product_photos]</b></legend>
-                              <center>$phrases[product_add_photos_note]</center>
+                              $phrases[product_add_photos_note]
                               <br>
                               </fieldset><br><br>
                                      
-               <table border=0 width=\"90%\"  style=\"border-collapse: collapse\" class=grid>           
+               <table border=0 width=\"100%\"   class=grid>           
              <tr><td align=center>  <input type=\"submit\" value=\"$phrases[add_button]\">  </td></tr>
 
 
@@ -1150,7 +1150,7 @@ if($action=="product_add"){
 
                 </table>
 
-</form>    </center>\n";
+</form>    ";
 
 }
 //-----------end ----------------

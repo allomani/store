@@ -70,6 +70,7 @@ background-color: #E8F8FF;
 
 .handle {
    width:15px;
+   height: 15px;
     background-image: url('../images/move.gif');
     background-repeat: no-repeat;
     background-position: center;

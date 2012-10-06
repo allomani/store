@@ -43,6 +43,7 @@ if($action=="set_blocks_sort"){
             case "payment_methods" :  if_admin(); $sort_table = 'store_payment_methods';break;
               case "shipping_methods" :  if_admin(); $sort_table = 'store_shipping_methods';break;
                case "orders_status" :  if_admin('orders_status'); $sort_table = 'store_orders_status';break;
+                case "product_photos" :   $sort_table = 'store_products_photos';break;
         default: die();break;
     }
       
@@ -54,14 +55,3 @@ if($action=="set_blocks_sort"){
      }
 
 
-
- //---------Product Photos  Sort ------------
-if($action=="set_product_photos_sort"){ 
-    
-if(is_array($sort_list)){
- for ($i = 0; $i < count($sort_list); $i++) {  
-   
-    db_query("UPDATE store_products_photos SET ord = '$i' WHERE `id` = $sort_list[$i]");
- }
-}
-}

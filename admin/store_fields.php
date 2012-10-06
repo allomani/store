@@ -148,7 +148,7 @@ if ($action == "add") {
                                  </td>
         </tr>
 
-<tr><td><b>$phrases[the_type]</b></td><td><select name=type onChange=\"show_hide_fields_divs(this.value);\">
+<tr><td><b>$phrases[the_type]</b></td><td><select name='type' id='type' onChange=\"show_hide_fields_divs(this.value);\">
 <option value='text'>$phrases[textbox]</option>
 
 <option value='select'>$phrases[select_menu]</option>
@@ -213,7 +213,7 @@ if ($action == "edit" || $action == "fields_options_edit_ok") {
         </tr>
         
          
-<tr><td><b>$phrases[the_type]</b></td><td><select name=type onChange=\"show_hide_fields_divs(this.value);\">";
+<tr><td><b>$phrases[the_type]</b></td><td><select name='type' id='type' onChange=\"show_hide_fields_divs(this.value);\">";
 
         if ($data['type'] == "text") {
             $chk1 = "selected";
@@ -266,7 +266,7 @@ if ($action == "edit" || $action == "fields_options_edit_ok") {
         print "</table></center></form>
 
 <script>
-show_hide_fields_divs($('type').value);
+show_hide_fields_divs($('#type').val());
 </script>
 ";
     } else {
