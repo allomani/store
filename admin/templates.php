@@ -86,7 +86,10 @@ print "
   if($cat){
 
 $cat_data = db_qr_fetch("select name from store_templates_cats where id='$cat'");
-print "<p align=$global_align><img src='images/link.gif'><a href='templates.php'>$phrases[the_templates] </a> / $cat_data[name]</p>";
+print "<ul class='nav-bar'>
+    <li><a href='templates.php'>$phrases[the_templates]</a></li>
+<li>$cat_data[name]</li>
+</ul>";
 
 
          $qr = db_query("select a.*,b.name as group_name from store_templates a,store_templates_groups b where a.cat = '$cat' and b.id = a.group_id order by b.ord , a.id");
@@ -217,7 +220,11 @@ $qr = db_query("select * from store_templates where id='$id'");
     
      
  $cat_data = db_qr_fetch("select name from store_templates_cats where id='$data[cat]'");
-print "<p align=$global_align><img src='images/link.gif'><a href='templates.php'>$phrases[the_templates] </a> / <a href='templates.php?cat=$data[cat]'>$cat_data[name]</a> / $data[name]</p>";
+print "<ul class='nav-bar'>
+    <li><a href='templates.php'>$phrases[the_templates]</a></li>
+        <li><a href='templates.php?cat=$data[cat]'>$cat_data[name]</a></li>
+ <li>$data[name]</li>
+ </ul>";
 
 
 
@@ -261,7 +268,11 @@ if_admin("templates");
 
    $cat=intval($cat);
  $cat_data = db_qr_fetch("select name from store_templates_cats where id='$cat'");
-print "<p align=$global_align><img src='images/link.gif'><a href='templates.php'>$phrases[the_templates] </a> / <a href='templates.php?cat=$cat'>$cat_data[name]</a> / $phrases[add_new_template]</p>";
+print "<ul class='nav-bar'>
+    <li><a href='templates.php'>$phrases[the_templates]</a></li>
+        <li><a href='templates.php?cat=$cat'>$cat_data[name]</a></li>
+ <li>$phrases[add_new_template]</li>
+ </ul>";
 
 
 print "

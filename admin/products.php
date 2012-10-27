@@ -13,7 +13,7 @@ if_products_cat_admin($cat,false);
  print "<form action='products.php' method=post name=sender>
  <input type=hidden name=action value='products_move_ok'>
  <input type=hidden name=from_cat value='$cat'>
- <table width=60% class=grid><tr><td colspan=2><b>$phrases[move_from] : </b>";
+ <center><table width=60% class=grid><tr><td colspan=2><b>$phrases[move_from] : </b>";
 
 //-----------------------------------------
 $data_from['cat'] = $cat ;
@@ -59,7 +59,7 @@ while($dir_data['cat']!=0){
  <tr><td colspan=2 align=center><input type=submit value=' $phrases[move_the_products] '></td></tr>
  </table>";
  }else{
-                print "  $phrases[please_select_products_first] ";
+                print "<center>  $phrases[please_select_products_first] </center>";
                 }
         }
   
@@ -76,7 +76,7 @@ if_products_cat_admin($cat,false);
  print "<form action='products.php' method=post name=sender>
  <input type=hidden name=action value='products_cat_move_ok'>
  <input type=hidden name=from_cat value='$cat'>
- <table width=60% class=grid><tr><td colspan=2><b> $phrases[move_from] : </b>";
+ <center><table width=60% class=grid><tr><td colspan=2><b> $phrases[move_from] : </b>";
 
 //-----------------------------------------
 $data_from['cat'] = $cat ;
@@ -125,7 +125,7 @@ while($dir_data['cat']!=0){
  <tr><td colspan=2 align=center><input type=submit value=' $phrases[move_the_cats] '></td></tr>
  </table>";
  }else{
-                print "  $phrases[please_select_cats_first] ";
+                print "<center>  $phrases[please_select_cats_first] </center>";
                 }
         }      
         
@@ -323,15 +323,15 @@ $thumb =  create_thumb($img_full,$settings['products_thumb_width'],$settings['pr
 //------------------------
    
 }else{
-print_admin_table("".$fl->last_error_description."");   
+print_admin_table("<center>".$fl->last_error_description."</center>");   
 }
 
       
 }else{
-print_admin_table("$phrases[this_filetype_not_allowed]");
+print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
 }
 }else{
-      print_admin_table("  $settings[uploader_msg]  ","90%") ;  
+      print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
 }
 }
 
@@ -416,14 +416,14 @@ $thumb =  create_thumb($img_full,$settings['products_thumb_width'],$settings['pr
 //------------------------
    
 }else{
-print_admin_table("".$fl->last_error_description."");   
+print_admin_table("<center>".$fl->last_error_description."</center>");   
 }
       
 }else{
-print_admin_table("$phrases[this_filetype_not_allowed]");
+print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
 }
  }else{
-     print_admin_table("  $settings[uploader_msg]  ","90%") ;  
+     print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
  }
 }
 //--------------End Save New Picture----------------
@@ -452,8 +452,8 @@ print_admin_table("$phrases[this_filetype_not_allowed]");
       
 
  if(db_num($qr)){
- print "
- <p class=title align=center>$phrases[the_cats]</p>
+ print "<center>
+ <p class=title>$phrases[the_cats]</p>
  <form action='products.php' name=cats_form method=post>
  <input type=hidden name=cat value='$cat'>
  <input type=hidden name='start' value='$start'>
@@ -510,7 +510,7 @@ print_admin_table("$phrases[this_filetype_not_allowed]");
       
        
         
-          <br>
+          </center><br>
           </form>
        
        <script type=\"text/javascript\">
@@ -541,7 +541,7 @@ print_admin_table("$phrases[this_filetype_not_allowed]");
           
         $items_count = valueof(db_qr_fetch("select count(*) as count from store_products_data where cat='$cat'"),'count');
         
-            print "
+            print "<center>
             <form action='products.php' method=post name='products_form'>
             <input type=hidden name=cat value='$cat'>
             <table class=grid width=90%><tr><td>
@@ -590,7 +590,7 @@ toggle_tr_class();
             print_pages_links($start, $items_count, $perpage, $page_string);
               }else{
                 if($cat > 0 || $no_cats){
-                      print_admin_table("$phrases[no_products]");
+                      print_admin_table("<center>$phrases[no_products]</center>");
                 }
                       }
 
@@ -603,7 +603,7 @@ if($action=="products_cat_add"){
   print_admin_path_links($cat);  
   
   
-print "<p class=title align=center>$phrases[add_cat] </p>
+print "<center><p class=title>$phrases[add_cat] </p>
    <form method=\"POST\" action=\"products.php\" name='sender'>
    <input type=hidden name='action' value='products_cat_add_ok'>
       <input type=hidden name='cat' value='$cat'>
@@ -699,7 +699,7 @@ print "<p class=title align=center>$phrases[add_cat] </p>
                        }
   //-------------- Tags --------------//                     
                               print "
-                              <fieldset style=\"width:100%;\">
+                              <fieldset>
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -722,7 +722,7 @@ print "<p class=title align=center>$phrases[add_cat] </p>
 
     </form>
 
-   ";
+   </center>";
    
    }
  //------------------------- Cat Edit------------------------
@@ -735,7 +735,7 @@ print "<p class=title align=center>$phrases[add_cat] </p>
           if_products_cat_admin($id);
            
            $data=db_fetch($qr); 
-               print "
+               print "<center>
 
                 <table border=0 width=\"100%\"   class=grid><tr>
 
@@ -838,7 +838,7 @@ print "<p class=title align=center>$phrases[add_cat] </p>
                        }
     //-------------- Tags ------------//                 
                               print "
-                              <fieldset style=\"width:100%;\">
+                              <fieldset>
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -856,16 +856,16 @@ print "<p class=title align=center>$phrases[add_cat] </p>
                                <table border=0 width=\"100%\"   class=grid>
                                <tr>
                                 <td>
-                <input type=\"submit\" value=\"$phrases[edit]\">
+                <center><input type=\"submit\" value=\"$phrases[edit]\">
                         </td>
                         </tr>
                         </table>
 
                   
 
-</form>    ";
+</form>    </center>\n";
 }else{
-     print_admin_table(" $phrases[err_wrong_url]");
+     print_admin_table("<center> $phrases[err_wrong_url]</center>");
      
  }
                       }
@@ -889,7 +889,7 @@ if($action == "product_edit"){
  
   
    
-   print " 
+   print " <center>
    
    <table class=grid><tr>
    <td align=center><a href='products_fields.php?id=$id'>Fields</a></td>
@@ -968,7 +968,7 @@ if($action == "product_edit"){
           
          
          print " 
-                              <fieldset style=\"width:100%;\">
+                              <fieldset>
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -986,9 +986,9 @@ if($action == "product_edit"){
             //------------ Photos -----------//
            /* $count_photos = db_qr_fetch("select count(id) as count from store_products_photos where product_id='$id'");
             
-            print "<fieldset style=\"width:100%;\">
+            print "<fieldset>
                               <legend><b>$phrases[product_photos]</b></legend>
-                              <b> $phrases[photos_count] : </b> ".intval($count_photos['count'])." [<a href='index.php?action=products_photos&id=$id'> $phrases[manage_product_photos] </a>]
+                              <center><b> $phrases[photos_count] : </b> ".intval($count_photos['count'])." [<a href='index.php?action=products_photos&id=$id'> $phrases[manage_product_photos] </a>]</center>
                               <br>
                               </fieldset><br><br>";*/
                                               
@@ -997,11 +997,11 @@ if($action == "product_edit"){
       <tr><td  align=center>  <input type=\"submit\" value=\"$phrases[edit]\">  </td></tr>
 </table>
 
-</form>    ";
+</form>    </center>";
 
 
  }else{
-     print_admin_table(" $phrases[err_wrong_url]");
+     print_admin_table("<center> $phrases[err_wrong_url]</center>");
      
  }
         }
@@ -1012,7 +1012,7 @@ if($action=="product_add"){
     if_products_cat_admin($cat,false);
     print_admin_path_links($cat);
     
-   print "
+   print "<center>
                
                    
                 <form name=sender method=\"POST\" action=\"products.php\" enctype=\"multipart/form-data\">
@@ -1121,7 +1121,7 @@ if($action=="product_add"){
                       }
                       //---------------------// 
                 print " 
-                              <fieldset style=\"width:100%;\">
+                              <fieldset>
                               <legend><b>$phrases[page_custom_info]</b></legend>
                               <table width=100%>
                               
@@ -1136,9 +1136,9 @@ if($action=="product_add"){
                               
                               </table>
                               </fieldset><br><br>
-                 <fieldset style=\"width:100%;\">
+                 <fieldset>
                               <legend><b>$phrases[product_photos]</b></legend>
-                              $phrases[product_add_photos_note]
+                              <center>$phrases[product_add_photos_note]</center>
                               <br>
                               </fieldset><br><br>
                                      
@@ -1150,7 +1150,7 @@ if($action=="product_add"){
 
                 </table>
 
-</form>    ";
+</form>    </center>\n";
 
 }
 //-----------end ----------------

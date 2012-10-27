@@ -75,7 +75,11 @@ print "</table>";
 
 }else{
 
-  print "<img src='images/arrw.gif'>&nbsp; <a href='comments.php'>$phrases[the_comments]</a> / ".$comments_types_phrases[$op]." <br><br>";
+  print "
+      <ul class='nav-bar'>
+      <li><a href='comments.php'>$phrases[the_comments]</a></li>
+    <li>".$comments_types_phrases[$op]."</li>
+        </ul>";
   
   $start = (int) $start;
   $comments_perpage = 50;
@@ -169,7 +173,12 @@ print_pages_links($start,$comments_count['count'],$comments_perpage,$page_string
     if(db_num($qr)){
     
  
-    print "<img src='images/arrw.gif'>&nbsp; <a href='comments.php'>$phrases[the_comments]</a> / <a href='comments.php?op=".htmlspecialchars($op)."'>".$comments_types_phrases[$op]."</a> / $phrases[edit] <br><br>";
+    print "
+        <ul class='nav-bar'>
+        <li><a href='comments.php'>$phrases[the_comments]</a></li>
+            <li><a href='comments.php?op=".htmlspecialchars($op)."'>".$comments_types_phrases[$op]."</a></li>
+            <li>$phrases[edit]</li>
+            </ul>";
   
      
        print "<form action='comments.php' method='post'>

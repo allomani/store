@@ -119,7 +119,10 @@ if ($action == "edit") {
             $geo_zones = array();
         }
 
-        print "<img src='images/arrw.gif'>&nbsp;<a href='shipping_methods.php'>$phrases[shipping_methods]</a> / $data[name] <br><br>   
+        print "<ul class='nav-bar'>
+            <li><a href='shipping_methods.php'>$phrases[shipping_methods]</a></li>
+        <li>$data[name]</li>
+            </ul>
         
         <center><form action=shipping_methods.php method=post>
         <input type=hidden name=id value='$id'>
@@ -309,7 +312,10 @@ if ($action == "add") {
     if_admin();
 
     print "
-        <img src='images/arrw.gif'>&nbsp;<a href='shipping_methods.php'>$phrases[shipping_methods]</a> / $phrases[add] <br><br>
+       <ul class='nav-bar'>
+       <li><a href='shipping_methods.php'>$phrases[shipping_methods]</a></li>
+    <li>$phrases[add]</li>
+        </ul>
         
         <center><form action='shipping_methods.php' method=post>
         <input type=hidden name=id value='$id'>

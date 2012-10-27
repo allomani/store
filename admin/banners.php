@@ -161,7 +161,10 @@ if($action=="add"){
     if_admin("banners");
     
          print "
-                  <img src='images/arrw.gif'>&nbsp; <a href='banners.php'>$phrases[the_banners]</a> / $phrases[add_button] <br><br> 
+                  <ul class='nav-bar'>
+                  <li><a href='banners.php'>$phrases[the_banners]</a></li>
+                   <li>$phrases[add_button]</li>
+                    </ul>
                 
                 
                 <form method=\"POST\" action=\"banners.php\" name='sender'>
@@ -339,7 +342,11 @@ $c++ ;
     if_admin("banners");
   
         $data=db_qr_fetch("select * from store_banners where id='$id'");
-        print "<img src='images/arrw.gif'>&nbsp;<a href='banners.php'>$phrases[the_banners]</a> / $data[title] <br><br> 
+        print "
+            <ul class='nav-bar'>
+            <li><a href='banners.php'>$phrases[the_banners]</a></li>
+        <li>$data[title]</li>
+            </ul>
                    
                    <form name=sender method=\"POST\" action=\"banners.php\">
                  <input type='hidden' value='edit_ok' name='action'>

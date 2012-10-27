@@ -37,7 +37,10 @@ if($group){
  
 $cat_data = db_qr_fetch("select name from store_phrases_cats where id='".db_escape($group)."'");
 
-print "<p align=$global_align><img src='images/link.gif'><a href='phrases.php'>$phrases[the_phrases] </a> / $cat_data[name]</p>";
+print "<ul class='nav-bar'>
+    <li><a href='phrases.php'>$phrases[the_phrases]</a></li>
+<li>$cat_data[name]</li>
+</ul>";
 
 
          $qr = db_query("select * from store_phrases where cat='".db_escape($group)."'");

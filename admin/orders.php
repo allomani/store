@@ -283,7 +283,10 @@ if($action=="orders_edit" || $action=="orders_edit_ok" || $action=="orders_item_
       
     $id = intval($id);
     
-print "<img src='images/arrw.gif'>&nbsp;<a href='orders.php'>$phrases[the_orders]</a> / <a href='orders.php?action=orders_edit&id=$id'>$phrases[order_number_x] $id</a><br><br>";
+print "<ul class='nav-bar'>
+    <li><a href='orders.php'>$phrases[the_orders]</a></li>
+        <li><a href='orders.php?action=orders_edit&id=$id'>$phrases[order_number_x] $id</a></li>
+    </ul>";
 
 
 //----------------- update order  ---------------------------
@@ -369,7 +372,7 @@ $msg_rplc_arr = array($sitename,$scripturl,$id,$invc_url,"\"".addslashes($old_st
  billing_telephone='".db_escape($billing_telephone)."',
  billing_country='".db_escape($billing_country)."',billing_city='".db_escape($billing_city)."',
  shipping_price='".db_escape($shipping_price)."',
- paid='".intval($paid)."',date='".db_escape($date)."',status='".intval($status)."',status_text='".db_escape($status_text)."' where id='$id'");
+ paid='".intval($paid)."',status='".intval($status)."',status_text='".db_escape($status_text)."' where id='$id'");
     
 }
 //-----------------------------------------------------------
@@ -512,7 +515,7 @@ $tr_color="#F0F0F0";
   print "<a href=\"index.php?action=client_edit&id=$data_client[id]\">$data_client[username]</a>";
   print "</td></tr>
  
- <tr><td><b>$phrases[order_date]</b></td><td><input type=text name=\"date\" value=\"$data[date]\" dir=ltr size=30></td></tr>";
+ <tr><td><b>$phrases[order_date]</b></td><td>".get_date($data['date'],"d M Y h:i")."</td></tr>";
   if($settings['show_paid_option']){   
  print "<tr><td><b>$phrases[paid]</b></td><td>";
  print_select_row('paid',array("$phrases[no]","$phrases[yes]"),$data['paid']) ;

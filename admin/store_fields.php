@@ -122,7 +122,10 @@ if (!$action || $action == "edit_ok" || $action == "add_ok" ||
 if ($action == "add") {
     if_admin("store_fields");
 
-    print "<img src='images/link.gif'> <a href='store_fields.php'>$phrases[products_fields]</a> / $phrases[store_field_add]<br><br>";
+    print "<ul class='nav-bar'>
+        <li><a href='store_fields.php'>$phrases[products_fields]</a></li>
+        <li>$phrases[store_field_add]</li>
+    </ul>";
 
 
     print "<center>
@@ -178,7 +181,9 @@ if ($action == "edit" || $action == "fields_options_edit_ok") {
     if_admin("store_fields");
     $id = intval($id);
 
-    print "<img src='images/link.gif'> <a href='store_fields.php'>$phrases[products_fields]</a><br><br>";
+    print "<ul class='nav-bar'>
+        <li><a href='store_fields.php'>$phrases[products_fields]</a></li>
+    </ul>";
 
 //---- edit options -----//
     if ($action == "fields_options_edit_ok") {

@@ -71,20 +71,15 @@ if ($settings['count_visitors_info']) {
 
 //-------- OS and Browser Info ------------
 
-    db_query("update info_browser set count=count+1 where name like '$browser'");
-    db_query("update info_os set count=count+1 where name like '$os'");
+    db_query("insert into info_browser (name,count) values ('".db_escape($browser)."','1') ON DUPLICATE KEY UPDATE count=count+1");
+    db_query("insert into info_os (name,count) values ('".db_escape($os)."','1') ON DUPLICATE KEY UPDATE count=count+1");
 }
 
 
 if ($settings['count_visitors_hits']) {
 //------ Visitors Count ----------------
-    $dot = date("d-m-Y");
-    $result = db_query("select hits from info_hits where date like '$dot'");
-    if (db_num($result)) {
-        db_query("update info_hits set hits=hits+1 where date like '$dot'");
-    } else {
-        db_query("insert into info_hits (date,hits) values ('$dot','1')");
-    }
+    $today = date("d-m-Y");
+    db_query("insert into info_hits (date,hits) values ('$today','1') ON DUPLICATE KEY UPDATE hits=hits+1");
 }
 
 
@@ -103,20 +98,10 @@ if ($settings['count_online_visitors']) {
 
     $time = time();
     $timeout = $time - $timeoutseconds;
-//$file=$_SERVER['PHP_SELF'];
-    $ip_max = $ip;
 
-    db_query("DELETE FROM info_online WHERE time<$timeout or ip like '" . db_escape($ip_max) . "%'");
+    db_query("DELETE FROM info_online WHERE time<$timeout");
+    db_query("INSERT INTO info_online (time,ip) VALUES ('$time', '" . db_escape($ip) . "') ON DUPLICATE KEY UPDATE time='".$time."'");
 
-
-//$sm=split("/",str_replace(".","/",$ip));
-//$ip_max = trim("$sm[0].$sm[1].$sm[2]");
-//$result = db_query("SELECT * FROM info_online WHERE ip like '$ip_max%'");
-//if (db_num($result)) {
-//db_query("UPDATE info_online SET time='$time', ip='$ip' WHERE ip like '$ip_max%'");
-//} else {
-    db_query("INSERT INTO info_online (time,ip) VALUES ('$time', '" . db_escape($ip) . "')");
-//}
 //---------- Now Online Visitors ------------
 
     $visitors_data = db_qr_fetch("select count(*) as count FROM info_online ");

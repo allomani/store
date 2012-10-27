@@ -71,7 +71,10 @@ $qr  = db_query("select * from store_pages where id='$id'");
 
 if(db_num($qr)){
   $data=db_fetch($qr);
-  print "<img src='images/arrw.gif'> &nbsp; <a href='pages.php?action=pages'>$phrases[pages]</a> / $data[title] <br><br>";
+  print "<ul class='nav-bar'>
+      <li><a href='pages.php?action=pages'>$phrases[pages]</a></li>
+    <li>$data[title]</li>
+  </ul>";
   
    
     form_start("pages.php");
@@ -151,7 +154,10 @@ if($action=="pages_add"){
 if_admin("pages"); 
 
 
-  print "<img src='images/arrw.gif'> &nbsp; <a href='pages.php?action=pages'>$phrases[pages]</a> / $phrases[pages_add] <br><br>";
+  print "<ul class='nav-bar'>
+      <li><a href='pages.php?action=pages'>$phrases[pages]</a></li>
+<li>$phrases[pages_add]</li>
+</ul>";
   
   
   

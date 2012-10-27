@@ -7,7 +7,12 @@ if ($action == "permisions") {
     if_admin();
     $data = db_qr_fetch("select * from store_user where id='$id'");
 
-    print "<img src='images/arrw.gif'>&nbsp;<a href='users.php?action=users'>$phrases[the_users]</a> / $phrases[permissions_manage]  / $data[username] <br><br>
+    print "<ul class='nav-bar'>
+        <li><a href='users.php?action=users'>$phrases[the_users]</a></li>
+    <li>$phrases[permissions_manage]</li>
+    <li>$data[username]</li>
+        </ul>
+        
     <form method=post action=users.php>
            <input type=hidden value='$id' name='user_id'>
                <input type=hidden value='permisions_edit' name='action'>";
@@ -189,11 +194,15 @@ if ($action == "edit") {
 
         $data = db_fetch($qr);
 
-        print "<img src='images/arrw.gif'>&nbsp;<a href='users.php?action=users'>$phrases[the_users]</a> / $data[username] <br><br>
+        print "<ul class='nav-bar'>
+        <li><a href='users.php?action=users'>$phrases[the_users]</a></li>
+        <li>$data[username]</li>
+            </ul>
+            
 
 
 <center>
-<FORM METHOD=\"post\" ACTION=\"users.php\">
+<form method=\"post\" action=\"users.php\">
 
  <TABLE width=70% class=grid>
     <TR>
@@ -257,15 +266,19 @@ if ($action == "edit") {
 }
 //--------------------- Add User Form -------------------------------------------------------
 if ($action == "add") {
-    print "   <img src='images/arrw.gif'>&nbsp;<a href='users.php?action=users'>$phrases[the_users]</a> / $phrases[add_button] <br><br>
+    print "<ul class='nav-bar'>
+        <li><a href='users.php?action=users'>$phrases[the_users]</a></li>
+    <li>$phrases[add_button]</li>
+        </ul>
+        
 
    <center>
 
-<form METHOD=\"post\" ACTION=\"users.php\">
-<INPUT TYPE=\"hidden\" NAME=\"action\"  value=\"add_ok\" >
+<form method=\"post\" action=\"users.php\">
+<INPUT TYPE=\"hidden\" name=\"action\"  value=\"add_ok\" >
 
 
- <TABLE width=\"70%\" class=grid>
+ <table width=\"70%\" class=grid>
     <TR>
    <td colspan=2 align=center><span class=title> $phrases[cp_add_user] </span></td></tr>
    <tr>

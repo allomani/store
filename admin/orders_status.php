@@ -115,7 +115,10 @@ $qr = db_query("select * from store_orders_status where id='$id'");
 if(db_num($qr)){
 $data = db_fetch($qr);
 
-print "<img src='images/arrw.gif'>&nbsp;<a href='orders_status.php?action=orders_status'>$phrases[orders_status]</a> / $data[name] <br><br>  
+print "<ul class='nav-bar'>
+    <li><a href='orders_status.php?action=orders_status'>$phrases[orders_status]</a></li>
+    <li>$data[name]</li>
+        </ul>
 
 <form action='orders_status.php' method=post>
 <input type=hidden name=action value='edit_ok'>
@@ -144,7 +147,10 @@ if($action=="add"){
 
     if_admin('orders_status');
     
-print "<img src='images/arrw.gif'>&nbsp;<a href='orders_status.php?action=orders_status'>$phrases[orders_status]</a> / $phrases[add] <br><br>  
+print "<ul class='nav-bar'>
+    <li><a href='orders_status.php?action=orders_status'>$phrases[orders_status]</a></li>
+    <li>$phrases[add]</li>
+        </ul>
 
 <form action='orders_status.php' method=post>
 <input type=hidden name=action value='add_ok'>

@@ -22,8 +22,8 @@ if ($id) {
             $cat_name = db_qr_fetch("select name from store_news_cats where id='$data[cat]'");
         }
         print "<ul class='nav-bar'>
-      <li><a class='path_link' href=\"" . $links['news'] . "\" title=\"$phrases[the_news]\">$phrases[the_news]</a></li>
-          " . iif($cat_name['name'], "<li> <a class='path_link' href=\"" . str_replace("{cat}", $data['cat'], $links['browse_news']) . "\" title=\"$cat_name[name]\">$cat_name[name]</a></li>");
+      <li><a href=\"" . $links['news'] . "\" title=\"$phrases[the_news]\">$phrases[the_news]</a></li>
+          " . iif($cat_name['name'], "<li> <a href=\"" . str_replace("{cat}", $data['cat'], $links['browse_news']) . "\" title=\"$cat_name[name]\">$cat_name[name]</a></li>");
         if ($data[title]) {
             print "<li class='name'>$data[title]</li>";
         }
@@ -57,8 +57,8 @@ if($settings['enable_news_comments']){
         $cat_name = db_qr_fetch("select name from store_news_cats where id='$cat'");
     }
     print "<ul class='nav-bar'>
-      <li><a class='path_link' href=\"" . $links['news'] . "\" title=\"$phrases[the_news]\">$phrases[the_news]</a></li>"
-            . iif($cat_name['name'], "<li><a class='path_link' href=\"" . str_replace("{cat}", $cat, $links['browse_news']) . "\" title=\"$cat_name[name]\">$cat_name[name]</a></li>") . "
+      <li><a href=\"" . $links['news'] . "\" title=\"$phrases[the_news]\">$phrases[the_news]</a></li>"
+            . iif($cat_name['name'], "<li><a href=\"" . str_replace("{cat}", $cat, $links['browse_news']) . "\" title=\"$cat_name[name]\">$cat_name[name]</a></li>") . "
               </ul>";
 
 

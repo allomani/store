@@ -1,4 +1,5 @@
 <?
+
 require("global.php");
 header("Content-Type: text/html;charset=$settings[site_pages_encoding]");
 //------------------------------------------
@@ -137,55 +138,53 @@ if ($action == "cart_delete_item") {
 }
 
 
-if($action == "cart_item_options"){
-  
+if ($action == "cart_item_options") {
+
     print "<form action='ajax.php' method=post id='add_to_cart_form' onSubmit=\"cart_add_item('add_to_cart_form');return false;\">
 <input type='hidden' name='action' value='cart_add_item'>
 <input type='hidden' name='id' value='$id'>
-"; 
- $qro = db_query("select * from store_products_options where product_id='$id'");
- $o=0;
- while($datao = db_fetch($qro)){
-     print "<input type='hidden' name=\"product_options[$o][type]\" value='$datao[type]'>
+";
+    $qro = db_query("select * from store_products_options where product_id='$id'");
+    $o = 0;
+    while ($datao = db_fetch($qro)) {
+        print "<input type='hidden' name=\"product_options[$o][type]\" value='$datao[type]'>
      <input type='hidden' name=\"product_options[$o][id]\" value='$datao[id]'>";
-     print "<fieldset>
+        print "<fieldset>
      <legend><b>$datao[name]</b></legend>";
-     
-     
-     if($datao['type']=="select" || $datao['type']=="checkbox"){
-     $qr_values = db_query("select * from store_products_options_data where cat='$datao[id]'");
-     unset($option_values_arr);
-     while($data_values = db_fetch($qr_values)){
-     $option_values_arr[$data_values['id']] = $data_values['name'].iif($data_values['price']," (".$data_values['price_prefix'].$data_values['price']." $settings[currency])");
-     }
- 
-    if($datao['type']=="select"){
-     print_select_row("product_options[$o][value]",$option_values_arr);
-    }else{ 
-    $oo=0; 
-    foreach($option_values_arr as $key=>$value){
-    print "<input type=checkbox name=\"product_options[$o][value][$oo]\" value=\"$key\" id=\"option_{$key}\"><label for=\"option_{$key}\" class='pointer'>$value</label><br>";
-    $oo++;
+
+
+        if ($datao['type'] == "select" || $datao['type'] == "checkbox") {
+            $qr_values = db_query("select * from store_products_options_data where cat='$datao[id]'");
+            unset($option_values_arr);
+            while ($data_values = db_fetch($qr_values)) {
+                $option_values_arr[$data_values['id']] = $data_values['name'] . iif($data_values['price'], " (" . $data_values['price_prefix'] . $data_values['price'] . " $settings[currency])");
+            }
+
+            if ($datao['type'] == "select") {
+                print_select_row("product_options[$o][value]", $option_values_arr);
+            } else {
+                $oo = 0;
+                foreach ($option_values_arr as $key => $value) {
+                    print "<input type=checkbox name=\"product_options[$o][value][$oo]\" value=\"$key\" id=\"option_{$key}\"><label for=\"option_{$key}\" class='pointer'>$value</label><br>";
+                    $oo++;
+                }
+            }
+        } elseif ($datao['type'] == "text") {
+            print "<input type=\"text\" name=\"product_options[$o][value]\" size=20>";
+        } elseif ($datao['type'] == "textarea") {
+            print "<textarea cols=20 rows=5 name=\"product_options[$o][value]\"></textarea>";
+        }
+
+
+        print "</fieldset><br>";
+        $o++;
     }
-    }
-    
-     }elseif($datao['type']=="text"){
-         print "<input type=\"text\" name=\"product_options[$o][value]\" size=20>";
-     }elseif($datao['type']=="textarea"){
-         print "<textarea cols=20 rows=5 name=\"product_options[$o][value]\"></textarea>";
-     }
-     
-     
-     print "</fieldset><br>";
-     $o++;
- } 
- 
-  print "<p align=\"$global_align_x\"><input type=submit value=\"$phrases[add_to_cart]\" name='cart_button' id='cart_button' class='cart_button'></p>
- </form>"; 
-  
-    }
-    
-    
+
+    print "<p align=\"$global_align_x\"><input type=submit value=\"$phrases[add_to_cart]\" name='cart_button' id='cart_button' class='cart_button'></p>
+ </form>";
+}
+
+
 //-----------------------------------------
 //--------- Payment Method Details -------
 if ($action == "payment_method_details") {
@@ -294,25 +293,25 @@ if ($action == "get_saved_address") {
     }
 
     $data = db_qr_fetch("select * from store_clients_addresses where id='$id'");
-   print json_encode($data); 
-  /*  print "<table width=100%>
- <tr><td><b>" . $phrases[$suffix . "_name"] . "</b></td><td><input type=text name=\"" . $suffix . "_info[name]\" size=30 value=\"$data[name]\"></td></tr>
- 
- <tr><td><b>$phrases[country]</b></td><td><select name=\"" . $suffix . "_info[country]\">";
-    $qr_c = db_query("select * from store_countries order by name asc");
-    while ($data_c = db_fetch($qr_c)) {
-        print "<option value=\"$data_c[name]\"" . iif($data['country'] == $data_c['name'], " selected") . ">$data_c[name]</option>";
-    }
+    print json_encode($data);
+    /*  print "<table width=100%>
+      <tr><td><b>" . $phrases[$suffix . "_name"] . "</b></td><td><input type=text name=\"" . $suffix . "_info[name]\" size=30 value=\"$data[name]\"></td></tr>
 
-    print "</select></td></tr>
- 
-  <tr><td><b>$phrases[city]</b></td><td><input type=text name=\"" . $suffix . "_info[city]\" size=30 value=\"$data[city]\"></td></tr>
- <tr><td><b>$phrases[the_address]</b></td><td><input type=text name=\"" . $suffix . "_info[address_1]\" size=30 value=\"$data[address_1]\"></td></tr>
- <tr><td></td><td><input type=text name=\"" . $suffix . "_info[address_2]\" size=30 value=\"$data[address_2]\"></td></tr>
- 
- <tr><td><b>$phrases[telephone]</b></td><td><input type=text name=\"" . $suffix . "_info[telephone]\" size=30 value=\"$data[tel]\"></td></tr>
-   
- </table>";    */
+      <tr><td><b>$phrases[country]</b></td><td><select name=\"" . $suffix . "_info[country]\">";
+      $qr_c = db_query("select * from store_countries order by name asc");
+      while ($data_c = db_fetch($qr_c)) {
+      print "<option value=\"$data_c[name]\"" . iif($data['country'] == $data_c['name'], " selected") . ">$data_c[name]</option>";
+      }
+
+      print "</select></td></tr>
+
+      <tr><td><b>$phrases[city]</b></td><td><input type=text name=\"" . $suffix . "_info[city]\" size=30 value=\"$data[city]\"></td></tr>
+      <tr><td><b>$phrases[the_address]</b></td><td><input type=text name=\"" . $suffix . "_info[address_1]\" size=30 value=\"$data[address_1]\"></td></tr>
+      <tr><td></td><td><input type=text name=\"" . $suffix . "_info[address_2]\" size=30 value=\"$data[address_2]\"></td></tr>
+
+      <tr><td><b>$phrases[telephone]</b></td><td><input type=text name=\"" . $suffix . "_info[telephone]\" size=30 value=\"$data[tel]\"></td></tr>
+
+      </table>"; */
 }
 
 if ($action == "shipping_method_price") {
@@ -320,7 +319,7 @@ if ($action == "shipping_method_price") {
     $id = (int) $id;
     $obj = get_shipping_method($id);
     if ($obj['status']) {
-        print "<div id='shipping_method_price'>".iif($obj['price'],$obj['price'].' '.$settings['currency'],$phrases['free'])."</div>";   
+        print "<div id='shipping_method_price'>" . iif($obj['price'], $obj['price'] . ' ' . $settings['currency'], $phrases['free']) . "</div>";
     } else {
 
         print "<div id='shipping_method_price'>Cannot Get Price !</div>";
@@ -330,44 +329,39 @@ if ($action == "shipping_method_price") {
 
 
 //-------- Rating ---------------
-if($action=="rating_send"){
+if ($action == "rating_send") {
 
-$id = (int) $id;
-$score = (int) $score;
+    $id = (int) $id;
+    $score = (int) $score;
 
 
 
-    if(in_array($type,$rating_types)){
-   
-   if($score > 0){
-   $cookie_name = 'rating_'.$type.'_'.$id;
-    
-   $settings['rating_expire_hours'] = intval($settings['rating_expire_hours']);
-   $settings['rating_expire_hours'] = iif($settings['rating_expire_hours'],$settings['rating_expire_hours'],1);
-        
-  if(get_cookie($cookie_name)){
-        print "<center>".str_replace('{hours}',$settings['rating_expire_hours'],$phrases['rating_expire_msg'])."</center>" ;                
-  }else{
-     
-       if($type=='news'){
-   db_query("update store_news set votes=votes+$score , votes_total=votes_total+1 where id='$id'");
-   db_query("update store_news set rate = (votes/votes_total) where id='$id'");
-   
-       }
-       
-  set_cookie($cookie_name,1,time()+(60*60*$settings['rating_expire_hours']));    
-         print "$phrases[rating_done]"; 
-         
-  }
-         
-    }else{
-        print "Wrong Rating Value !";
-    }       
-    }else{
-    print "Wrong Reference !";    
+    if (in_array($type, $rating_types)) {
+
+        if ($score > 0) {
+            $cookie_name = 'rating_' . $type . '_' . $id;
+
+            $settings['rating_expire_hours'] = intval($settings['rating_expire_hours']);
+            $settings['rating_expire_hours'] = iif($settings['rating_expire_hours'], $settings['rating_expire_hours'], 1);
+
+            if (get_cookie($cookie_name)) {
+                print "<center>" . str_replace('{hours}', $settings['rating_expire_hours'], $phrases['rating_expire_msg']) . "</center>";
+            } else {
+
+                if ($type == 'news') {
+                    db_query("update store_news set votes=votes+$score , votes_total=votes_total+1 where id='$id'");
+                    db_query("update store_news set rate = (votes/votes_total) where id='$id'");
+                }
+
+                set_cookie($cookie_name, 1, time() + (60 * 60 * $settings['rating_expire_hours']));
+                print "$phrases[rating_done]";
+            }
+        } else {
+            print "Wrong Rating Value !";
+        }
+    } else {
+        print "Wrong Reference !";
     }
-    
-   
 }
 
 
@@ -375,141 +369,131 @@ $score = (int) $score;
 
 //---------------------  Comments ---------------------------
 
-if($action=="comments_add"){
-if(check_member_login()){
+if ($action == "comments_add") {
+    if (check_member_login()) {
 
-if(in_array($type,$comments_types)){
-    
-$content = trim($content);
+        if (in_array($type, $comments_types)) {
 
-if($content){  
+            $content = trim($content);
 
-db_query("insert into store_comments (uid,fid,comment_type,content,time,active) values ('".intval($member_data['id'])."','".intval($id)."','".db_escape($type)."','".db_escape($content)."','".time()."','".iif($settings['comments_auto_activate'],1,0)."')");
+            if ($content) {
 
-   $new_id = mysql_insert_id();
-   
-if($settings['comments_auto_activate']){
-  //  print $content;   
-  $data_member = db_qr_fetch("select ".members_fields_replace('id')." as uid,".members_fields_replace('username')." as username from ".members_table_replace('store_clients')." where ".members_fields_replace('id')."='".intval($member_data['id'])."'",MEMBER_SQL);
-   
-  $data = $data_member;
-  $data['id'] = $new_id;
-  $data['time'] = time()-1;
-  $data['content'] = htmlspecialchars($content);
-  
-  
-  $rcontent =  get_comment($data);   
-   
-       print json_encode(array("status"=>1,"content"=>$rcontent));
-}else{
-     print json_encode(array("status"=>1,"content"=>"","msg"=>"$phrases[comment_is_waiting_admin_review]")); 
-}
+                db_query("insert into store_comments (uid,fid,comment_type,content,time,active) values ('" . intval($member_data['id']) . "','" . intval($id) . "','" . db_escape($type) . "','" . db_escape($content) . "','" . time() . "','" . iif($settings['comments_auto_activate'], 1, 0) . "')");
+
+                $new_id = mysql_insert_id();
+
+                if ($settings['comments_auto_activate']) {
+                    //  print $content;   
+                    $data_member = db_qr_fetch("select " . members_fields_replace('id') . " as uid," . members_fields_replace('username') . " as username from " . members_table_replace('store_clients') . " where " . members_fields_replace('id') . "='" . intval($member_data['id']) . "'", MEMBER_SQL);
+
+                    $data = $data_member;
+                    $data['id'] = $new_id;
+                    $data['time'] = time() - 1;
+                    $data['content'] = htmlspecialchars($content);
 
 
-}else{
-    print json_encode(array("status"=>0,"msg"=>"$phrases[err_empty_comment]"));
-}
-}else{
-      print json_encode(array("status"=>0,"msg"=>"$phrases[err_wrong_url]")); 
-}
-        
-}else{
-  print json_encode(array("status"=>0,"msg"=>"$phrases[please_login_first]"));
-    
-}
+                    $rcontent = get_comment($data);
 
- 
+                    print json_encode(array("status" => 1, "content" => $rcontent));
+                } else {
+                    print json_encode(array("status" => 1, "content" => "", "msg" => "$phrases[comment_is_waiting_admin_review]"));
+                }
+            } else {
+                print json_encode(array("status" => 0, "msg" => "$phrases[err_empty_comment]"));
+            }
+        } else {
+            print json_encode(array("status" => 0, "msg" => "$phrases[err_wrong_url]"));
+        }
+    } else {
+        print json_encode(array("status" => 0, "msg" => "$phrases[please_login_first]"));
+    }
 }
 
 //--------------------------
-if($action=="comments_delete"){
-    
-check_member_login();
-db_query("delete from store_comments where id='".intval($id)."'".iif(!check_admin_login()," and uid='".$member_data['id']."'"));    
-    
+if ($action == "comments_delete") {
+
+    check_member_login();
+    db_query("delete from store_comments where id='" . intval($id) . "'" . iif(!check_admin_login(), " and uid='" . $member_data['id'] . "'"));
 }
 
 //------------------------------
 
 
-if($action=="comments_get"){
+if ($action == "comments_get") {
 
-      $offset = (int) $offset;
-      if(!$offset){$offset=1;}
-      $perpage =  intval($settings['commets_per_request']);
-      if(!$perpage){$perpage=10;}
-      $start = (($offset-1) * $perpage) ;
-      
- 
-  $check_admin_login = check_admin_login();
-  $check_member_login =  check_member_login();
-   
-  $members_cache = array();
-   
+    $offset = (int) $offset;
+    if (!$offset) {
+        $offset = 1;
+    }
+    $perpage = intval($settings['commets_per_request']);
+    if (!$perpage) {
+        $perpage = 10;
+    }
+    $start = (($offset - 1) * $perpage);
 
-$qr = db_query("select * from store_comments where fid='".db_escape($id)."' and comment_type like '".db_escape($type)."' and active=1 order by id desc limit $start,$perpage");
-    
-if(db_num($qr)){
-   if($offset = 1){
-  print "<div id='no_comments'></div>";
-   }
-  
- 
-   
-    $c=0;
-    while($data=db_fetch($qr)){                                                                    
-        $data_arr[$c] = $data;
-    
-    if($members_cache[$data['uid']]['username']){
-    $udata = $members_cache[$data['uid']];
-    }else{
-    $udata = db_qr_fetch("select ".members_fields_replace('username')." as username from ".members_table_replace('store_clients')." where ".members_fields_replace('id')."='$data[uid]'",MEMBER_SQL);
-    $members_cache[$data['uid']] =  $udata ;
-    }                                             
-    
-    $data_arr[$c]['username'] = $udata['username'];
-  
-    
-    
-    $c++;
-    }
-    
-   
-    
-    //--- first row id ----
-    $first_index = count($data_arr)-1;
-     $data_first_row = db_qr_fetch("select id from store_comments where fid='".db_escape($id)."' and comment_type like '".db_escape($type)."' and active=1 order by id limit 1");
-     if($data_arr[$first_index]['id'] != $data_first_row['id']){
-          print " <div id='comments_older_div' class='older_comments_div'><a href='javascript:;' onClick=\"comments_get('".$type."','".$id."');\"><img src=\"$style[images]/older_comments.gif\">&nbsp; $phrases[older_comments]</a></div> ";
-     }                                                        
-    //---------------------
-    
-    
-    
-    unset($data);
-    for($i=count($data_arr)-1;$i>=0;$i--){
-           //    print $i;
-        $data= $data_arr[$i];
-        
-    if($tr_class=="row_2"){
-        $tr_class="row_1";
-    }else{
-        $tr_class="row_2";
-    }
-           
-    print get_comment($data);
-    }
-   
-    
-}else{
-    if($offset == 1){ 
-    print "<div id='no_comments'>$phrases[no_comments]</div>";
+
+    $check_admin_login = check_admin_login();
+    $check_member_login = check_member_login();
+
+    $members_cache = array();
+
+
+    $qr = db_query("select * from store_comments where fid='" . db_escape($id) . "' and comment_type like '" . db_escape($type) . "' and active=1 order by id desc limit $start,$perpage");
+
+    if (db_num($qr)) {
+        if ($offset = 1) {
+            print "<div id='no_comments'></div>";
+        }
+
+
+
+        $c = 0;
+        while ($data = db_fetch($qr)) {
+            $data_arr[$c] = $data;
+
+            if ($members_cache[$data['uid']]['username']) {
+                $udata = $members_cache[$data['uid']];
+            } else {
+                $udata = db_qr_fetch("select " . members_fields_replace('username') . " as username from " . members_table_replace('store_clients') . " where " . members_fields_replace('id') . "='$data[uid]'", MEMBER_SQL);
+                $members_cache[$data['uid']] = $udata;
+            }
+
+            $data_arr[$c]['username'] = $udata['username'];
+
+
+
+            $c++;
+        }
+
+
+
+        //--- first row id ----
+        $first_index = count($data_arr) - 1;
+        $data_first_row = db_qr_fetch("select id from store_comments where fid='" . db_escape($id) . "' and comment_type like '" . db_escape($type) . "' and active=1 order by id limit 1");
+        if ($data_arr[$first_index]['id'] != $data_first_row['id']) {
+            print " <div id='comments_older_div' class='older_comments_div'><a href='javascript:;' onClick=\"comments_get('" . $type . "','" . $id . "');\"><img src=\"$style[images]/older_comments.gif\">&nbsp; $phrases[older_comments]</a></div> ";
+        }
+        //---------------------
+
+
+
+        unset($data);
+        for ($i = count($data_arr) - 1; $i >= 0; $i--) {
+            //    print $i;
+            $data = $data_arr[$i];
+
+            if ($tr_class == "row_2") {
+                $tr_class = "row_1";
+            } else {
+                $tr_class = "row_2";
+            }
+
+            print get_comment($data);
+        }
+    } else {
+        if ($offset == 1) {
+            print "<div id='no_comments'>$phrases[no_comments]</div>";
+        }
     }
 }
-
-
- 
-}
-
-
 ?>

@@ -78,7 +78,10 @@ if_admin();
     if(db_num($qr)){
         $data = db_fetch($qr);
         
-        print "<img src='images/arrw.gif'>&nbsp;<a href='payment_methods.php'>$phrases[payment_methods]</a> / $data[name] <br><br>   
+        print "<ul class='nav-bar'>
+            <li><a href='payment_methods.php'>$phrases[payment_methods]</a></li>
+        <li>$data[name]</li>
+            </ul>
         
         <center><form action=payment_methods.php method=post name=sender>
         <input type=hidden name=id value='$id'>
@@ -127,7 +130,10 @@ if($action=="add"){
 if_admin();
  
         print "
-        <img src='images/arrw.gif'>&nbsp;<a href='payment_methods.php'>$phrases[payment_methods]</a> / $phrases[add] <br><br>
+        <ul class='nav-bar'>
+        <li><a href='payment_methods.php'>$phrases[payment_methods]</a></li>
+<li>$phrases[add]</li>
+    </ul>
         
         <center><form action=payment_methods.php method=post name=sender>
         <input type=hidden name=id value='$id'>

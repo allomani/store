@@ -90,14 +90,19 @@ if($cat){
 $qr = db_query("select id,name from store_news_cats where id='$cat'");
 if(db_num($qr)){
     $data=db_fetch($qr);
-print "<img src=\"images/arrw.gif\">&nbsp;<a href='news.php?action=news'>$phrases[the_news]</a> / $data[name] <br><br>";
+print "<ul class='nav-bar'>
+    <li><a href='news.php'>$phrases[the_news]</a></li>
+    <li>$data[name]</li>
+    </ul>";
   $continue = true;  
 }else{
    print_admin_table("<center>$phrases[err_wrong_url]</center>"); 
     $continue = false;
 }
 }else{
-    print "<img src=\"images/arrw.gif\">&nbsp;<a href='news.php?action=news'>$phrases[the_news]</a> <br><br>"; 
+    print "<ul class='nav-bar'>
+        <li><a href='news.php'>$phrases[the_news]</a></li>
+    </ul>"; 
     $continue = true;
 }
 
@@ -125,7 +130,7 @@ print "<p align='$global_align'><a href='news.php?action=news_cats_add' class='a
       <span style=\"cursor: move;\" class=\"handle\"><img alt='$phrases[click_and_drag_to_change_order]' src='images/move.gif'></span> 
       </td>
       
-      <td width=75%><a href='news.php?action=news&cat=$data[id]'>$data[name]</a></td>
+      <td width=75%><a href='news.php?cat=$data[id]'>$data[name]</a></td>
      
       <td align='$global_align_x'><a href='news.php?action=news_cats_edit&id=$data[id]'>$phrases[edit]</a> - 
       <a href=\"news.php?action=news_cats_del&id=$data[id]\" onClick=\"return confirm('$phrases[news_cat_del_warn]');\">$phrases[delete]</a></td>
@@ -248,8 +253,11 @@ if($action == "news_edit"){
 
   
       print "
-
-<img src='images/arrw.gif'>&nbsp;<a href='news.php?action=news'>$phrases[the_news]</a> / ".iif($data['cat'],"<a href='news.php?action=news&cat=$data[cat]'>$data_cat[name]</a> / ")."$data[title] <br><br>";
+<ul class='nav-bar'>
+<li><a href='news.php'>$phrases[the_news]</a></li>
+".iif($data['cat'],"<li><a href='news.php?cat=$data[cat]'>$data_cat[name]</a></li>")."
+              <li>$data[title]</li>
+              </ul>";
 
 
       print " <center>
@@ -261,7 +269,7 @@ if($action == "news_edit"){
                        <input type=hidden name=\"start\" value='$start'> 
       
                        
-                <table border=0 width=\"90%\" class=grid><tr>
+                <table border=0 width=\"100%\" class=grid><tr>
 
                       <tr>
                                 <td width=\"100\">
@@ -330,12 +338,14 @@ if($cat){
 }
 
  
-print "
-
-<img src='images/arrw.gif'>&nbsp;<a href='news.php?action=news'>$phrases[the_news]</a> / ".iif($data_cat['id'],"<a href='news.php?action=news&cat=$data_cat[id]'>$data_cat[name]</a> / ")."$phrases[news_add] <br><br>";
+print "<ul class='nav-bar'>
+    <li><a href='news.php'>$phrases[the_news]</a></li>
+".iif($data_cat['id'],"<li><a href='news.php?cat=$data_cat[id]'>$data_cat[name]</a></li>")."
+        <li>$phrases[news_add]</li>
+        </ul>";
 
 print "<center>
-                <table border=0 width=\"90%\"  class=grid><tr>
+                <table border=0 width=\"100%\"  class=grid><tr>
 
                 <form name=sender method=\"POST\" action=\"news.php\" name=\"sender\">
 
@@ -398,7 +408,10 @@ $qr = db_query("select * from store_news_cats where id='$id'");
 if(db_num($qr)){
     $data = db_fetch($qr);
     
-    print "<img src=\"images/arrw.gif\">&nbsp;<a href='news.php?action=news'>$phrases[the_news]</a> / $data[name] <br><br>";
+    print "<ul class='nav-bar'>
+        <li><a href='news.php'>$phrases[the_news]</a></li>
+        <li>$data[name]</li>
+    </ul>";
     
     
                print "<center>
@@ -408,7 +421,7 @@ if(db_num($qr)){
 
                       <input type=hidden name=\"action\" value='news_cats_edit_ok'> 
                       
-                <table border=0 width=\"80%\"   class=grid><tr>
+                <table border=0 width=\"100%\"   class=grid><tr>
 
 
                       
@@ -446,7 +459,10 @@ if(db_num($qr)){
    
    if_admin("news");
     
-         print "<img src=\"images/arrw.gif\">&nbsp;<a href='news.php?action=news'>$phrases[the_news]</a> / $phrases[add_cat] <br><br>";
+         print "<ul class='nav-bar'>
+             <li><a href='news.php'>$phrases[the_news]</a></li>
+   <li>$phrases[add_cat]</li>
+   </ul>";
     
     
     
@@ -456,7 +472,7 @@ if(db_num($qr)){
 
                       <input type=hidden name=\"action\" value='news_cats_add_ok'> 
                       
-                <table border=0 width=\"80%\" class=grid><tr>
+                <table border=0 width=\"100%\" class=grid><tr>
 
 
 

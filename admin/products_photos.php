@@ -16,14 +16,14 @@ require('./start.php');
     
  //----------- edit ---------//
  if($action=="edit_ok"){
-     $pic_id = (int) $pic_id;
-     
-     db_query("update store_products_photos set name='".db_escape($name)."' where id='$pic_id'");  
+      $pic_id = (int) $pic_id;
+   
+     db_query("update store_products_photos set name='".db_escape($name)."' where id='$pic_id'");
+    
  }
  //----------- del ----------//
  if($action=="del"){
      $pic_id = (array) $pic_id;
-   
    foreach($pic_id as $iid){ 
    $iid = (int) $iid;
     
@@ -56,16 +56,10 @@ $fl = new save_file($_FILES['img']['tmp_name'][$i],$upload_folder,$_FILES['img']
 
 if($fl->status){
 $img_saved =  $fl->saved_filename;
-if($default_uploader_chmod){@chmod(CWD . "/". $img_saved,$default_uploader_chmod);}  
-
 
 //------- thumb --------
-$thumb_saved =  create_thumb($img_saved,$settings['thumb_width'],$settings['thumb_height'],$settings['thumb_fixed'],'thumb');
-if($default_uploader_chmod){@chmod(CWD . "/".$thumb_saved ,$default_uploader_chmod);}
- 
-    
-    
-    
+$thumb_saved =  create_thumb($img_saved,$settings['products_photos_thumb_width'],$settings['products_photos_thumb_height'],$settings['products_photos_thumb_fixed'],'thumb');
+   
   db_query("insert into store_products_photos (name,img,thumb,product_id) values 
              ('".db_escape($name[$i])."','".db_escape($img_saved,false)."','".db_escape($thumb_saved,false)."','$id')");
              
@@ -109,14 +103,14 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
                        
                        while($data=db_fetch($qr)){
                        
-                        print "<div id=\"item_$data[id]\" style=\"float: $global_align;width:".($settings['thumb_width']+60).";height:".($settings['thumb_height']+80).";border: #CCC 1px dashed; margin:10px;\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\" onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
+                        print "<div id=\"item_$data[id]\" style=\"float: $global_align;padding:10px;border: #CCC 1px dashed; margin:10px;\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\" onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
   
     <div style=\"cursor: move;text-align:right;\" class=\"handle\"></div>  
   
     <br>
    <img src=\"$scripturl/".get_image($data['thumb'])."\" title=\"$data[name]\"><br>
    <br>
-   <input type='checkbox' name='photo_id[]' value='$data[id]'>
+   <input type='checkbox' name='pic_id[]' value='$data[id]'>
    <a href='products_photos.php?action=edit&pic_id=$data[id]&id=$id'>$phrases[edit]</a> - 
    <a href='products_photos.php?action=del&pic_id=$data[id]&id=$id' onclick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a>
    
@@ -138,7 +132,6 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
           &nbsp;  &nbsp;
           
          <select name='action'>
-          <option value='edit'>$phrases[edit]</option>
          <option value='del'>$phrases[delete]</option>
          </select>
         <input type=submit value=\"$phrases[do_button]\" onClick=\"return confirm('$phrases[are_you_sure]');\">

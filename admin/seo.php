@@ -19,7 +19,10 @@ print "<center><table width=60% class=grid>
 if($action=="meta_settings" || $action=="meta_settings_update"){
 if_admin(); 
   
- print "<img src='images/arrw.gif'>&nbsp; <a href='seo.php'>$phrases[seo_settings]</a> / $phrases[pages_meta_settings] <br><br>"; 
+ print "<ul class='nav-bar'>
+     <li><a href='seo.php'>$phrases[seo_settings]</a></li>
+<li>$phrases[pages_meta_settings]</li>
+</ul>"; 
    
 
 if($action=="meta_settings_update"){
@@ -62,7 +65,10 @@ if($action=="links_settings" || $action=="links_settings_update"){
 
 if_admin();
 
- print "<img src='images/arrw.gif'>&nbsp; <a href='seo.php'>$phrases[seo_settings]</a> / $phrases[pages_links_settings] <br><br>"; 
+ print "<ul class='nav-bar'>
+     <li><a href='seo.php'>$phrases[seo_settings]</a></li>
+<li>$phrases[pages_links_settings]</li>
+</ul>"; 
    
    
 if($action=="links_settings_update"){

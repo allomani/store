@@ -23,7 +23,15 @@ db_query("update store_votes_cats set active=0");
 db_query("update store_votes_cats set active=1 where id=$id");
         }
 
-         print "<center><p class=title > $phrases[the_votes] </p>
+         print "
+             
+<p class=title align=center> $phrases[the_votes] </p>
+    
+             <ul class='nav-bar'>
+<li><a href='votes.php'>$phrases[the_votes]</a></li>
+    </ul>
+    
+<center>
          <form action=votes.php method=post>
          <input type=hidden name=action value='vote_add'>
          <table width=50% class=grid><tr><td>
@@ -73,7 +81,9 @@ while($data = db_fetch($qr)){
 
    print "
        
-<p><img src='images/arrw.gif'>&nbsp;<a href='votes.php'>$phrases[the_votes]</a></p>
+<ul class='nav-bar'>
+<li><a href='votes.php'>$phrases[the_votes]</a></li>
+    </ul>
     
 <center>
   <form action=votes.php mothod=post>

@@ -26,9 +26,11 @@ function print_admin_path_links($cat, $filename = "") {
         $dir_data = db_qr_fetch("select name,id,cat from store_products_cats where id='$dir_data[cat]'");
 
 
-        $dir_content = "<a href='products.php?cat=$dir_data[id]'>$dir_data[name]</a> / " . $dir_content;
+        $dir_content = "<li><a href='products.php?cat=$dir_data[id]'>$dir_data[name]</a></li>" . $dir_content;
     }
-    print "<p align=$global_align><img src='images/link.gif'> <a href='products.php?cat=0'>$phrases[the_products]  </a> / $dir_content " . "$filename</p>";
+    print "<ul class='nav-bar'>
+        <li><a href='products.php?cat=0'>$phrases[the_products]</a></li>
+    $dir_content " .iif($filename, "<li>$filename</li>")."</ul>";
 }
 
 //--------------------------------- Check Functions ---------------------------------

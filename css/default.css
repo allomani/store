@@ -272,20 +272,25 @@ A:hover.path_link {
 /* ------------ Navigation Bar ---------------- */
 ul.nav-bar {
 	list-style-type:none;
-         border:1px solid #ccc;height:45px;line-height:45px;
+    border:1px solid #ccc;
+   height:25px;
+   padding: 3px 8px;   
   box-shadow:inset 0 0 0px 1px #FFFFFF;
-  background:url('../images/nav_back.png') repeat-x left bottom;
-  border-radius:4px;
-  -webkit-border-radius:4px;
-  -moz-border-radius:4px;
+  background:url('../images/nav_back.png') repeat-x;
+  border-radius:8px;
+  -webkit-border-radius:8px;
+  -moz-border-radius:8px;
   position:relative; 
   display:block;
   margin-bottom: 10px;
 }
 
 .nav-bar li	{
-float:right;height:45px;background:gold;
-  margin-left:1px;padding:0 5px 0 20px;background:url("../images/nav_arrw.png") no-repeat left center;
+float:right;
+background:gold;
+  margin-left:1px;
+  padding:0 5px 0 20px;
+  background:url("../images/nav_arrw.png") no-repeat left center;
 }
 .nav-bar .name {
     font-weight: bold;
@@ -295,7 +300,10 @@ float:right;height:45px;background:gold;
     content: "/";
 }*/
 .nav-bar a 	
-{ color:#5a5a5a;font-size:12px;line-height:45px;font-weight:bold;text-decoration:none; }
+{ 
+    color:#5a5a5a;
+font-size:12px;
+font-weight:bold;text-decoration:none; }
 
 
 
@@ -409,54 +417,64 @@ text-align: center;
 
 /* --------- Slider ---------------*/
 
-.slider_active {
-	-moz-border-radius: 5px 5px 0px 0px;
-	border-color: #aaa;
-	border-width: 1px;
-	border-style: solid;
-	background-color: #fff;
-	color: #000;
-	float: right;
-	
-	cursor: default;
-	font-weight: bold;
-
-margin: 0 5px; 
-height:15;
-padding: 3px 5px;
-
-	font-size: 10pt;
-	text-align: center;
-	background-image:url('../images/tabs_shade.gif')
+.main_slider {
+    padding: 15px 0 15px 40px;
+    position: relative;
+}
+.main_slider li {
+    border: 1px solid #ccc;
+    background-color: white;
+    padding: 9px;
+    margin: 7px;
+    display: block;
+    float: left;
+    text-align:center;
+}
+.main_slider a.prev, a.next {
+    background: url(../images/miscellaneous_sprite.png) no-repeat transparent;
+    width: 45px;
+    height: 50px;
+    display: block;
+    position: absolute;
+    top: 85px;
+    margin:10px;
+}
+.main_slider a.prev {  
+ left: -15px;
+  background-position: 0 0; 
+}
+.main_slider a.prev:hover {        background-position: 0 -50px; }
+.main_slider a.prev.disabled {    background-position: 0 -100px !important;  }
+.main_slider a.next {            right: -22px;
+                    background-position: -50px 0; }
+.main_slider a.next:hover {        background-position: -50px -50px; }
+.main_slider a.next.disabled {    background-position: -50px -100px !important;  }
+.main_slider a.prev.disabled, a.next.disabled {
+    cursor: default;
 }
 
-.slider_inactive {
-	-moz-border-radius: 5px 5px 0px 0px;
-	border-color: #aaa;
-	border-style: solid;
-	border-width: 1px;
-	background-color: #ddd;
-	color: #777;
-	float: right;
-        cursor:pointer;
-	cursor: hand;
-       
-
-margin: 0 5px; 
-height:15;
-padding: 3px 5px;
-
-	font-size: 10pt;
-	text-align: center;
+.main_slider a.prev span, a.next span {
+    display: none;
+}
+.main_slider .pagination {
+    text-align: center;
+    direction: ltr;
+}
+.main_slider .pagination a {
+    background: url(../images/miscellaneous_sprite.png) 0 -300px no-repeat transparent;
+    width: 15px;
+    height: 15px;
+    margin: 0 5px 0 0;
+    display: inline-block;
+}
+.main_slider .pagination a.selected {
+    background-position: -25px -300px;
+    cursor: default;
+}
+.main_slider .pagination a span {
+    display: none;
 }
 
-
-
-
-.slider_btnz{
-cursor: hand;
-width:25;
-}
 
 /*--------------- FancyBox --------------
 /*! fancyBox v2.0.5 fancyapps.com | fancyapps.com/fancybox/#license */

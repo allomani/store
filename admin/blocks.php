@@ -210,7 +210,11 @@ if($action == "edit_block"){
       $data['file'] = htmlspecialchars($data['file']) ;
 
 
- print "<img src='images/arrw.gif'>&nbsp;<a href='blocks.php?action=blocks'>$phrases[the_blocks]</a> / $data[title] <br><br>
+ print "
+     <ul class='nav-bar'>
+     <li><a href='blocks.php?action=blocks'>$phrases[the_blocks]</a></li>
+      <li>$data[title]</li>
+          </ul>
  
  <form method=\"POST\" action=\"blocks.php\">  
  <input type=hidden name=\"action\" value='edit_ok'>
@@ -317,33 +321,12 @@ $i++;
         
 //------------ Block Add ------------
 if($action=="add"){
-     print "<img src='images/arrw.gif'>&nbsp;<a href='blocks.php?action=blocks'>$phrases[the_blocks]</a> / $phrases[add_button] <br><br>";     
-?>
-    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
-    <script src="codemirror/lib/codemirror.js"></script>
-    <script src="codemirror/mode/php/php.js"></script>
-    <script src="codemirror/mode/clike/clike.js"></script> 
-    <script src="codemirror/mode/xml/xml.js"></script> 
-    <script src="codemirror/mode/css/css.js"></script> 
-    <script src="codemirror/mode/javascript/javascript.js"></script> 
-        
-   
-
-    <style type="text/css">
-      .CodeMirror {
-        border: 1px solid #ccc;
-        direction:ltr;
-        text-align:left;
-       width:99%;
-      }
-      .CodeMirror-scroll {
-        height: 300px;
-        overflow-y: auto;
-        overflow-x: scroll;
-        width: 100%;
-      }
-    </style>
-<?    
+     print "
+         <ul class='nav-bar'>
+         <li><a href='blocks.php?action=blocks'>$phrases[the_blocks]</a></li>
+        <li>$phrases[add_button]</li>
+    </ul>";     
+  
    print "
     <form method=\"POST\" action=\"blocks.php\" name=submit_form>
     <input type=hidden name=\"action\" value='add_ok'>
@@ -431,22 +414,7 @@ $i++;
 </center>
 </form>";
 
-?>
-<script>
-      var editor = CodeMirror.fromTextArea(document.getElementById("file"), {
-       matchBrackets: true,
-        mode: "application/x-httpd-php",
-        indentUnit: 4,
-        indentWithTabs: true,
-        enterMode: "keep",
-        tabMode: "shift",
-        lineNumbers: true,
-        lineWrapping: true,
-        fixedGutter : true
-      });
-    </script>
-    <?
-
+        code_editor_init("file");
 
 }
 
