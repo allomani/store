@@ -18,7 +18,7 @@ db_query("insert into store_user (username,password,email,group_id) values('".db
 }
 }
 //-------- First time setup ----------//
-$users_num = db_qr_fetch("select count(id) as count from store_user");
+$users_num = db_qr_fetch("select count(*) as count from store_user");       
 if($users_num['count'] == 0){
 
 if($global_lang=="arabic"){

@@ -6,6 +6,7 @@ $db_name = "store200" ;
 $db_username = "root" ;
 $db_password = "" ;
 $db_charset = "utf8"; 
+$db_extension = "mysqli";
 
 
 //---------- Script Settings ---------- 

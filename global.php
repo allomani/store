@@ -95,25 +95,15 @@ if ($session_cookie_save) {
 }
 
 //---------------- Cache -------------------
-if ($cache_srv['engine'] == 'memcache') {
-    require(CWD . "/includes/functions_memcache.php");
-} elseif ($cache_srv['engine'] == 'xcache') {
-    require(CWD . "/includes/functions_xcache.php");
-} elseif ($cache_srv['engine'] == 'filecache') {
-    require(CWD . "/includes/functions_filecache.php");
-} else {
-    require(CWD . "/includes/functions_nocache.php");
-}
-
+require(CWD . "/includes/functions_".$cache_srv['engine'].".php");
 cache_init();
 
-//------------------------------------------
+//-------------- Database -------------------
+require(CWD . "/includes/functions_db_".$db_extension.".php");
 
-
-require(CWD . "/includes/functions_db.php");
-//---------------------------
 db_connect($db_host, $db_username, $db_password, $db_name, $db_charset);
 
+//---------------------------
 
 $data_cat_cache = array();
 $cat_fields_cache = array();

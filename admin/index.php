@@ -45,7 +45,7 @@ print "<center><table width=50% class=grid><tr><td align=center><b>$phrases[welc
     
     print "<span dir='$global_dir'><b>$phrases[php_version] : </b></span> <br><span dir='ltr'>".@phpversion()." </span><br><br> ";
 
-      print "<b><span dir=$global_dir>$phrases[mysql_version] :</span> </b><br><span dir=ltr>" .@mysql_get_server_info() ."</span><br><br>";
+      print "<b><span dir=$global_dir>$phrases[mysql_version] :</span> </b><br><span dir=ltr>" .db_server_info() ."</span><br><br>";
   
    if(extension_loaded('ionCube Loader')){
    print "<b><span dir=$global_dir>$phrases[ioncube_version] :</span> </b><br><span dir=ltr>" . ioncube_loader_version()  ."</span><br><br>";
