@@ -12,8 +12,6 @@ $re_link = iif($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_REFERER'],'index.php');
  
  //--------------Item Delete------------
  if($action=="item_delete"){
- //set_cookie('cart',base64_url_decode($cart_hash));
- //print base64_url_decode($cart_hash);
  cart_item_delete($hash);
  print_redirection($re_link);
  }

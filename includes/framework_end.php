@@ -29,7 +29,7 @@ print "</td>" ;
 
 
   if(count($blocks['r'][0])){
-print "<td width='$blocks_width' valign=\"top\" align=\"center\" dir=\"$global_dir\">";
+print "<td id=\"right_blocks\">";
 
 print "<table width=100%>";
 

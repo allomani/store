@@ -7,12 +7,7 @@ if($debug){$start_time=microtime();}
 
 if(!$settings['enable_browsing']){
 if(!check_admin_login()){
-print "<html>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$settings[site_pages_encoding]\" />
-<head>
-</head><body>
-<center><table width=50% style=\"border: 1px solid #ccc\"><tr><td> $settings[disable_browsing_msg] </td></tr></table></center>
-</body></html>";
+run_template('browsing_disabled_page');
 die();
 }
 }
@@ -24,14 +19,7 @@ site_header();
 compile_hook('site_after_header');
 
 
-
-
- if(!$blocks_width){
-            $blocks_width = "17%" ;
-            }
-                  
-       
-       print "<table border=\"0\" width=\"100%\"  style=\"border-collapse: collapse\" dir=ltr>
+print "<table id=\"main_container\">
 
          <tr>" ;
         //------------------------- Block Pages System ---------------------------
@@ -90,7 +78,7 @@ compile_hook('site_after_header');
         unset($qr,$data);
        //----------------------- Left Content --------------------------------------------
       if(count($blocks['l'])){
-        print "<td width='$blocks_width' valign=\"top\" align=\"center\" dir=\"$global_dir\">
+        print "<td id=\"left_blocks\">
         <table width=100%>" ;
 
         $adv_c = 1 ;

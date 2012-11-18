@@ -10,7 +10,6 @@ $db_extension = "mysqli";
 
 
 //---------- Script Settings ---------- 
-$blocks_width = "17%" ;
 
 $global_lang = "arabic" ;
 

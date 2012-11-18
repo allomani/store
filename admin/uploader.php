@@ -7,15 +7,15 @@ define('CWD', (($getcwd = getcwd()) ? $getcwd : '.'));
 require(CWD . "/global.php") ;
 
 echo "<html dir=$global_dir>\n";
-print "<META http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
-<META http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
+print "<meta http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
+<mata http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
 ?>
 <? print "<title>$phrases[uploader_title]</title>\n";?>
 <link href="images/style.css" type=text/css rel=stylesheet>
-<script src='js.js' type="text/javascript" language="javascript"></script>
+<script src='javascript.js' type="text/javascript" language="javascript"></script>
 <br>
 <?
-if (check_login_cookies()) {
+if (check_admin_login()) {
 if($settings['uploader']){ 
 if(($_FILES['datafile']['name'] || $url) && $folder && $f_name){
    $upload_folder = $settings['uploader_path']."/$folder" ;

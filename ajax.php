@@ -339,12 +339,12 @@ if ($action == "rating_send") {
     if (in_array($type, $rating_types)) {
 
         if ($score > 0) {
-            $cookie_name = 'rating_' . $type . '_' . $id;
+            $session_name = 'rating_' . $type . '_' . $id;
 
             $settings['rating_expire_hours'] = intval($settings['rating_expire_hours']);
             $settings['rating_expire_hours'] = iif($settings['rating_expire_hours'], $settings['rating_expire_hours'], 1);
 
-            if (get_cookie($cookie_name)) {
+            if (get_session($session_name) > time() - (60 * 60 * $settings['rating_expire_hours'])) {
                 print "<center>" . str_replace('{hours}', $settings['rating_expire_hours'], $phrases['rating_expire_msg']) . "</center>";
             } else {
 
@@ -353,7 +353,7 @@ if ($action == "rating_send") {
                     db_query("update store_news set rate = (votes/votes_total) where id='$id'");
                 }
 
-                set_cookie($cookie_name, 1, time() + (60 * 60 * $settings['rating_expire_hours']));
+                set_session($session_name,time());
                 print "$phrases[rating_done]";
             }
         } else {
