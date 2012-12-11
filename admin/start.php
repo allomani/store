@@ -70,7 +70,6 @@ if (!check_admin_login()) {
 if($action=="backup_db_do"){
 if(!$disable_backup){
 if_admin();
-require(CWD. '/includes/class_mysql_db_backup.php');
 $backup_obj = new MySQL_DB_Backup();
 $backup_obj->server = $db_host ;
 $backup_obj->port = 3306;

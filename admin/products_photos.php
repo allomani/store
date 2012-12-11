@@ -35,8 +35,7 @@ require('./start.php');
  }
   //------------ photos add -----------//
   if($action=="add_ok"){  
- if($settings['uploader']){   
-    require_once(CWD. "/includes/class_save_file.php");                          
+ if($settings['uploader']){                        
    $upload_folder = "$settings[uploader_path]/products_photos";
    $upload_types = array("gif","jpg","png","bmp");
    

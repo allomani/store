@@ -36,7 +36,6 @@ if($auto_preview_text){
                 
 //----- filter XSS Tages -------
 /*
-include_once(CWD . "/includes/class_inputfilter.php");
 $Filter = new InputFilter(array(),array(),1,1);
 $details = $Filter->process($details);*/
 //------------------------------
@@ -53,7 +52,6 @@ if ($action=="news_edit_ok"){
 
 //----- filter XSS Tages -------
 /*
-include_once(CWD . "/includes/class_inputfilter.php");
 $Filter = new InputFilter(array(),array(),1,1);
 $details = $Filter->process($details);*/
 //------------------------------

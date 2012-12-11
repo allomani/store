@@ -2,7 +2,7 @@
 
 //---------------- get timezones --------------------
 function get_timezones() {
- /*   require_once(CWD . '/includes/class_xml.php');
+ /*  
     $xmlobj = new XMLparser(false, CWD . "/xml/time_zones.xml");
     $xml = $xmlobj->parse();
     return (array) $xml['zone'];*/

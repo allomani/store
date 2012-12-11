@@ -1,6 +1,5 @@
 <?php
 require ('global.php');
-require (CWD . '/includes/class_captcha.php'); 
 
 // Initialize class
 $gd = new captcha($op);

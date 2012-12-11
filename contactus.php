@@ -2,7 +2,7 @@
 
 require("global.php");
 
-require(CWD . '/includes/class_captcha.php');
+
 $sec_img = new captcha('contactus');
 
 

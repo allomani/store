@@ -44,9 +44,9 @@ if (!empty($_GET)) {
 spl_autoload_register('autoloadClass');
 
 function autoloadClass($name, $ext = 'php') {
-    $file = CWD . "/includes/class_" . $name . "." . $ext;
+    $file = CWD . "/includes/class_" . strtolower($name) . "." . $ext;
     if (file_exists($file)) {
-        include($file);
+        require($file);
     } else {
         print "Class \"$name\" is not Exists !";
     }

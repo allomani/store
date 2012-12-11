@@ -290,7 +290,6 @@ if($auto_preview_text){
                 
 //----- filter XSS Tags -------
 /*
-include_once(CWD . "/includes/class_inputfilter.php");
 $Filter = new InputFilter(array(),array(),1,1);
 $details = $Filter->process($details);    */
 //------------------------------
@@ -300,7 +299,6 @@ $details = $Filter->process($details);    */
 //-------- Save New Picture ---------- 
 if($_FILES['imgfile']['name']){
 if($settings['uploader']){
-require_once(CWD. "/includes/class_save_file.php"); 
 $imtype = strtolower(file_extension($_FILES['imgfile']['name']));
 
 if(in_array($imtype,$upload_types)){
@@ -376,7 +374,7 @@ if($action=="product_edit_ok"){
                 $content = getPreviewText($details);
 }
 //----- filter XSS Tages -------
-/*include_once(CWD . "/includes/class_inputfilter.php");
+/*
 $Filter = new InputFilter(array(),array(),1,1);
 $details = $Filter->process($details);  */
 //------------------------------
@@ -393,7 +391,6 @@ delete_file($old_img['thumb']);
 //--------------------------------------------
 
 
-require_once(CWD. "/includes/class_save_file.php"); 
 $imtype = strtolower(file_extension($_FILES['imgfile']['name']));
 
 if(in_array($imtype,$upload_types)){

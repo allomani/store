@@ -25,8 +25,7 @@ if(($_FILES['datafile']['name'] || $url) && $folder && $f_name){
      print_admin_table("<center>$phrases[err_wrong_uploader_folder]</center>");
      die();
       }
-
- require_once(CWD. "/includes/class_save_file.php");  
+ 
       
    //--------- interial file upload process -------------
 

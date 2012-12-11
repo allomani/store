@@ -35,6 +35,7 @@ class MySQL_DB_Backup
         var $fname_format = 'd_m_y__H_i_s';
         var $error = '';
         var $null_values = array( '0000-00-00', '00:00:00', '0000-00-00 00:00:00');
+        var $db_charset = 'utf8';
 
         function Execute($task = MSX_STRING, $dname = '', $compress = false)
         {
@@ -98,10 +99,12 @@ class MySQL_DB_Backup
                         elseif ($this->link_id !== -1)
                         {
                                 $value = mysql_select_db($this->database, $this->link_id);
+                                mysql_query("set names '".$this->db_charset."'"); 
                         }
                         else
                         {
                                 $value = mysql_select_db($this->database);
+                                mysql_query("set names '".$this->db_charset."'");
                         }
                 }
                 if (!$value)

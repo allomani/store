@@ -2,7 +2,6 @@
 require("global.php");
 
 if($settings['register_sec_code']){  
-require(CWD . '/includes/class_captcha.php');
 $sec_img = new captcha('register');
 }
 
