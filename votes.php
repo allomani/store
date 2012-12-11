@@ -9,14 +9,14 @@ compile_hook('votes_start');
 
 if ($action == "vote_add") {
 $session_name = "vote_{$vote_id}_added";
-    if (get_session($session_name) > time() - ($settings['votes_expire_hours'] * 60*60)) {
+    if ($session->get($session_name) > time() - ($settings['votes_expire_hours'] * 60*60)) {
        open_table();
        print "<center>" . str_replace('{vote_expire_hours}', $settings['votes_expire_hours'], $phrases['err_vote_expire_hours']) . "</center>";
        close_table();
         
     }else{
      db_query("update store_votes set cnt=cnt+1 where id='$vote_id'");
-         set_session($session_name,time());
+         $session->set($session_name,time());
     }
 }
 

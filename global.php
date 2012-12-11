@@ -74,25 +74,10 @@ if ($cat) {
         $cat = (int) $cat;
     }
 }
-//-------------------------------------------------------------------
-//--------------- Session ---------------------
-if ($session_cookie_save) {
-    $sid = get_cookie($session_cookie_name);
-    if ($sid && preg_match("/^([a-zA-Z-0-9])*$/", $sid)) {
-        session_id($sid);
-    }
-}
 
-session_start();
-if ($session_ip_check && get_session('ip') != $_SERVER['REMOTE_ADDR']) {
-    session_regenerate_id(true);
-    unset($_SESSION[$session_prefix]);
-    set_session('ip', $_SERVER['REMOTE_ADDR']);
-}
-$sid = session_id();
-if ($session_cookie_save) {
-    set_cookie($session_cookie_name, $sid);
-}
+//--------------- Session ---------------------
+$session = new session();
+
 
 //---------------- Cache -------------------
 require(CWD . "/includes/functions_".$cache_srv['engine'].".php");
@@ -240,7 +225,7 @@ function is_valid_styleid($styleid) {
 }
 
 //----- check if valid styleid -------
-$styleid = (isset($styleid) ? intval($styleid) : get_session("styleid"));
+$styleid = (isset($styleid) ? intval($styleid) : $session->get("styleid"));
 if (!is_valid_styleid($styleid)) {
     $styleid = $settings['default_styleid'];
     if (!is_valid_styleid($styleid)) {
@@ -251,7 +236,7 @@ if (!is_valid_styleid($styleid)) {
 $data_style = db_qr_fetch("select images from  store_templates_cats where id='" . db_escape($styleid) . "'");
 $style['images'] = iif($data_style['images'], $data_style['images'], "images");
 
-set_session('styleid', intval($styleid));
+$session->set('styleid', intval($styleid));
 
 
 //----------- Load links -----------
@@ -406,11 +391,11 @@ function run_php($content) {
 $user_info = array();
 
 function check_admin_login() {
-    global $user_info;
+    global $user_info,$session;
 
-    $user_info['username'] = get_session('admin_username');
-    $user_info['password'] = get_session('admin_password');
-    $user_info['id'] = intval(get_session('admin_id'));
+    $user_info['username'] = $session->get('admin_username');
+    $user_info['password'] = $session->get('admin_password');
+    $user_info['id'] = intval($session->get('admin_id'));
 
 
     if ($user_info['id']) {
@@ -697,10 +682,16 @@ function iif($expression, $returntrue, $returnfalse = '') {
 }
 
 //------- set cookies function -----------
-function set_cookie($name, $value = "") {
+function set_cookie($name, $value = "",$expire=null) {
     global $cookies_prefix, $cookies_timemout, $cookies_path, $cookies_domain;
     $name = $cookies_prefix . $name;
+    
+    if(!isset($expire)){
     $k_timeout = time() + (60 * 60 * 24 * intval($cookies_timemout));
+    }else{
+    $k_timeout = time() + (60 * 60 * 24 * intval($expire));
+   }
+    
     setcookie($name, $value, $k_timeout, $cookies_path, $cookies_domain);
 }
 
@@ -709,18 +700,6 @@ function get_cookie($name) {
     global $cookies_prefix, $_COOKIE;
     $name = $cookies_prefix . $name;
     return $_COOKIE[$name];
-}
-
-//----------- set session ------------
-function set_session($name, $value) {
-    global $session_prefix;
-//unset($_SESSION[$session_prefix.$name]);
-    $_SESSION[$session_prefix][$name] = $value;
-}
-
-function get_session($name) {
-    global $session_prefix;
-    return $_SESSION[$session_prefix][$name];
 }
 
 function array_get_key($arr, $value) {

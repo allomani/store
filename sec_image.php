@@ -1,9 +1,9 @@
 <?php
-// Require the class code...
-require ('includes/class_security_img.php'); 
+require ('global.php');
+require (CWD . '/includes/class_captcha.php'); 
 
 // Initialize class
-$gd = new sec_img_verification();
+$gd = new captcha($op);
 
 // Output image
 $gd->output_image();

@@ -2,8 +2,8 @@
 
 require("global.php");
 
-require(CWD . '/includes/class_security_img.php');
-$sec_img = new sec_img_verification();
+require(CWD . '/includes/class_captcha.php');
+$sec_img = new captcha('contactus');
 
 
 require(CWD . "/includes/framework_start.php");

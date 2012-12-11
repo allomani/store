@@ -113,10 +113,10 @@ db_connect($db_host,$db_username,$db_password,$db_name,$db_charset);
 //----------------------------- Members -----------------
 $member_data = array();
 function check_member_login(){
-      global $member_data,$members_connector ;
+      global $member_data,$members_connector,$session;
 
- $member_data['id'] = get_session('member_data_id');
- $member_data['password'] = get_session('member_data_password');
+ $member_data['id'] = $session->get('member_data_id');
+ $member_data['password'] = $session->get('member_data_password');
 
    if($member_data['id']){
 

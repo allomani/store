@@ -23,9 +23,9 @@ if ($action == "login" && $username && $password ){
        if($login_data['password']==$password){
  access_log_record($login_data['username'],"Login Done");
  
-set_session('admin_id', $login_data['id']);
-set_session('admin_username', $login_data['username']);
-set_session('admin_password', md5($login_data['password']));
+$session->set('admin_id', $login_data['id']);
+$session->set('admin_username', $login_data['username']);
+$session->set('admin_password', md5($login_data['password']));
    redirect($re_link);
   //   print "<SCRIPT>window.location=\"index.php\";</script>";
       exit();
@@ -44,9 +44,9 @@ set_session('admin_password', md5($login_data['password']));
               }elseif($action == "logout"){
                   
                 
-                    set_session('admin_id');
-                    set_session('admin_username');
-                    set_session('admin_password');
+                    $session->set('admin_id');
+                    $session->set('admin_username');
+                    $session->set('admin_password');
                     
 
                   redirect("login.php");

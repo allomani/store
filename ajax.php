@@ -344,7 +344,7 @@ if ($action == "rating_send") {
             $settings['rating_expire_hours'] = intval($settings['rating_expire_hours']);
             $settings['rating_expire_hours'] = iif($settings['rating_expire_hours'], $settings['rating_expire_hours'], 1);
 
-            if (get_session($session_name) > time() - (60 * 60 * $settings['rating_expire_hours'])) {
+            if ($session->get($session_name) > time() - (60 * 60 * $settings['rating_expire_hours'])) {
                 print "<center>" . str_replace('{hours}', $settings['rating_expire_hours'], $phrases['rating_expire_msg']) . "</center>";
             } else {
 
@@ -353,7 +353,7 @@ if ($action == "rating_send") {
                     db_query("update store_news set rate = (votes/votes_total) where id='$id'");
                 }
 
-                set_session($session_name,time());
+                $session->set($session_name,time());
                 print "$phrases[rating_done]";
             }
         } else {

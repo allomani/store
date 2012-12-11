@@ -73,15 +73,10 @@ function cart_item_delete($hash) {
 
 //---------- Cart Items Array ---------
 function cart_items_array() {
+global $session;
+ 
 
-    /*
-      $cart_str = (string) $_SESSION['cart'];
-      $items = iif($cart_str,unserialize($cart_str),array());
-      if(!is_array($items)){$items=array();}
-
-      return  $items; */
-
-    return (array) get_session('cart');
+    return (array) $session->get('cart');
 }
 
 //-----------Cart Exclude Item ---------
@@ -123,15 +118,9 @@ function cart_update_qty($items) {
 
 //--------- Cart Set Value ------
 function cart_set_value($value) {
-    /*
-      if($is_serialized){
-      $c_value = iif(is_serialized($value),$value,serialize(array()));
-      }else{
-      $c_value = iif(is_array($value),serialize($value),serialize(array()));
-      }
-
-      $_SESSION['cart']=$c_value; */
-    set_session('cart', (array) $value);
+    global $session;
+ 
+    $session->set('cart', (array) $value);
 }
 
 //----------- Order total price- ----------

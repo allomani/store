@@ -2,8 +2,8 @@
 require("global.php");
 
 if($settings['register_sec_code']){  
-require(CWD . '/includes/class_security_img.php');
-$sec_img = new sec_img_verification();
+require(CWD . '/includes/class_captcha.php');
+$sec_img = new captcha('register');
 }
 
 
@@ -305,8 +305,9 @@ $cf++;
            print " <br><fieldset style=\"padding: 2\"><table width=100%><tr>";
 
            if($settings['register_sec_code']){
-           print "<td><b>$phrases[security_code]</b></td><td>".$sec_img->output_input_box('sec_string','size=7')."
-           <img src=\"sec_image.php\" title=\"$phrases[security_code]\" /></td>";
+           print "<td><b>$phrases[security_code]</b></td><td>".$sec_img->output_input_box('sec_string','size=7')
+                   .$sec_img->output_img_box()."
+           </td>";
            }
 
            print "<td align=center><input type=submit value=' $phrases[register_do] '></td></tr>

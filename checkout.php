@@ -91,7 +91,7 @@ $total_items = count($items);
  $billing_info = (array)$billing_info; 
   if($billing_info['name'] && $billing_info['country']){
  $billing_info = array_map('htmlspecialchars',$billing_info);
- set_session("checkout_billing",$billing_info);
+ $session->set("checkout_billing",$billing_info);
  }else{
     if($sop == $steps[$prev_step]){
      print "<div class='err_msg'>Please Fill All Fields</div>";
@@ -105,7 +105,7 @@ $total_items = count($items);
     $shipping_info = (array) $shipping_info;
     if($shipping_info['name'] && $shipping_info['country']){
     $shipping_info = array_map('htmlspecialchars',$shipping_info);
-    set_session("checkout_shipping",$shipping_info);
+    $session->set("checkout_shipping",$shipping_info);
     }else{
     if($sop == $steps[$prev_step]){
      print "<div class='err_msg'>Please Fill All Fields</div>";
@@ -119,11 +119,11 @@ $total_items = count($items);
     if($shipping_method){
     $obj = get_shipping_method($shipping_method);
     if($obj['status']){
-    set_session("checkout_shipping_method",$shipping_method);
-    set_session("checkout_shipping_price",  $obj['price']);
+    $session->set("checkout_shipping_method",$shipping_method);
+    $session->set("checkout_shipping_price",  $obj['price']);
     }else{
-    set_session("checkout_shipping_method",'');
-    set_session("checkout_shipping_price", '');
+    $session->set("checkout_shipping_method",'');
+    $session->set("checkout_shipping_price", '');
     
     if($sop == $steps[$prev_step]){
      print "<div class='err_msg'>Cannot get shipping price , please try again</div>";
@@ -144,7 +144,7 @@ $total_items = count($items);
  
   if($sop=="billing_method"){
     if($payment_method){
-    set_session("checkout_billing_method",$payment_method);
+    $session->set("checkout_billing_method",$payment_method);
     }else{
     if($sop == $steps[$prev_step]){
      print "<div class='err_msg'>no billing method selected</div>";
@@ -223,7 +223,7 @@ open_table("$phrases[checkout]");
  //-------------- billing --------------
  if($op=="billing"){
      
- $billing_session = (array) get_session("checkout_billing");
+ $billing_session = (array) $session->get("checkout_billing");
  
  print "<br>
 
@@ -270,7 +270,7 @@ open_table("$phrases[checkout]");
  //--------- shipping Address ------//
   if($op=="shipping"){
      
- $shipping_session = (array) get_session("checkout_shipping");
+ $shipping_session = (array) $session->get("checkout_shipping");
  
  print "<br>
 
@@ -315,7 +315,7 @@ open_table("$phrases[checkout]");
  //------- shipping method -----//   
  if($op=="shipping_method"){  
  if(count($shipping_ids)){
-  $shipping_method_session = get_session("checkout_shipping_method");    
+  $shipping_method_session = $session->get("checkout_shipping_method");    
  $qr_sm = db_query("select * from store_shipping_methods where id IN (".implode(",",$shipping_ids).") and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) order by ord asc");
   if(db_num($qr_sm)){
   print "<fieldset style=\"width:100%;\">  
@@ -355,7 +355,7 @@ get_shipping_method_price($first_id);
  }
  //----------- billing method ----------------
  if($op=="billing_method"){
-     $payment_method = get_session('checkout_billing_method');
+     $payment_method = $session->get('checkout_billing_method');
     
  print "<br>
  
@@ -420,8 +420,8 @@ print "</td><td>".$items[$i]['qty']."</td><td>$data[item_price] $settings[curren
  
  }
  
- $shipping_price = (float) get_session('checkout_shipping_price');
- $shipping_method = (int) get_session('checkout_shipping_method');
+ $shipping_price = (float) $session->get('checkout_shipping_price');
+ $shipping_method = (int) $session->get('checkout_shipping_method');
  
  
  print "<tr><td colspan=4 align='$global_align_x'>";
@@ -440,18 +440,18 @@ print "</td><td>".$items[$i]['qty']."</td><td>$data[item_price] $settings[curren
 //-------------- done ---------------------------
  if($op=="confirm"){
      
- $payment_method = (int) get_session('checkout_billing_method');
+ $payment_method = (int) $session->get('checkout_billing_method');
  $payment_info  = db_qr_fetch("select name from store_payment_methods where id='$payment_method'");
  
- $shipping_method = (int) get_session('checkout_shipping_method'); 
+ $shipping_method = (int) $session->get('checkout_shipping_method'); 
  if($shipping_method){  
  $shipping_method_info  = db_qr_fetch("select name,default_status from store_shipping_methods where id='$shipping_method'");
  }
  
- $billing_info = (array) get_session("checkout_billing");
- $shipping_info = (array) get_session("checkout_shipping");  
+ $billing_info = (array) $session->get("checkout_billing");
+ $shipping_info = (array) $session->get("checkout_shipping");  
  
- $shipping_price = (float) get_session("checkout_shipping_price");  
+ $shipping_price = (float) $session->get("checkout_shipping_price");  
  
  
  

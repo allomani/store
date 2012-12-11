@@ -29,8 +29,8 @@
                 if(in_array($data[members_fields_replace('usr_group')],$members_connector['allowed_login_groups'])){
 
 
-                    set_session('member_data_id', $data[members_fields_replace('id')]);
-                    set_session('member_data_password', $data[members_fields_replace('password')]);
+                    $session->set('member_data_id', $data[members_fields_replace('id')]);
+                    $session->set('member_data_password', $data[members_fields_replace('password')]);
 
                     print "<SCRIPT>window.location=\"$re_link\";</script>";
 
@@ -97,8 +97,8 @@
         //--------------- Logout ---------------
     }elseif($action=="logout"){
 
-        set_session('member_data_id', "");
-        set_session('member_data_password',"");
+        $session->set('member_data_id', "");
+        $session->set('member_data_password',"");
 
         print "<SCRIPT>window.location=\"$re_link\";</script>";
 

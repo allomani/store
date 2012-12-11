@@ -89,11 +89,13 @@ $smtp_settings['show_errors'] = 1;
 
 
 //-------- Cookies Settings  -----------
-$cookies_prefix = "store_";
+$cookies_prefix = "store200_";
 $cookies_timemout = 365 ; //days
 $cookies_path = "/" ;
 $cookies_domain = "";
-$session_cookie_save = true;
+
+//---- session Settings ----
+$session_cookie_expire = $cookies_timemout;
 $session_cookie_name = "sid";
 $session_prefix = "store";
 $session_ip_check = true;

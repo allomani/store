@@ -1,32 +1,33 @@
 <?php
 
-class sec_img_verification {
+class captcha {
 
     var $im = NULL;
     var $string = NULL;
-    var $height = 100;
-    var $width = 30;
+    var $height = 150;
+    var $width = 35;
+    var $s_name = 'default';
 
-    function sec_img_verification($height = 150, $width = 35, $sid = NULL) {
-        if ($sid != NULL) {
-            session_name($sid);
-        }
-
-        // Start session
-        session_start();
+    function __construct($s_name = 'default',$height = 150, $width = 35) {
+    $this->height = $height;
+    $this->width = $width;
+    $this->s_name = $s_name;
     }
 
     function generate_string() {
+        global $session;
         // Create random string
         $this->string = substr(sha1(mt_rand()), 17, 6);
 
         // Set session variable
-        $_SESSION['gd_string'] = $this->string;
+        $session->set('gd_string',$this->string);
     }
 
     function verify_string($gd_string) {
+        global $session;
+        
         // Check if the original string and the passed string match...
-        if (strtolower($_SESSION['gd_string']) === strtolower($gd_string)) {
+        if (strtolower($session->get('gd_string')) === strtolower($gd_string)) {
             return TRUE;
         } else {
             return FALSE;
@@ -36,6 +37,10 @@ class sec_img_verification {
     function output_input_box($name, $parameters = NULL) {
         return '<input type="text" name="' . $name . '" ' . $parameters . ' /> ';
     }
+    
+    function output_img_box(){
+       return  "<img src=\"sec_image.php?op=".$this->s_name."\" class=\"captcha_img\" />";
+        }
 
     function create_image() {
         // Seed string
@@ -73,10 +78,11 @@ class sec_img_verification {
     function output_image() {
         $this->create_image(); // Generate image
 
-        header("Content-type: image/jpeg"); // Tell the browser the data is a JPEG image
+        header("Content-type: image/png"); 
 
-        imagejpeg($this->im); // Output Image
+        imagepng($this->im); // Output Image
         imagedestroy($this->im); // Flush Image
+        die();
     }
 
 }
