@@ -50,9 +50,9 @@ if(@mysql_select_db($members_connector['db_name'])){
  if(is_array($required_database_fields_names)){
 
 
- $qr = db_query("SHOW FIELDS FROM user",MEMBER_SQL);
+ $qr = members_db_query("SHOW FIELDS FROM {{store_clients}}");
   $c=0;
-while($data =db_fetch($qr)){
+while($data =members_db_fetch($qr)){
 
     $table_fields['name'][$c] = $data['Field'];
     $table_fields['type'][$c] = $data['Type'];
@@ -82,7 +82,7 @@ if(in_array($table_fields['type'][$searchkey],$req_type)){
 print "<b><font color=green>Valid</font></b>";
 }else{
 print "<b><font color=red>Not Valid Type</font></b>";
-$qrx = db_query("ALTER TABLE ".members_table_replace("store_clients")." CHANGE `".$required_database_fields_names[$i]."` `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;",MEMBER_SQL);
+$qrx = members_db_query("ALTER TABLE {{store_clients}} CHANGE `".$required_database_fields_names[$i]."` `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;");
 
     if(!$qrx){
     print "<td><b><font color=red> $phrases[chng_field_type_failed] </font></b></td>";
@@ -96,7 +96,7 @@ print "</td>";
     }else{
     print "<td><b><font color=red>Not found</font></b></td>";
 
-    $qrx = db_query("ALTER TABLE ".members_table_replace("store_clients")." ADD `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;",MEMBER_SQL);
+    $qrx = members_db_query("ALTER TABLE {{store_clients}} ADD `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;");
 
     if(!$qrx){
     print "<td><b><font color=red> $phrases[add_field_failed] </font></b></td>";
@@ -429,7 +429,7 @@ $qr = members_db_query($sql);
 
 
  if(db_num($qr)){
-// $page_result = db_qr_fetch($page_result_sql,MEMBER_SQL);
+
 $page_result['count'] = db_num(members_db_query($page_result_sql));
  print "<b> $phrases[view]  </b>".($start+1)." - ".($start+$limit) . "<b> $phrases[from] </b> $page_result[count]<br><br>";
 

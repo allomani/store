@@ -70,15 +70,15 @@ function connector_member_pwd($userid,$pwd,$op){
     if($op=="update"){
         $salt = fetch_user_salt(3);
         $pwdz = md5(md5($pwd).$salt);
-    db_query("update user set password='".$pwdz."',salt='$salt' where userid='".intval($userid)."'",MEMBER_SQL);    
+    members_db_query("update user set password='".$pwdz."',salt='$salt' where userid='".intval($userid)."'");    
     }
 }
 
 function connector_after_reg_process(){
     global $member_id;
-    db_query("insert into userfield (userid) values('$member_id')",MEMBER_SQL);
-     db_query("insert into usertextfield (userid) values('$member_id')",MEMBER_SQL);
-     db_query("update user set options='3159' where userid='$member_id'",MEMBER_SQL); 
+    members_db_query("insert into userfield (userid) values('$member_id')");
+    members_db_query("insert into usertextfield (userid) values('$member_id')");
+    members_db_query("update user set options='3159' where userid='$member_id'"); 
 }
 
 function connector_get_date($date,$op){
@@ -159,7 +159,7 @@ if(trim($user_email)){
  $data =db_fetch($qr);
  $new_pwd = rand_string();
  connector_member_pwd($data['cat'],$new_pwd,"update");
- $data_member = db_qr_fetch("select username from user where userid='$data[cat]'",MEMBER_SQL);
+ $data_member = members_db_qr_fetch("select username from user where userid='$data[cat]'");
     
      
      $msg = get_template('pwd_rest_done_msg',array('{name}','{password}','{siteurl}','{sitename}'),

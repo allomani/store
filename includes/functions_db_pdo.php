@@ -78,9 +78,7 @@ function db_query($sql, $type = "") {
 
     $last_sql = $sql;
 
-    if ($type == MEMBER_SQL) {
-        members_remote_db_connect();
-    }
+ 
 
     try{
     
@@ -105,11 +103,9 @@ function db_query($sql, $type = "") {
 
         return false;  */
   //  } else {
-        if ($type == MEMBER_SQL) {
-            members_local_db_connect();
-        }
-        print_r($qr);
-        print "<br>";
+       
+
+   //     print "<br>";
      //  $qr->fetchAll();
      //  $qr->closeCursor();
         return $qr;
