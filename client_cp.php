@@ -78,9 +78,9 @@
                 //---------- email change confirmation -----------
                 if(check_email_address($email)){ 
                     if($settings['auto_email_activate']){
-                        $email_update_query = ", ".members_fields_replace("email")."='".db_escape($email)."'" ;
+                        $email_update_query = ", ::email=':email'" ;
                     }else{   
-                        $data_email = db_qr_fetch("select ".members_fields_replace('email').",".members_fields_replace('username')." from ".members_table_replace("store_clients")." where ".members_fields_replace("id")."='".intval($member_data['id'])."'",MEMBER_SQL);
+                        $data_email = members_db_qr_fetch("select ::email,::username from {{store_clients}} where ::id=':id'",array('id'=>intval($member_data['id'])));
                         if($email != $data_email['email']){
                             $val_code = md5($email.$data_email['email'].time().rand(0,100));    
                             db_query("insert into store_confirmations (type,old_value,new_value,cat,code) values ('member_email_change','".$data_email['email']."','".db_escape($email)."','".intval($member_data['id'])."','$val_code')");
@@ -100,8 +100,13 @@
                 //------------------
 
 
-                db_query("update ".members_table_replace("store_clients")." set ".members_fields_replace("country")."='".db_escape($country)."',".members_fields_replace("birth")."='".db_escape(connector_get_date("$date_y-$date_m-$date_d",'member_birth_date'))."'
-                    $email_update_query where ".members_fields_replace("id")."='".intval($member_data['id'])."'",MEMBER_SQL);
+                members_db_query("update {{store_clients}} set ::country=':country',::birth=':birth' $email_update_query where ::id=':id'",
+                        array(
+                            'country'=>db_escape($country),
+                            'birth'=>db_escape(connector_get_date("$date_y-$date_m-$date_d",'member_birth_date')),
+                            'id'=>intval($member_data['id'])      
+                            )
+                        );
 
 
                 //-------- if change password --------------
@@ -142,10 +147,13 @@
 
             open_table($phrases['the_profile']);
 
-            $data = db_qr_fetch("select * from ".members_table_replace("store_clients")." where ".members_fields_replace("id")."='".intval($member_data['id'])."'",MEMBER_SQL);
+             $data = members_db_qr_fetch("select * from {{store_clients}} where ::id=':id'",
+                     array(
+                         'id'=>intval($member_data['id'])
+                         )
+                     );
 
-
-            $birth_data = connector_get_date($data[members_fields_replace('birth')],"member_birth_array");
+            $birth_data = connector_get_date($data['birth'],"member_birth_array");
 
             print "
             <script type=\"text/javascript\" language=\"javascript\">
@@ -176,10 +184,10 @@
             <table width=100%><tr>
             <td width=20%>
             $phrases[username] :
-            </td><td>".$data[members_fields_replace('username')]."</td>  </tr>
+            </td><td>".$data['username']."</td>  </tr>
             <td width=20%>
             $phrases[email] :
-            </td><td ><input type=text name=email value='".$data[members_fields_replace('email')]."' size=30></td>  </tr>
+            </td><td ><input type=text name=email value='".$data['email']."' size=30></td>  </tr>
             </tr></table>
             </fieldset>
             <br>
@@ -202,7 +210,7 @@
                     print "
                     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
                     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-                    print get_member_field("custom[$cf]",$dataf,"edit",$data[members_fields_replace('id')]);
+                    print get_member_field("custom[$cf]",$dataf,"edit",$data['id']);
                     print "</td></tr>";
                     $cf++;
                 }
@@ -244,7 +252,7 @@
                     print "
                     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
                     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-                    print get_member_field("custom[$cf]",$dataf,"edit",$data[members_fields_replace('id')]);
+                    print get_member_field("custom[$cf]",$dataf,"edit",$data['id']);
                     print "</td></tr>";
                     $cf++;
                 }

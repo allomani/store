@@ -1,5 +1,4 @@
 <?
-// Edited : 06-10-2009
 
 if($members_connector['custom_members_table']){
 $members_connector['members_table'] = $members_connector['custom_members_table'];
@@ -7,17 +6,20 @@ $members_connector['members_table'] = $members_connector['custom_members_table']
 $members_connector['members_table'] = "user" ;
 }
 
+$members_tables_replacement = array(
+    'store_clients'=> $members_connector['members_table']
+    );
 
-$member_fields_tofind = array('id','password','last_login','birth','date','usr_group');
+$members_fields_replacement = array(
+    'id' =>'userid',
+    'password'=>'password',
+    'last_login'=>'lastvisit',
+    'birth'=>'birthday',
+    'date'=>'joindate',
+    'usr_group'=>'usergroupid'
+    );
 
-$member_fields_toreplace = array('userid','password','lastvisit','birthday','joindate','usergroupid');
 
-$member_table_tofind =array('store_clients');
-$member_table_toreplace = array($members_connector['members_table']);
-
- 
- 
- 
 function get_members_groups_array(){
     global $phrases;
     $members_groups_array =array(
@@ -97,12 +99,12 @@ return $new_arr;
 
 function member_verify_password($userid,$pwd,$md5pwd="",$md5pwd_utf=""){ 
     
-$qr=db_query("select ".members_fields_replace('password').",salt from ".members_table_replace('store_clients')." where ".members_fields_replace('id')."='$userid'",MEMBER_SQL);
+$qr=members_db_query("select ::password,::salt from {{store_clients}} where ::id=':id'",array('id'=>$userid));
 
 if(db_num($qr)){
     $data = db_fetch($qr);
 
-  if($data[members_fields_replace('password')]==md5($md5pwd.$data['salt']) || $data[members_fields_replace('password')]==md5($md5pwd_utf.$data['salt']) || $data[members_fields_replace('password')]==md5(md5($pwd).$data['salt'])){   
+  if($data['password']==md5($md5pwd.$data['salt']) || $data['password']==md5($md5pwd_utf.$data['salt']) || $data['password']==md5(md5($pwd).$data['salt'])){   
  return true;
  }else{
  return false;
@@ -121,9 +123,9 @@ function connector_members_rest_pwd($action){
  if($action=="lostpwd"){
  open_table("$phrases[forgot_pass]");
 if(trim($user_email)){
- $qr=db_query("select * from user where email='".db_clean_string($user_email)."'",MEMBER_SQL);
+ $qr=members_db_query("select * from {{store_clients}} where ::email=':email'",array('email'=>db_escape($user_email)));
  if(db_num($qr)){
-     $data = db_fetch($qr);
+     $data = members_db_fetch($qr);
      $active_code = md5($data['email'].time().rand(1,999).rand(1,999).$data['id']);
      $url = $scripturl . "/index.php?action=rest_pwd&code=$active_code";
      
@@ -152,7 +154,7 @@ if(trim($user_email)){
  }
  //------------ Rest pwd Process ----------------
  if($action=="rest_pwd"){
- $qr = db_query("select * from store_confirmations where code='".db_clean_string($code)."'");
+ $qr = db_query("select * from store_confirmations where code='".db_escape($code)."'");
  if(db_num($qr)){
  $data =db_fetch($qr);
  $new_pwd = rand_string();
@@ -166,7 +168,7 @@ if(trim($user_email)){
 
  send_email($sitename,$mailing_email,$user_email,$phrases['pwd_rest_done_msg_subject'],$msg,$settings['mailing_default_use_html'],$settings['mailing_default_encoding']);
  
- db_query("delete from store_confirmations where type='rest_pwd' and code='".db_clean_string($code)."'");    
+ db_query("delete from store_confirmations where type='rest_pwd' and code='".db_escape($code)."'");    
  
  open_table();    
  print "<center> $phrases[pwd_rest_done]</center>";

@@ -99,7 +99,7 @@ print "</table>";
       $last_active = 0;
       while($data=db_fetch($qr)){
           
-          $data_member = db_qr_fetch("select ".members_fields_replace('username')." from ".members_table_replace('store_clients')." where ".members_fields_replace('id')."='$data[uid]'",MEMBER_SQL);
+          $data_member = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'",array('id'=>$data['uid']));
          
 $file_info =  get_comment_file_info($op,$data['fid']);
          
@@ -190,7 +190,7 @@ print_pages_links($start,$comments_count['count'],$comments_perpage,$page_string
        $i=0;
        while($data=db_fetch($qr)){
            
-             $data_member = db_qr_fetch("select ".members_fields_replace("username")." from ".members_table_replace("store_clients")." where ".members_fields_replace("id")."='$data[uid]'",MEMBER_SQL);
+             $data_member = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'",array('id'=>$data['uid']));
         
            $file_info = get_comment_file_info($data['comment_type'],$data['fid']);
         

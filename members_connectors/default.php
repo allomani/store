@@ -1,10 +1,12 @@
 <?
- // Edited : 06-10-2009
- 
- 
+
 $members_connector['allowed_login_groups']=array('1');
 $members_connector['disallowed_login_groups']=array('2');
 $members_connector['waiting_conf_login_groups']=array('0');
+
+
+$members_tables_replacement = array();
+$members_fields_replacement = array();
 
 
 function get_members_groups_array(){

@@ -128,7 +128,7 @@ if ($settings['count_online_visitors']) {
 
 
     if ($settings['online_members_count']) {
-        $data = db_qr_fetch("select count(*) as count from " . members_table_replace("store_clients") . " where " . members_fields_replace("last_login") . " >= " . connector_get_date($timeout, 'member_last_login'), MEMBER_SQL);
+        $data = members_db_qr_fetch("select count(*) as count from {{store_clients}} where ::last_login >= ':last_login'", array('last_login'=>connector_get_date($timeout, 'member_last_login')));
 
         $counter['online_members'] = intval($data['count']);
         $counter['online_users'] = $users - $counter['online_members'];

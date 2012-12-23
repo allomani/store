@@ -177,7 +177,7 @@ $comments_types_phrases = array(
 
 $comments_types = array_keys($comments_types_phrases);
 
-$rating_types = array('news');
+$rating_types = array('news','products');
 
 $settings = array();
 
@@ -603,10 +603,10 @@ function print_rating($type, $id, $rating = 0, $readonly = false) {
     global $style;
 
     print "
-        <div class='rating_stars'>
-       <div id=\"" . $type . $id . "_rating_div\" dir=ltr></div> 
-       <div id=\"" . $type . $id . "_rating_status_div\" dir=ltr></div>
-       <div id='" . $type . $id . "_rating_loading_div' style=\"display:none;\"><img src='images/loading.gif'></div>
+        <div class='rating_stars {$type}_rating'>
+       <div id=\"" . $type . $id . "_rating_div\" class='rating_div'></div> 
+       <div id=\"" . $type . $id . "_rating_status_div\" class='rating_status'></div>
+       <div id='" . $type . $id . "_rating_loading_div' style=\"display:none;\" class='rating_loading'><img src='images/loading.gif'></div>
            </div>
         ";
     ?>     

@@ -13,6 +13,9 @@ $qr = db_query("select * from store_products_data where id='$id'");
 if (db_num($qr)) {
     $data = db_fetch($qr);
 
+    db_query("update store_products_data set views=views+1 where id='$id'");
+    
+    
     compile_hook('product_details_start');
 
     print_path_links($data['cat'], $data['name']);
@@ -194,6 +197,8 @@ if (db_num($qr)) {
 
 //--------------- PRODUCT DETAILS END --------------------------------------
 
+    print_rating('products',$data['id'],$data['rate']); 
+    
     close_table();
 
 //------ Comments -------------------

@@ -42,7 +42,16 @@ input[type="submit"]:focus{border:1px solid #4d90fe;outline:none}
 input{font-family:inherit}  
 
 
+.main_side {
+    width:20%;
+    border-left:1px dashed #ccc;
+    vertical-align: top;
+}
 
+.main_content {
+    vertical-align: top;
+   padding-right:5px;
+}
 
 
 /*----------  TABLES COLORS ---------*/

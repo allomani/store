@@ -256,8 +256,8 @@ function rating_init(type,id,rating,read_only,path){
     
 function rating_send(type,id,score){ 
 
-    $('#'+type+id+'_rating_loading_div').css('display', 'inline');
-    $('#'+type+id+'_rating_status_div').css('display', 'none');   
+    $('#'+type+id+'_rating_loading_div').show();
+    $('#'+type+id+'_rating_status_div').hide();   
 
     new $.post('ajax.php',  {
         action:'rating_send',
@@ -269,8 +269,8 @@ function rating_send(type,id,score){
 
         $('#'+type+id+'_rating_status_div').html(data); 
 
-        $('#'+type+id+'_rating_loading_div').css('display', 'none'); 
-        $('#'+type+id+'_rating_status_div').css('display', 'inline');; 
+        $('#'+type+id+'_rating_loading_div').hide(); 
+        $('#'+type+id+'_rating_status_div').show(); 
   
 
     }); 

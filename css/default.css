@@ -315,17 +315,17 @@ A:hover.path_link {
 /* ------------ Navigation Bar ---------------- */
 ul.nav-bar {
     list-style-type:none;
-    border:1px solid #ccc;
-    height:25px;
-    padding: 3px 8px;   
-    box-shadow:inset 0 0 0px 1px #FFFFFF;
-    background:url('../images/nav_back.png') repeat-x;
+  /*  border:1px solid #ccc;*/
+ /*   height:25px;*/
+ /*   padding: 3px 8px;   
+    box-shadow:inset 0 0 0px 1px #FFFFFF;*/
+   /* background:url('../images/nav_back.png') repeat-x;
     border-radius:8px;
     -webkit-border-radius:8px;
-    -moz-border-radius:8px;
+    -moz-border-radius:8px;*/
     position:relative; 
     display:block;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .nav-bar li	{
@@ -346,8 +346,13 @@ ul.nav-bar {
 { 
     color:#5a5a5a;
     font-size:12px;
-    font-weight:bold;text-decoration:none; }
+    font-weight:bold;text-decoration:none;
+}
 
+.nav-bar a:hover 	
+{ 
+    color:#316ac5;
+}
 
 
 /* ---- Tables ----------*/
@@ -369,13 +374,23 @@ table th {
 }
 .add-new {
     background-position: right;
-    background-image: url(../images/add_small.gif);
+    background-image: url('../images/add_small.gif');
     padding-right:20px;
     background-repeat: no-repeat;
     height:16px;
     margin: 10px 0;
 
 }
+
+/* ---- rating ------*/
+.rating_stars {
+    text-align: center;
+}
+
+.rating_div {
+   display:inline;
+}
+
 /*---------- Colored Rows COLORS ---------*/
 .row_1{
     background-color: #f7f7f7

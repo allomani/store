@@ -8,10 +8,9 @@ if ($action == "check_register_username") {
         $exclude_list = explode(",", $settings['register_username_exclude_list']);
 
         if (!in_array($str, $exclude_list)) {
-//$num = db_num(member_query("select","id",array("username"=>"='$str'")));
-            $num = db_qr_num("select " . members_fields_replace("id") . " from " . members_table_replace("store_clients") . " where " . members_fields_replace("username") . " like '" . db_escape($str) . "'", MEMEBR_SQL);
+            $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username  like ':username'", array('username'=> db_escape($str)));
 
-            if (!$num) {
+            if (!$exist['count']) {
                 print "<img src='$style[images]/true.gif'>";
             } else {
                 print "<img src='$style[images]/false.gif' title=\"" . str_replace("{username}", $str, "$phrases[register_user_exists]") . "\">";
@@ -28,8 +27,8 @@ if ($action == "check_register_username") {
 //------------------------------------------
 if ($action == "check_register_email") {
     if (check_email_address($str)) {
-        $num = db_qr_num("select " . members_fields_replace("id") . " from " . members_table_replace("store_clients") . " where " . members_fields_replace("email") . " like '" . db_escape($str) . "'", MEMBER_SQL);
-        if (!$num) {
+        $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'", array('email'=>db_escape($str)));
+        if (!$exist['count']) {
             print "<img src='$style[images]/true.gif'>";
         } else {
             print "<img src='$style[images]/false.gif' title=\"$phrases[register_email_exists]\">";
@@ -353,6 +352,12 @@ if ($action == "rating_send") {
                     db_query("update store_news set rate = (votes/votes_total) where id='$id'");
                 }
 
+                if ($type == 'products') {
+                    db_query("update store_products_data set votes=votes+$score , votes_total=votes_total+1 where id='$id'");
+                    db_query("update store_products_data set rate = (votes/votes_total) where id='$id'");
+                }
+                
+                
                 $session->set($session_name,time());
                 print "$phrases[rating_done]";
             }
@@ -384,7 +389,7 @@ if ($action == "comments_add") {
 
                 if ($settings['comments_auto_activate']) {
                     //  print $content;   
-                    $data_member = db_qr_fetch("select " . members_fields_replace('id') . " as uid," . members_fields_replace('username') . " as username from " . members_table_replace('store_clients') . " where " . members_fields_replace('id') . "='" . intval($member_data['id']) . "'", MEMBER_SQL);
+                    $data_member = members_db_qr_fetch("select ::id as uid,::username from {{store_clients}} where ::id=':id'", array('id'=>intval($member_data['id'])));
 
                     $data = $data_member;
                     $data['id'] = $new_id;
@@ -454,7 +459,7 @@ if ($action == "comments_get") {
             if ($members_cache[$data['uid']]['username']) {
                 $udata = $members_cache[$data['uid']];
             } else {
-                $udata = db_qr_fetch("select " . members_fields_replace('username') . " as username from " . members_table_replace('store_clients') . " where " . members_fields_replace('id') . "='$data[uid]'", MEMBER_SQL);
+                $udata = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'",array('id'=>$data['uid']));
                 $members_cache[$data['uid']] = $udata;
             }
 

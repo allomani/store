@@ -155,7 +155,7 @@ print "<h3><center><font color=red>Warning : Installation Folder Exists , Please
 
 ?>  
 
-<table width=100% height=100%><tr><td width=20% valign=top>
+<table width=100% height=100%><tr><td class="main_side">
 
 <?
 print str_replace("{username}",$user_info['username'],$phrases['cp_welcome_msg']); 
@@ -165,5 +165,4 @@ print " <br><br>";
 ?>
 
 </td>
- <td width=1 background='images/dot.gif'></td>
-<td valign=top> <br>
+<td class="main_content">

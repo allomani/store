@@ -53,9 +53,9 @@ if(is_array($custom)){
 if(check_email_address($email)){
 //$email = db_escape($email);
 
-$exsists = db_qr_num("select ".members_fields_replace('id')." from ".members_table_replace('store_clients')." where ".members_fields_replace('email')." like '".db_escape($email)."'",MEMBER_SQL);
+$exsist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'",array('email'=>db_escape($email)));
       //------------- check email exists ------------
-       if($exsists){
+       if($exsist['count']){
                          print "<li>$phrases[register_email_exists]<br>$phrases[register_email_exists2] <a href='index.php?action=forget_pass'>$phrases[click_here] </a></li>";
               $all_ok = 0 ;
            }
@@ -72,10 +72,10 @@ $exsists = db_qr_num("select ".members_fields_replace('id')." from ".members_tab
 
          if(!in_array($username,$exclude_list)){
 
-     $exsists2 = db_qr_num("select ".members_fields_replace('id')." from ".members_table_replace('store_clients')." where ".members_fields_replace('username')." like '".db_escape($username)."'",MEMBER_SQL);
+     $exsist2 = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username like ':username'",array('username'=>db_escape($username)));
 
        //-------------- check username exists -------------
-            if($exsists2){
+            if($exsist2['count']){
                          print(str_replace("{username}",$username,"<li>$phrases[register_user_exists]</li>"));
                 $all_ok = 0 ;
            }
@@ -143,8 +143,20 @@ if($settings['auto_email_activate']){
     }
 
 
-   db_query("insert into ".members_table_replace('store_clients')." (".members_fields_replace('email').",".members_fields_replace('username').",".members_fields_replace('date').",".members_fields_replace('usr_group').",".members_fields_replace('birth').",".members_fields_replace('country').",".members_fields_replace('gender').",pm_email_notify,privacy_settings,members_list)
-  values('".db_escape($email)."','".db_escape($username)."','".connector_get_date(time(),'member_reg_date')."','$member_group','".connector_get_date("$date_y-$date_m-$date_d",'member_birth_date')."','".db_escape($country)."','".db_escape($gender)."','1','$settings[defualt_privacy_settings]','1')",MEMBER_SQL);
+   members_db_query("insert into {{store_clients}} (::email,::username::date,::usr_group,::birth,::country,::gender,::pm_email_notify,::privacy_settings,::members_list)
+  values(':email',':username',':date',':usr_group',':birth',':country',':gender',':pm_email_notify',':privacy_settings',':members_list')",
+        array('email'=> db_escape($email),
+            'username'=>db_escape($username),
+            'date'=>connector_get_date(time(),'member_reg_date'),
+            'usr_group'=>$member_group,
+            'birth'=>connector_get_date("$date_y-$date_m-$date_d",'member_birth_date'),
+            'country'=>db_escape($country),
+            'gender'=>db_escape($gender),
+            'pm_email_notify'=>'1',
+            'privacy_settings'=>$settings['defualt_privacy_settings'],
+            'members_list'=>'1'
+           ) 
+           );
 
 
     $member_id=db_inserted_id();
@@ -156,7 +168,7 @@ if($settings['auto_email_activate']){
    if($custom_id[$i] && $custom[$i]){
    $m_custom_id=intval($custom_id[$i]);
    $m_custom_name =$custom[$i] ;
-    db_query("update ".members_table_replace('store_clients')." set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ".members_fields_replace('id')."='$member_id'",MEMBER_SQL);
+    members_db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ::id=':id'",array('id'=>$member_id));
   
        }
    }

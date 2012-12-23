@@ -284,8 +284,6 @@ $c++ ;
    if ($action == "adv2_edit"){
     if_admin("adv");
 
-$id = db_clean_string($id,"num");
-
         $data=db_qr_fetch("select * from store_banners where id='$id'");
         print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=banners'>$phrases[the_banners]</a> / $data[title] <br><br> 
                    

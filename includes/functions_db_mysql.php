@@ -65,12 +65,14 @@ function db_query($sql, $type = "") {
     // print $queries.$sql."<br>";
     //     print $queries . "." .$sql."<hr>";   
 
-    $last_sql = $sql;
+  
 
-    if ($type == MEMBER_SQL) {
+  /*  if ($type == MEMBER_SQL) {
         members_remote_db_connect();
-    }
+    }*/
 
+      $last_sql = $sql;
+      
     $qr = @mysql_query($sql);
 
     if (mysql_errno()) {
@@ -90,9 +92,9 @@ function db_query($sql, $type = "") {
 
         return false;
     } else {
-        if ($type == MEMBER_SQL) {
+      /*  if ($type == MEMBER_SQL) {
             members_local_db_connect();
-        }
+        }*/
 
         return $qr;
     }
