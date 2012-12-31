@@ -114,7 +114,7 @@ if($action=="view"){
        
 if($msg_snd_ok){
                     
-$qr = members_db_query("select ::id,::username,::pm_email_notify from {{store_clients}} where ::username=':username'",
+$qr = members_db_query("select ::id,::username,::email,::pm_email_notify from {{store_clients}} where ::username=':username'",
         array('username'=>db_escape($to_username)));
 if(db_num($qr)){
 $data=members_db_fetch($qr);
@@ -136,7 +136,7 @@ $data=members_db_fetch($qr);
                     if($data['pm_email_notify']){
                       $msg_url = "$scripturl/messages.php";
                       $msg = get_template("pm_email_notify_msg",array("{name_from}","{url}"),array($member_data['username'],$msg_url));
-                      $email_result = send_email($sitname,$mailing_email,$data['email'],"$phrases[pm_email_notify_subject]",$msg);
+                      $email_result = send_email($sitname,$mailing_email,$data['email'],"$phrases[pm_email_notify_subject]",$msg,$settings['mailing_default_use_html'],$settings['mailing_default_encoding']);
                     }
                       //----------------------------------------------
                       
