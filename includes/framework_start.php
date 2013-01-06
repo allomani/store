@@ -91,7 +91,7 @@ print "<table id=\"main_container\">
           $sub_count = count($blocks['l'][$xdata['id']]);
           
         
-            open_block(iif(!$xdata['hide_title'] && !$sub_count,$xdata['title']),$xdata['template']);    
+             
             
            if($sub_count){
               
@@ -111,11 +111,11 @@ print "<table id=\"main_container\">
          
           
            }else{
-               
+                open_block(iif(!$xdata['hide_title'] && !$sub_count,$xdata['title']),$xdata['template']);  
                run_php($xdata['file']);           
-                     
+                close_block($xdata['template']);          
            } 
-          close_block($xdata['template']);   
+        
           
                 print "</td>
         </tr>";
@@ -208,7 +208,7 @@ run_php($data['content']);
         
 
            if($sub_count){
-               open_table();
+             
                $tabs = new tabs("block_".$ydata['id']);
  
         $tabs->start($ydata['title']);
@@ -223,8 +223,7 @@ run_php($data['content']);
           }
           
            $tabs->run(); 
-           print "<br>";
-           close_table();
+         
            }else{
                open_table(iif(!$ydata['hide_title'],$ydata['title']),$ydata['template']);     
                run_php($ydata['file']);           

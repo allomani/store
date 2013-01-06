@@ -71,8 +71,8 @@ if ($settings['count_visitors_info']) {
 
 //-------- OS and Browser Info ------------
 
-    db_query("insert into info_browser (name,count) values ('".db_escape($browser)."','1') ON DUPLICATE KEY UPDATE count=count+1");
-    db_query("insert into info_os (name,count) values ('".db_escape($os)."','1') ON DUPLICATE KEY UPDATE count=count+1");
+    db_query("insert into info_browser (name,count) values ('" . db_escape($browser) . "','1') ON DUPLICATE KEY UPDATE count=count+1");
+    db_query("insert into info_os (name,count) values ('" . db_escape($os) . "','1') ON DUPLICATE KEY UPDATE count=count+1");
 }
 
 
@@ -92,15 +92,14 @@ if ($settings['count_online_visitors']) {
     }
 
 
-    $ip = getenv("REMOTE_ADDR");
-    //  $ip = "213.25.52.40";
+    $ip = $_SERVER["REMOTE_ADDR"];
 //$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 
     $time = time();
     $timeout = $time - $timeoutseconds;
 
     db_query("DELETE FROM info_online WHERE time<$timeout");
-    db_query("INSERT INTO info_online (time,ip) VALUES ('$time', '" . db_escape($ip) . "') ON DUPLICATE KEY UPDATE time='".$time."'");
+    db_query("INSERT INTO info_online (time,ip) VALUES ('$time', '" . db_escape($ip) . "') ON DUPLICATE KEY UPDATE time='" . $time . "'");
 
 //---------- Now Online Visitors ------------
 
@@ -128,7 +127,7 @@ if ($settings['count_online_visitors']) {
 
 
     if ($settings['online_members_count']) {
-        $data = members_db_qr_fetch("select count(*) as count from {{store_clients}} where ::last_login >= ':last_login'", array('last_login'=>connector_get_date($timeout, 'member_last_login')));
+        $data = members_db_qr_fetch("select count(*) as count from {{store_clients}} where ::last_login >= ':last_login'", array('last_login' => connector_get_date($timeout, 'member_last_login')));
 
         $counter['online_members'] = intval($data['count']);
         $counter['online_users'] = $users - $counter['online_members'];

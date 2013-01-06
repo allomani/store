@@ -147,7 +147,7 @@ if_admin("reports");
      
      print "</td></tr>
      
-     <tr><td valign=top><b>$phrases[the_content]</b></td><td><textarea cols=40 rows=8>$data[content]</textarea></td><tr>";
+     <tr><td valign=top><b>$phrases[the_explanation]</b></td><td><textarea cols=40 rows=8>$data[content]</textarea></td><tr>";
     
     //------ comments ------// 
      if($data['report_type']=="comment"){

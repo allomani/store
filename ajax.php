@@ -8,7 +8,7 @@ if ($action == "check_register_username") {
         $exclude_list = explode(",", $settings['register_username_exclude_list']);
 
         if (!in_array($str, $exclude_list)) {
-            $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username  like ':username'", array('username'=> db_escape($str)));
+            $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username  like ':username'", array('username' => db_escape($str)));
 
             if (!$exist['count']) {
                 print "<img src='$style[images]/true.gif'>";
@@ -27,7 +27,7 @@ if ($action == "check_register_username") {
 //------------------------------------------
 if ($action == "check_register_email") {
     if (check_email_address($str)) {
-        $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'", array('email'=>db_escape($str)));
+        $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'", array('email' => db_escape($str)));
         if (!$exist['count']) {
             print "<img src='$style[images]/true.gif'>";
         } else {
@@ -356,9 +356,9 @@ if ($action == "rating_send") {
                     db_query("update store_products_data set votes=votes+$score , votes_total=votes_total+1 where id='$id'");
                     db_query("update store_products_data set rate = (votes/votes_total) where id='$id'");
                 }
-                
-                
-                $session->set($session_name,time());
+
+
+                $session->set($session_name, time());
                 print "$phrases[rating_done]";
             }
         } else {
@@ -373,37 +373,36 @@ if ($action == "rating_send") {
 
 
 //----------  Report -------
-if($action=="report"){
+if ($action == "report") {
 
-if($settings['report_sec_code']){      
-$sec_img = new captcha();
-}
+    if ($settings['report_sec_code']) {
+        $sec_img = new captcha();
+    }
 
 
-    $id=intval($id);
- if($settings['reports_enabled']){
- 
-  $member_login = check_member_login();  
-  
- if(!$settings['reports_for_visitors'] &&  !$member_login){
-  open_table();
-  print "<center>$phrases[please_login_first]</center>";
-  close_table();
-    
- }else{
- 
-    
-    open_table($phrases['report_do']);
-    print "<form  name='report_submit' id='report_submit'>
+    $id = intval($id);
+    if ($settings['reports_enabled']) {
+
+        $member_login = check_member_login();
+
+        if (!$settings['reports_for_visitors'] && !$member_login) {
+//  open_table();
+            print "<center>$phrases[please_login_first]</center>";
+//  close_table();
+        } else {
+
+
+            //   open_table($phrases['report_do']);
+            print "<form  name='report_submit' id='report_submit'>
     <input type='hidden' name='action' value='report_submit'>
      <input type='hidden' name='id' value='$id'> 
-     <input type='hidden' name='report_type' value=\"".htmlspecialchars($report_type)."\"> 
+     <input type='hidden' name='report_type' value=\"" . htmlspecialchars($report_type) . "\"> 
       
       
     <table width=100%>";
-    
-    if(!$member_login){
-print "<tr><td>
+
+            if (!$member_login) {
+                print "<tr><td>
     
 <b>$phrases[your_name] </b> </td>
 <td><input type=text name=name id='name' value=\"$member_data[username]\"></td>
@@ -411,96 +410,88 @@ print "<tr><td>
 <tr><td>
 <b>$phrases[your_email]</b> </td>
 <td><input type=text name=email dir=ltr id='email'  value=\"$member_data[email]\"></td></tr>";
-    }
+            }
 
 
 
-   print "
+            print "
     <tr><td><b>$phrases[the_explanation]</b></td><td>
     <textarea cols=30 rows=5 name='content'></textarea></td></tr>";
-    
-    if($settings['report_sec_code']){
-           print "<tr><td><b>$phrases[security_code]</b></td>
-           <td>".$sec_img->output_input_box('sec_string','size=7')."
+
+            if ($settings['report_sec_code']) {
+                print "<tr><td><b>$phrases[security_code]</b></td>
+           <td>" . $sec_img->output_input_box('sec_string', 'size=7') . "
            <img src=\"sec_image.php\" title=\"$phrases[security_code]\" /></td></tr>";
-           }
-           
-           
-    print 
-    "<tr><td colspan=2 align=center><input type=button id='send_button' name='send_button' value='$phrases[send]' style=\"height:70;width:60;\" onClick=\"report_send();\"></td>
+            }
+
+
+            print
+                    "<tr><td colspan=2 align=center><input type=button id='send_button' name='send_button' value='$phrases[send]' style=\"height:70;width:60;\" onClick=\"report_send();\"></td>
     </tr></table>
     </form>";
-    
-    close_table();
- }
- }
+
+            //  close_table();
+        }
+    }
 }
 
 //--- report submit ----//
-if($action=="report_submit"){
-    $id= (int) $id;
-    
- if($settings['reports_enabled']){ 
-     
-   $member_login = check_member_login();  
-  
- if(!$settings['reports_for_visitors'] &&  !$member_login){
-  print "<center>$phrases[please_login_first]</center>";
-  
- }else{
-     
-     
-    if(in_array($report_type,$reports_types)){       
- 
-    if($settings['report_sec_code']){
-        
-$sec_img = new captcha();
+if ($action == "report_submit") {
+    $id = (int) $id;
+
+    if ($settings['reports_enabled']) {
+
+        $member_login = check_member_login();
+
+        if (!$settings['reports_for_visitors'] && !$member_login) {
+            print "<center>$phrases[please_login_first]</center>";
+        } else {
 
 
-   if($sec_img->verify_string($sec_string)){
-       $security_code_check = 1;
-   }else{
-       $security_code_check = 0;
-   }
-    }else{
-        $security_code_check = 1;
+            if (in_array($report_type, $reports_types)) {
+
+                if ($settings['report_sec_code']) {
+
+                    $sec_img = new captcha();
+
+
+                    if ($sec_img->verify_string($sec_string)) {
+                        $security_code_check = 1;
+                    } else {
+                        $security_code_check = 0;
+                    }
+                } else {
+                    $security_code_check = 1;
+                }
+
+
+
+
+
+                if ($security_code_check) {
+                    if ($member_login) {
+                        $uid = $member_data['id'];
+                        $name = $member_data['username'];
+                        $email = $member_data['email'];
+                    } else {
+                        $uid = 0;
+                    }
+
+
+                    db_query("insert into store_reports(fid,uid,name,email,content,date,report_type) values ('$id','$uid','" . db_escape($name) . "','" . db_escape($email) . "','" . db_escape($content) . "','" . time() . "','" . db_escape($report_type) . "')");
+
+
+                    print "<center>  $phrases[report_sent] </center>";
+                } else {
+
+                    print "<center>$phrases[err_sec_code_not_valid]</center>";
+                }
+            } else {
+
+                print "<center>  $phrases[err_wrong_url] </center>";
+            }
+        }
     }
-        
-
-    
-    
- 
- if($security_code_check){       
-    if($member_login){
-    $uid = $member_data['id'];
-    $name = $member_data['username'];
-    $email = $member_data['email']; 
-    }else{
-      $uid = 0 ;  
-    }
-    
-    
- db_query("insert into store_reports(fid,uid,name,email,content,date,report_type) values ('$id','$uid','".db_escape($name)."','".db_escape($email)."','".db_escape($content)."','".time()."','".db_escape($report_type)."')");
-
-
-print "<center>  $phrases[report_sent] </center>";
-
- 
- 
- }else{
-    
-        print  "<center>$phrases[err_sec_code_not_valid]</center>";
-    
-
- }
-    
-    }else{     
-
-print "<center>  $phrases[err_wrong_url] </center>";
-
-    }
- }
- }  
 }
 
 
@@ -517,11 +508,11 @@ if ($action == "comments_add") {
 
                 db_query("insert into store_comments (uid,fid,comment_type,content,time,active) values ('" . intval($member_data['id']) . "','" . intval($id) . "','" . db_escape($type) . "','" . db_escape($content) . "','" . time() . "','" . iif($settings['comments_auto_activate'], 1, 0) . "')");
 
-                $new_id = mysql_insert_id();
+                $new_id = db_inserted_id();
 
                 if ($settings['comments_auto_activate']) {
                     //  print $content;   
-                    $data_member = members_db_qr_fetch("select ::id as uid,::username from {{store_clients}} where ::id=':id'", array('id'=>intval($member_data['id'])));
+                    $data_member = members_db_qr_fetch("select ::id as uid,::username from {{store_clients}} where ::id=':id'", array('id' => intval($member_data['id'])));
 
                     $data = $data_member;
                     $data['id'] = $new_id;
@@ -591,7 +582,7 @@ if ($action == "comments_get") {
             if ($members_cache[$data['uid']]['username']) {
                 $udata = $members_cache[$data['uid']];
             } else {
-                $udata = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'",array('id'=>$data['uid']));
+                $udata = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
                 $members_cache[$data['uid']] = $udata;
             }
 
@@ -631,6 +622,17 @@ if ($action == "comments_get") {
         if ($offset == 1) {
             print "<div id='no_comments'>$phrases[no_comments]</div>";
         }
+    }
+}
+
+
+
+if ($action == "add_to_fav") {
+    $id = (int) $id;
+    if (check_member_login()) {
+        db_query("insert ignore into store_clients_favorites (userid,product_id) values('$member_data[id]','$id')");
+    } else {
+        print "<center> $phrases[please_login_first] </center>";
     }
 }
 ?>

@@ -8,18 +8,27 @@ function banner_pop_close(url,name){
 }
 
 
-function snd(id)
-{
-    msgwindow=window.open("send2friend.php?id="+id,"displaywindow","toolbar=no,scrollbars=no,width=400,height=320,top=200,left=200")
+
+function add_to_fav(id){
+  $.post('ajax.php',{
+      action: 'add_to_fav',
+      id: id
+      },function(data){
+          if(data == ""){
+    $('.add_to_fav').addClass('success');    
+    }else{
+        alert(data);
+        }
+          }
+          );
+            return false;
 }
 
-
-
-function add2fav(id)
-{
-    msgwindow=window.open("add2fav.php?id="+id,"displaywindow","toolbar=no,scrollbars=no,width=350,height=150,top=200,left=200")
-}
-
+function init_tabs(div_id){
+  $(function() {
+  $('#'+div_id).tabs();
+  });
+  }
 
 function CheckAll(form_name){
 
@@ -323,7 +332,7 @@ $('#send_button').disabled=true;
 function comments_add(type,id){
     $('#comment_add_button').attr('disabled','disabled');
     $('#comment_content').attr('disabled','disabled');
-
+  
     $.post("ajax.php",
     {
         action:'comments_add',
@@ -332,6 +341,7 @@ function comments_add(type,id){
         content: $('#comment_content').val()
         },
     function(data){
+      
         $('#comment_add_button').removeAttr('disabled');
         $('#comment_content').removeAttr('disabled');
 

@@ -162,7 +162,7 @@ if (db_num($qr)) {
  <td align=$global_align_x>";
 
     if ($data['available']) {
-        print "<input type=submit value=\"$phrases[add_to_cart]\" name='cart_button' id='cart_button'>";
+        print "<input type=submit value=\"$phrases[add_to_cart]\" name='cart_button' class='cart_button'>";
     } else {
         print "$phrases[not_available_now]";
     }
@@ -180,33 +180,51 @@ if (db_num($qr)) {
     }
 
 
-    print "</td></tr></table>";
+    print "</td></tr></table>
 
-    print $fields_content;
-
-    print "
- $data[details] 
- <br><br>
  
  
  <div align='$global_align_x'>
- <a href=\"javascript:add2fav($data[id]);\"><img src=\"$style[images]/favorite.gif\" border=0 alt=\"$phrases[add2favorite]\"></a>
+ <a href=\"#\" onClick=\"return add_to_fav($data[id]);\" title=\"$phrases[add2favorite]\" class='add_to_fav'></a>
  &nbsp;
  <a href='http://www.facebook.com/sharer.php?u=" . urlencode($scripturl . "/" . str_replace('{id}', $data['id'], $links['product_details'])) . "' target=_blank><img src='$style[images]/facebook.gif' alt='Share with Facebook' border=0></a>
  </div>";
 
-//--------------- PRODUCT DETAILS END --------------------------------------
 
     print_rating('products',$data['id'],$data['rate']); 
     
     close_table();
 
+ 
+   
+
+$tabs = new tabs('product_details');
+
+$tabs->start($phrases['the_details']);
+print  $data['details'] ;
+$tabs->end();
+
+$tabs->start("المواصفات");
+print $fields_content;
+$tabs->end();
+
+
+
+
+
+    
+    
 //------ Comments -------------------
     if ($settings['enable_product_comments']) {
-        open_table($phrases['members_comments']);
+    //    open_table($phrases['members_comments']);
+        $tabs->start($phrases['members_comments']);
         get_comments_box('product', $id);
-        close_table();
+       // close_table();
+        $tabs->end();
     }
+    
+$tabs->run();
+
     /*
       //-------- photos -------//
       $qrp=db_query("select * from store_products_photos where product_id='$id' order by id");
