@@ -175,6 +175,15 @@ $comments_types_phrases = array(
 
 $comments_types = array_keys($comments_types_phrases);
 
+//----- reports ----- 
+$reports_types_phrases = array(
+"comment"=>$phrases['the_comments'],
+"product"=>$phrases['the_products']
+        );
+
+$reports_types = array_keys($reports_types_phrases);
+
+//--------------------
 $rating_types = array('news','products');
 
 $settings = array();
@@ -1397,13 +1406,16 @@ function print_path_links($cat, $filename = "") {
             }
         }
     }
-    print "<ul class='nav-bar'>
+    print "
+        <div class='nav-bar-wrapper'>
+        <ul class='nav-bar'>
        <li><a href='" . str_replace('{id}', '0', $links['browse_products']) . "'>$phrases[the_products] </a></li>
         $dir_content ";
     if ($filename) {
         print "<li class='name'>$filename</li>";
     }
-    print "</ul>";
+    print "</ul>
+        </div>";
 }
 
 function login_header() {

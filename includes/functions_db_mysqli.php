@@ -59,7 +59,7 @@ function db_select($db_name, $db_charset = "") {
 }
 
 //----------- query ------------------
-function db_query($sql, $type = "") {
+function db_query($sql) {
 
     global $show_mysqli_errors, $log_mysqli_errors, $queries, $last_sql,$cn;
 
@@ -96,8 +96,14 @@ function db_query($sql, $type = "") {
 }
 
 //---------------- fetch -------------------
-function db_fetch($qr) {
+function db_fetch($r) {
   
+     if (is_object($r)) {
+        $qr = $r;
+    } else {
+        $qr = db_query($r);
+    }
+    
     return @mysqli_fetch_assoc($qr);
 }
 
@@ -109,27 +115,41 @@ function db_num($qr) {
 }
 
 //------------------ Query + fetch ----------------------
-function db_qr_fetch($sql, $type = "") {
+function db_qr_fetch($sql) {
 
-    return db_fetch(db_query($sql, $type));
+    return db_fetch($sql);
 }
 
 //--------------- Fetch First ---------------
-function db_qr_first($sql, $type = "") {
-    $data = db_fetch(db_query($sql, $type));
+function db_fetch_first($r) {
+    
+    if (is_object($r)) {
+        $qr = $r;
+    } else {
+        $qr = db_query($r);
+    }
+    
+    $data  = @mysqli_fetch_row($qr);
     return $data[0];
 }
 
 // ------------------- query + num --------------------
-function db_qr_num($sql, $type = "") {
+function db_qr_num($sql) {
 
-    return db_num(db_query($sql, $type));
+    return db_num(db_query($sql));
 }
 
 //------------- query and return array ----------------
-function db_qr_array($sql, $type = "") {
-    $qr = db_query($sql, $type);
+function db_fetch_all($r) {
+
+    if (is_object($r)) {
+        $qr = $r;
+    } else {
+        $qr = db_query($r);
+    }
+
     while ($data = db_fetch($qr)) {
+      
         $result[] = $data;
     }
     return (array) $result;

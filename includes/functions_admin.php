@@ -96,3 +96,30 @@ function print_admin_table($content, $width = "50%", $align = "center") {
        db_query("delete from store_access_log where date < '$expire_date'");
        db_query("insert into store_access_log (username,date,status) values ('".db_escape($username)."','".datetime()."','$status')");
    } 
+   
+   
+    //--------------
+ function get_comment_file_info($op,$fid){
+          global $links,$settings;
+     switch($op){
+             
+             case "news" :
+             $df = db_qr_fetch("select title,id from store_news where id='$fid'");
+             $file_name = $df['title']; 
+             $file_url = str_replace("{id}",$df['id'],$links['news_details']) ;
+             break;
+             
+             
+             
+             case "product" :
+             $df = db_qr_fetch("select name,id from store_products_data where id='$fid'");
+             $file_name = $df['name']; 
+             $file_url = str_replace("{id}",$df['id'],$links['product_details']);
+             break;
+             
+            
+             default : $file_url="";$file_name=""; break;
+         }
+ return array("name"=>$file_name,"url"=> $file_url);
+          
+ }

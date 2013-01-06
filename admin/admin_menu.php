@@ -69,10 +69,6 @@ if(if_admin("",true)){
 $admin_menu_content .= "<tr><td width=24><img src='images/pages.gif' width=24></td><td class=row_2><a href='pages.php'> $phrases[the_pages] </a></td></tr>";
 }
 
-if(if_admin("comments",true)){
-$admin_menu_content .= "<tr><td width=24><img src='images/comments.gif' width=24></td><td class=row_1><a href='comments.php'> $phrases[the_comments]</a></td></tr>\n";
-}
-
 //--------------------
 if($admin_menu_content){
 print "<br>
@@ -82,6 +78,32 @@ print $admin_menu_content;
 print "</table></fieldset>";
 }
 //---------------------
+
+
+$admin_menu_content = "";
+ 
+if(if_admin("comments",true)){
+$admin_menu_content .= "<tr><td width=24><img src='images/comments.gif' width=24></td><td class=row_1><a href='comments.php'> $phrases[the_comments]</a></td></tr>\n";
+}
+
+if(if_admin("reports",true)){
+$admin_menu_content .= "<tr><td width=24><img src='images/reports.gif' width=24></td><td class=row_2><a href='reports.php'> $phrases[the_reports]</a></td></tr>\n";
+}
+
+
+
+
+//--------------------
+if($admin_menu_content){
+print "<br>
+<fieldset style=\"padding: 2\">
+<table width=100%>";
+print $admin_menu_content; 
+print "</table></fieldset>";
+unset($admin_menu_content); 
+}
+//---------------------
+
 
 
 if(if_admin("clients",true)){

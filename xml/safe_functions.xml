@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <safe_functions>
-
-    <func>and</func>
+     <func>and</func>
     <func>or</func>
     <func>xor</func>
     <func>if</func>                    
@@ -46,5 +45,7 @@
     <func>get_short_details_fields_data</func>
     <func>number_format</func>
     <func>rand</func>
+    <func>time_duration</func>
+    <func>time</func>
     
 </safe_functions>

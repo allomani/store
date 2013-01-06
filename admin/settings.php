@@ -200,7 +200,29 @@ print "</td></tr>
    
  </table>
  </fieldset>  
-                      <br>
+        <br>     
+ <fieldset style=\"width:70%\">
+ <legend><b>$phrases[the_reports]</b></legend>
+  <table width=100%>
+
+  <tr><td> $phrases[report_do] : </td><td>" ;
+  print_select_row("stng[reports_enabled]",array("0"=>$phrases['disabled'],"1"=>$phrases['enabled']),$settings['reports_enabled']);
+ print "</td></tr>
+ 
+ <tr><td>$phrases[visitors_can_send_reports] : </td><td>";
+ print_select_row("stng[reports_for_visitors]",array("0"=>$phrases['no'],"1"=>$phrases['yes']),$settings['reports_for_visitors']);
+ print "
+ </td></tr>
+ 
+ <tr><td>$phrases[security_code_in_report] : </td><td>";
+ print_select_row("stng[report_sec_code]",array("0"=>$phrases['disabled'],"1"=>$phrases['enabled']),$settings['report_sec_code']);
+ print "
+ </td></tr>
+ 
+ </table>
+ </fieldset>
+ 
+<br>
  <table width=70% class=grid>
 
  <tr><td>$phrases[the_search] : </td><td><select name=stng[enable_search]>" ;

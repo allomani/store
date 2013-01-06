@@ -57,7 +57,7 @@ function db_select($db_name, $db_charset = "") {
 }
 
 //----------- query ------------------
-function db_query($sql, $type = "") {
+function db_query($sql) {
 
     global $show_mysql_errors, $log_mysql_errors, $queries, $last_sql;
 
@@ -65,11 +65,11 @@ function db_query($sql, $type = "") {
     // print $queries.$sql."<br>";
     //     print $queries . "." .$sql."<hr>";   
 
-  
 
 
-      $last_sql = $sql;
-      
+
+    $last_sql = $sql;
+
     $qr = @mysql_query($sql);
 
     if (mysql_errno()) {
@@ -89,105 +89,81 @@ function db_query($sql, $type = "") {
 
         return false;
     } else {
-    
+
 
         return $qr;
     }
 }
 
 //---------------- fetch -------------------
-function db_fetch($qr) {
-    //  global $show_mysql_errors,$log_mysql_errors,$last_sql ;
-
-    /*     $fetch = @mysql_fetch_array($qr);
-
-      $err =  mysql_error() ;
-
-      if($err){
-
-      if($show_mysql_errors){
-      print  "<p align=left><b> MySQL Error: </b> $err </p>";
-      }
-
-      if($log_mysql_errors){
-      do_error_log("$err \r\nSQL :  $last_sql",'db');
-      }
-
-      return false;
-      }else{
-      return $fetch;
-      } */
+function db_fetch($r) {
+    
+     if (is_resource($r)) {
+        $qr = $r;
+    } else {
+        $qr = db_query($r);
+    }
+    
     return @mysql_fetch_assoc($qr);
 }
 
 // ------------------------ num -----------------------
 function db_num($qr) {
-    //  global  $show_mysql_errors,$log_mysql_errors,$last_sql ;
-
-    /*
-      $num =  @mysql_num_rows($qr);
-      $err =  mysql_error() ;
-
-      if($err){
-
-      if($show_mysql_errors){
-      print  "<p align=left><b> MySQL Error: </b> $err </p>";
-      }
-
-      if($log_mysql_errors){
-      do_error_log("$err \r\nSQL :  $last_sql",'db');
-      }
-
-
-      return false;
-      }else{
-      return $num;
-      } */
-
     return @mysql_num_rows($qr);
 }
 
 //------------------ Query + fetch ----------------------
-function db_qr_fetch($sql, $type = "") {
-
-    return db_fetch(db_query($sql, $type));
+function db_qr_fetch($sql) {
+  return db_fetch($sql);
 }
 
 //--------------- Fetch First ---------------
-function db_qr_first($sql, $type = "") {
-    $data = db_fetch(db_query($sql, $type));
+function db_fetch_first($r) {
+    
+    if (is_resource($r)) {
+        $qr = $r;
+    } else {
+        $qr = db_query($r);
+    }
+    
+    $data  = @mysql_fetch_row($qr);
     return $data[0];
 }
 
 // ------------------- query + num --------------------
-function db_qr_num($sql, $type = "") {
+function db_qr_num($sql) {
 
-    return db_num(db_query($sql, $type));
+    return db_num(db_query($sql));
 }
 
 //------------- query and return array ----------------
-function db_qr_array($sql, $type = "") {
-    $qr = db_query($sql, $type);
+function db_fetch_all($r) {
+
+    if (is_resource($r)) {
+        $qr = $r;
+    } else {
+        $qr = db_query($r);
+    }
+
     while ($data = db_fetch($qr)) {
         $result[] = $data;
     }
     return (array) $result;
 }
 
-
-/* 
+/*
  * return last inserted ID
  * 
  */
-function db_inserted_id(){
+
+function db_inserted_id() {
     return mysql_insert_id();
-    }
-    
-    
-    function db_server_info(){
+}
+
+function db_server_info() {
     return @mysql_get_server_info();
 }
 
-function db_client_info(){
+function db_client_info() {
     return @mysql_get_client_info();
 }

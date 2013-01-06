@@ -5,7 +5,7 @@
     //----------------------------------------------------
 
 
-    $cat=intval($cat);
+    $cat= (int) $cat;
     $hide_subcats = intval($hide_subcats);
     $include_subcats = intval($include_subcats); 
 
@@ -21,21 +21,12 @@
         $qr2 = db_query("select * from store_products_cats where cat='$cat' and active=1 order by ord asc");
         if(db_num($qr2)){
 
+            $data_arr = db_fetch_all($qr2);
+            
             compile_hook('browse_products_before_cats_table'); 
-            run_template('browse_products_cats_header');
-            $c=0;
-            while($data = db_fetch($qr2)){
-                if ($c==$settings['img_cells']) {
-                    run_template('browse_products_cats_sep');
-                    $c = 0 ;
-                }
-
-
+           
                 run_template('browse_products_cats');
-                $c++;
-            }
-            run_template('browse_products_cats_footer');
-            close_table();
+       
             compile_hook('browse_products_after_cats_table');
         }else{
 
@@ -163,38 +154,13 @@
 
     if(db_num($qr)){
 
-        $products_count  = db_qr_fetch("select count(store_products_data.id) as count from store_products_data,store_products_cats where $sql_where");
-        //     $data_cat = db_qr_fetch("select name from store_products_cats where id='$cat'");
-
-
-
-        run_template('browse_products_header');  
-        $c=0;
-        while($data = db_fetch($qr)){
-
-            // $data_cat = db_qr_fetch("select name from store_products_cats where id='$cat'");    
-            if($include_subcats){
-                $data_cat['name'] = $data['cat_name'];
-                $data_cat['id'] = $data['cat_id']; 
-            }
-
-
-            if ($c==$settings['img_cells']) {
-                run_template('browse_products_spect');  
-                $c = 0 ;
-            }
-
-
-            run_template('browse_products');
-            $c++;
-
-        }
-        run_template('browse_products_footer');  
-
-
-
+        $products_count  = db_fetch_first("select count(store_products_data.id) as count from store_products_data,store_products_cats where $sql_where");
+        $data_cat = db_fetch("select name from store_products_cats where id='$cat'");
+        $data_arr  = db_fetch_all($qr);
+        run_template('browse_products');  
+      
         //-------------------- pages system ------------------------
-        print_pages_links($start,$products_count['count'],$perpage,$page_string); 
+        print_pages_links($start,$products_count,$perpage,$page_string); 
         //-----------------------------
 
     }else{

@@ -47,7 +47,7 @@ if($action=="add_ok"){
   db_query("insert into store_payment_gateways (class,name,img,active) values ('".db_escape($class)."','".db_escape($name)."','".db_escape($img)."','1')");
  $new_id = db_inserted_id();
  if($new_id){
-     $ord = db_qr_first("select max(ord) from store_payment_gateways")+1;
+     $ord = db_fetch_first("select max(ord) from store_payment_gateways")+1;
      db_query("update store_payment_gateways set ord = $ord where id='$new_id'");
     print "<script>window.location = 'payment_gateways.php?action=edit&id=$new_id';</script>";
  }    

@@ -278,6 +278,46 @@ function rating_send(type,id,score){
 }
 
 
+
+//------------- Reports ---------------------
+function report(id,report_type){
+
+  var $dialog =  $('<div id="report_dialog"><img src="images/ajax_loading.gif"></div>').dialog({
+        modal: true,
+        width:'30%',
+        height:'auto',
+        close: function(ev, ui) {
+            $(this).remove();
+        }
+    }); 
+        
+    $.post('ajax.php',{action:'report',id: id,report_type: report_type},
+        function(data){
+            $dialog.html(data);
+            $dialog.dialog('option', 'position', 'center');
+          
+        });
+ 
+}
+
+
+function report_send(){
+    
+$('#send_button').disabled=true;
+
+  $.post('ajax.php',$('#report_submit').serializeArray(),
+        function(data){
+            $('#report_dialog').html(data);
+            $('#report_dialog').dialog('option', 'position', 'center');
+          
+        });
+        
+
+
+}
+
+
+
 //---------- Comments Functions -------------------------------
 
 function comments_add(type,id){

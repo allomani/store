@@ -25,7 +25,7 @@
   $country_id = (int) $country_id;
   
  if($action=="geo_zone_country_add"){
-     $count = db_qr_first("select count(*) as count from store_geo_index where geo_id='$id' and country_id='$country_id'");
+     $count = db_fetch_first("select count(*) as count from store_geo_index where geo_id='$id' and country_id='$country_id'");
      if(!$count){
          db_query("insert into store_geo_index (geo_id,country_id) values ('$id','$country_id');");
      }

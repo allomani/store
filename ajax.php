@@ -372,6 +372,138 @@ if ($action == "rating_send") {
 
 
 
+//----------  Report -------
+if($action=="report"){
+
+if($settings['report_sec_code']){      
+$sec_img = new captcha();
+}
+
+
+    $id=intval($id);
+ if($settings['reports_enabled']){
+ 
+  $member_login = check_member_login();  
+  
+ if(!$settings['reports_for_visitors'] &&  !$member_login){
+  open_table();
+  print "<center>$phrases[please_login_first]</center>";
+  close_table();
+    
+ }else{
+ 
+    
+    open_table($phrases['report_do']);
+    print "<form  name='report_submit' id='report_submit'>
+    <input type='hidden' name='action' value='report_submit'>
+     <input type='hidden' name='id' value='$id'> 
+     <input type='hidden' name='report_type' value=\"".htmlspecialchars($report_type)."\"> 
+      
+      
+    <table width=100%>";
+    
+    if(!$member_login){
+print "<tr><td>
+    
+<b>$phrases[your_name] </b> </td>
+<td><input type=text name=name id='name' value=\"$member_data[username]\"></td>
+</td>
+<tr><td>
+<b>$phrases[your_email]</b> </td>
+<td><input type=text name=email dir=ltr id='email'  value=\"$member_data[email]\"></td></tr>";
+    }
+
+
+
+   print "
+    <tr><td><b>$phrases[the_explanation]</b></td><td>
+    <textarea cols=30 rows=5 name='content'></textarea></td></tr>";
+    
+    if($settings['report_sec_code']){
+           print "<tr><td><b>$phrases[security_code]</b></td>
+           <td>".$sec_img->output_input_box('sec_string','size=7')."
+           <img src=\"sec_image.php\" title=\"$phrases[security_code]\" /></td></tr>";
+           }
+           
+           
+    print 
+    "<tr><td colspan=2 align=center><input type=button id='send_button' name='send_button' value='$phrases[send]' style=\"height:70;width:60;\" onClick=\"report_send();\"></td>
+    </tr></table>
+    </form>";
+    
+    close_table();
+ }
+ }
+}
+
+//--- report submit ----//
+if($action=="report_submit"){
+    $id= (int) $id;
+    
+ if($settings['reports_enabled']){ 
+     
+   $member_login = check_member_login();  
+  
+ if(!$settings['reports_for_visitors'] &&  !$member_login){
+  print "<center>$phrases[please_login_first]</center>";
+  
+ }else{
+     
+     
+    if(in_array($report_type,$reports_types)){       
+ 
+    if($settings['report_sec_code']){
+        
+$sec_img = new captcha();
+
+
+   if($sec_img->verify_string($sec_string)){
+       $security_code_check = 1;
+   }else{
+       $security_code_check = 0;
+   }
+    }else{
+        $security_code_check = 1;
+    }
+        
+
+    
+    
+ 
+ if($security_code_check){       
+    if($member_login){
+    $uid = $member_data['id'];
+    $name = $member_data['username'];
+    $email = $member_data['email']; 
+    }else{
+      $uid = 0 ;  
+    }
+    
+    
+ db_query("insert into store_reports(fid,uid,name,email,content,date,report_type) values ('$id','$uid','".db_escape($name)."','".db_escape($email)."','".db_escape($content)."','".time()."','".db_escape($report_type)."')");
+
+
+print "<center>  $phrases[report_sent] </center>";
+
+ 
+ 
+ }else{
+    
+        print  "<center>$phrases[err_sec_code_not_valid]</center>";
+    
+
+ }
+    
+    }else{     
+
+print "<center>  $phrases[err_wrong_url] </center>";
+
+    }
+ }
+ }  
+}
+
+
 //---------------------  Comments ---------------------------
 
 if ($action == "comments_add") {

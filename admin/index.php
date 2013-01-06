@@ -66,8 +66,14 @@ print "<center><table width=50% class=grid><tr><td align=center><b>$phrases[welc
    
    print "</td></tr></table>";
 
+     if(if_admin("reports",true)){  
+    print "<br>";  
+ $reports_cnt = db_qr_fetch("select count(*) as count from store_reports where opened=0");  
+ print_admin_table("$phrases[new_reports] : <a href='reports.php'>$reports_cnt[count]</a>");
+   }
    
-      if(if_admin("comments",true)){   
+ 
+    if(if_admin("comments",true)){   
   print "<br>";  
  $comments_cnt = db_qr_fetch("select count(*) as count from store_comments where active=0");  
  print_admin_table("$phrases[comments_waiting_admin_review] : <a href='comments.php'>$comments_cnt[count]</a>");

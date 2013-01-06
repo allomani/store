@@ -28,7 +28,7 @@ function cart_item_info($item) {
                 } elseif ($option['type'] == "checkbox") {
                     if (is_array($option['value'])) {
                         $data_option_value = db_qr_fetch("select name from store_products_options where id='" . intval($option['id']) . "'");
-                        $data_option_data = db_qr_array("select * from store_products_options_data where id IN (" . implode(",", $option['value']) . ")");
+                        $data_option_data = db_fetch_all("select * from store_products_options_data where id IN (" . implode(",", $option['value']) . ")");
 
                         $info .= "<br>- <b>$data_option_value[name] : </b> <br> ";
                         foreach ($data_option_data as $d) {

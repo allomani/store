@@ -63,7 +63,7 @@ $shipping_settings = (array) $shipping_settings;
 
         $new_id = db_inserted_id();
         if ($new_id) {
-            $ord = db_qr_first("select max(ord) from store_shipping_methods") + 1;
+            $ord = db_fetch_first("select max(ord) from store_shipping_methods") + 1;
             db_query("update store_shipping_methods set ord = $ord where id='$new_id'");
             print "<script>window.location = 'shipping_methods.php?action=edit&id=$new_id';</script>";
         }

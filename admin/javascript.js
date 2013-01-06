@@ -262,7 +262,7 @@ function init_blocks_sortlist(){
 
 
 function init_sortlist(div_name,op){
-    
+   
     $('#'+div_name).sortable({
         update: function(event,ui) { 
              $.post("ajax.php",{

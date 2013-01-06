@@ -423,8 +423,7 @@ $page_result_sql = "select a.::id from ".$srch_remote_db.".{{store_clients}} a w
 
 }
 
- //  print $page_result_sql;
-print "<p align=left>$sql</p>";
+
 $qr = members_db_query($sql);
 
 
