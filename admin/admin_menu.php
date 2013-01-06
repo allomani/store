@@ -8,8 +8,8 @@ $admin_menu_content  = "";
 
 
 
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <legend>$phrases[the_orders]</legend>
 <table width=100%>";
 print "<tr><td width=24><img src='images/orders.gif' width=24></td><td class=row_1><a href='orders.php'>$phrases[the_orders]</a></td></tr>";
@@ -22,8 +22,8 @@ print "</table></fieldset>";
 
 
 
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <legend>$phrases[the_products]</legend>
 <table width=100%>";
 print "<tr><td width=24><img src='images/products.gif' width=24></td><td class=row_1><a href='products.php'>$phrases[the_products_and_cats]</a></td></tr>";
@@ -38,8 +38,8 @@ print "</table></fieldset>";
 
 
 if(if_admin("",true)){ 
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <legend>$phrases[payment_and_shipping]</legend>
 <table width=100%>";
 print "<tr><td width=24><img src='images/payment_methods.gif' width=24></td><td class=row_1><a href='payment_methods.php'>$phrases[payment_methods]</a></td></tr>";
@@ -71,8 +71,8 @@ $admin_menu_content .= "<tr><td width=24><img src='images/pages.gif' width=24></
 
 //--------------------
 if($admin_menu_content){
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <table width=100%>";
 print $admin_menu_content; 
 print "</table></fieldset>";
@@ -95,8 +95,8 @@ $admin_menu_content .= "<tr><td width=24><img src='images/reports.gif' width=24>
 
 //--------------------
 if($admin_menu_content){
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <table width=100%>";
 print $admin_menu_content; 
 print "</table></fieldset>";
@@ -107,8 +107,8 @@ unset($admin_menu_content);
 
 
 if(if_admin("clients",true)){
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <legend>$phrases[the_members]</legend>
 <table width=100%>";
 print "<tr><td width=24><img src='images/clients.gif' width=24></td><td class=row_1><a href='index.php?action=clients'> $phrases[cp_mng_members]</a></td></tr>\n";
@@ -123,8 +123,8 @@ print "</table></fieldset>";
 }
 
 if(if_admin("",true)){
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <legend>Geo Settings</legend>
 <table width=100%>
 <tr><td width=24><img src='images/db_backup.gif' width=24></td><td class=row_2><a href='index.php?action=geo_zones'>Geo Zones</a></td></tr>
@@ -135,8 +135,8 @@ print "<br>
 
 
 if(if_admin("",true)){
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <legend>$phrases[the_database]</legend>
 <table width=100%>
 <tr><td width=24><img src='images/db_info.gif' width=24></td><td class=row_1><a href='index.php?action=db_info'>$phrases[cp_db_check_repair]</a></td></tr>
@@ -182,8 +182,8 @@ $admin_menu_content .= "<tr><td width=24><img src='images/stng.gif' width=24></t
 
 //--------------------
 if($admin_menu_content){
-print "<br>
-<fieldset style=\"padding: 2\">
+print "
+<fieldset>
 <table width=100%>";
 print $admin_menu_content; 
 print "</table></fieldset>";
@@ -191,8 +191,8 @@ print "</table></fieldset>";
 //---------------------
 
 
-print "<br> 
-<fieldset style=\"padding: 2\"> 
+print " 
+<fieldset> 
 <table width=100%>";
 print "<tr><td width=24><img src='images/users2.gif' width=24></td><td class=row_1><a href='users.php'>$phrases[users_and_permissions]</a></td></tr>";
 

@@ -73,8 +73,8 @@ print "<p align=center class=title>$phrases[the_banners]</p>";
      
 
     print "
-  <center>
-  <table width=99% class=grid>
+ 
+  <table  class=grid>
 
  
   
@@ -170,12 +170,9 @@ if($action=="add"){
                 <form method=\"POST\" action=\"banners.php\" name='sender'>
                  <input type='hidden' value='add_ok' name='action'>
                  
-                    
-                   <center>
-<table width=\"80%\"><tr><td>
-
+         
                    
-<table  width=\"100%\" class=grid>
+<table class=grid>
   <tr>
                 <td>$phrases[bnr_appearance_places]</td>
                 <td><select id=\"type\" name=\"type\" size=\"1\" onChange=\"show_banners_options();\">
@@ -212,7 +209,7 @@ if($action=="add"){
 </table>
 
 
-<table  width=\"100%\" class=grid id='bnr_content_type'>
+<table class=grid id='bnr_content_type'>
            <tr>
                    <td >
                    $phrases[the_content_type]    <td >
@@ -285,8 +282,8 @@ if($action=="add"){
                 
  </table>
  
- <table width=\"100%\" class=grid id='banners_pages_area'>
-                <tr><td>$phrases[bnr_appearance_pages]</td><td>
+ <fieldset id='banners_pages_area'>               
+                <legend>$phrases[bnr_appearance_pages]</legend>
 
 <table width=100%><tr><td>";
 
@@ -313,18 +310,20 @@ $c++ ;
 }
 }
        print"</tr></table>
-       </td></tr>
-</table>
-<table width=\"100%\" class=grid>
-        <tr>
-                <td  align=center>
+    
+               
+<img src='images/arrow_" . $global_dir . ".gif'>    
+        
+          <a href='#' onclick=\"CheckAll(); return false;\"> $phrases[select_all] </a> -
+          <a href='#' onclick=\"UncheckAll(); return false;\">$phrases[select_none] </a>
+          &nbsp;  &nbsp;
+          
+</fieldset>
+<fieldset>
 
-                <input type=\"submit\" value=\"$phrases[add_button]\"></td>
-        </tr>
-</table>
+                <center><input type=\"submit\" value=\"$phrases[add_button]\"></center>
+        </fieldset>
 
-
-</td></tr></table></center>
         </form>";
        ?>
         <script>
@@ -353,13 +352,8 @@ $c++ ;
                   <input type='hidden' value='$id' name='id'>
                   
                   
-          <center>
-          
-        <table width=\"80%\"><tr><td>
-        
-        
-          
-          <table width=\"100%\" class=grid>
+       
+          <table class=grid>
       
 
                   <tr>
@@ -393,7 +387,7 @@ $c++ ;
         </table>
         
         
-        <table width=\"100%\" class=grid id='bnr_content_type'>";
+        <table class=grid id='bnr_content_type'>";
 
       
          print " <tr>
@@ -409,14 +403,14 @@ $c++ ;
         </tr>
         </table>
         
-        <table width=\"100%\" class=grid id='banners_url_area'>
+        <table  class=grid id='banners_url_area'>
        <tr><td >$phrases[the_url]</td>
                 <td>
                 <input type=\"text\" name=\"url\"  dir=ltr value='$data[url]' size=\"38\"></td>
         </tr>
         </table>
         
-      <table width=\"100%\" class=grid id='banners_img_area'>
+      <table class=grid id='banners_img_area'>
     <tr><td>$phrases[the_image]</td><td>
 
                 <table><tr><td>
@@ -429,7 +423,7 @@ $c++ ;
         </tr>
         </table>
         
-  <table width=\"100%\" class=grid id='banners_code_area'>
+  <table class=grid id='banners_code_area'>
 <tr>
  <td valign=top>$phrases[the_code] </td><td> 
 <textarea dir=ltr rows=\"8\" name=\"content\" cols=\"50\">$data[content]</textarea>
@@ -437,7 +431,7 @@ $c++ ;
 </table>
 
 
-<table width=\"100%\" class=grid id='add_after_menu'>
+<table class=grid id='add_after_menu'>
     
         <tr>
                 <td> $phrases[add_after_menu_number]</td>
@@ -453,7 +447,7 @@ $c++ ;
 
                 </tr>
 </table>
-<table width=\"100%\" class=grid>
+<table class=grid>
 
                 <tr>
                 <td>$phrases[the_order]</td>
@@ -464,13 +458,11 @@ $c++ ;
                 
                 
  </table>
- <table width=\"100%\" class=grid id='banners_pages_area'>               
-                
-                <tr>
-                <td>  $phrases[bnr_appearance_pages]</td>
-                
-                
-                <td><table width=100%><tr><td>";
+ 
+
+ <fieldset id='banners_pages_area'>               
+                <legend>$phrases[bnr_appearance_pages]</legend>
+                <table width=100%><tr><td>";
 
                          $pages_view = explode(",",$data['pages']);
 
@@ -501,19 +493,20 @@ $c++ ;
 
 
                           print "</tr></table>
-                          </td><tr>
-</table>
-<table width=\"100%\" class=grid >
-                          
-        <tr>
-                <td  align=center>
-              
-                <input type=\"submit\" value=\"$phrases[edit]\"></td>
-        </tr>
-</table>
+                              
+<img src='images/arrow_" . $global_dir . ".gif'>    
+        
+          <a href='#' onclick=\"CheckAll(); return false;\"> $phrases[select_all] </a> -
+          <a href='#' onclick=\"UncheckAll(); return false;\">$phrases[select_none] </a>
+          &nbsp;  &nbsp;
+          
+                       </fieldset>
+                       
+<fieldset>
+    <center> <input type=\"submit\" value=\"$phrases[edit]\"> </center>
+</fieldset>
 
 
-</td></tr></table></center>
         </form>";
 ?>
         <script>

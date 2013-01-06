@@ -9,10 +9,13 @@ BODY {
 
 fieldset {
     border:  1px solid #D0D0D0;
+    margin:10px 0 0 15px;
 
 }
 
-
+legend {
+    font-weight: bold;
+}
 
 label {
     margin:10px;
@@ -161,8 +164,9 @@ DIV.footer {
 
 table.grid {
     border: 1px solid #ccc;
-
     color: #333;
+    width:99%;
+    margin:5px 0;
 }
 
 

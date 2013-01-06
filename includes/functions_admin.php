@@ -85,7 +85,7 @@ function check_safe_functions($condition_value) {
 
 //--------- print admin table -------------
 function print_admin_table($content, $width = "50%", $align = "center") {
-    print "<center><table class=grid width='$width'><tr><td align='$align'>$content</td></tr></table></center>";
+    print "<center><table class=grid style='width:$width;'><tr><td align='$align'>$content</td></tr></table></center>";
 }
 
 //------------ Access Log ------------

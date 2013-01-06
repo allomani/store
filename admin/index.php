@@ -14,7 +14,7 @@ require(CWD . "/counter.php");
    
    $count_members = members_db_qr_fetch("select count(::id) as count from {{store_clients}}");
 
-print "<center><table width=50% class=grid><tr><td align=center><b>$phrases[welcome_to_cp] <br><br>";
+print "<center><table class=grid style='width:50%;'><tr><td align=center><b>$phrases[welcome_to_cp] <br><br>";
 
 
    if($global_lang=="arabic"){
@@ -41,7 +41,7 @@ print "<center><table width=50% class=grid><tr><td align=center><b>$phrases[welc
   $phrases[clients_count] : $count_members[count] <br>
    $phrases[users_count] : $data4[count] </font></td></tr></table></center>";
 
-  print "<br><center><table width=50% class=grid><td align=center>";
+  print "<br><center><table class=grid style='width:50%;'><td align=center>";
     
     print "<span dir='$global_dir'><b>$phrases[php_version] : </b></span> <br><span dir='ltr'>".@phpversion()." </span><br><br> ";
 
@@ -82,7 +82,7 @@ print "<center><table width=50% class=grid><tr><td align=center><b>$phrases[welc
     
     
 
-  print "<br><center><table width=50% class=grid><td align=center>
+  print "<br><center><table class=grid style='width:50%;'><td align=center>
   <p><b> $phrases[cp_addons] </b></p>";
 
    //--------------- Check Installed Plugins --------------------------
@@ -105,12 +105,12 @@ if(!$plgcnt){
  print "</td></tr></table>";
 
 if($global_lang=="arabic"){
-    print "<br><center><table width=50% class=grid><td align=center>
+    print "<br><center><table class=grid style='width:50%;'><td align=center>
      يتصفح الموقع حاليا $counter[online_users] زائر
                                                <br><br>
    أكبر تواجد كان  $counter[best_visit] في : <br> $counter[best_visit_time] <br></td></tr></table>";
  }else{
- 	    print "<br><center><table width=50% class=grid><td align=center>
+ 	    print "<br><center><table class=grid style='width:50%;'><td align=center>
      Now Browsing : $counter[online_users] Visitor
                                                <br><br>
    Best Visitors Count : $counter[best_visit] in : <br> $counter[best_visit_time] <br></td></tr></table>";
@@ -138,7 +138,7 @@ require(ADMIN_DIR ."/settings.php");
 //------------------- DATABASE BACKUP --------------------------
 if($action=="backup_db_do"){
     $output = htmlspecialchars($output) ;
-print "<br><center> <table width=50% class=grid><tr><td align=center>  $output </td></tr></table>";
+print "<br><center> <table class=grid style='width:50%;'><tr><td align=center>  $output </td></tr></table>";
 }
 
   if($action=="backup_db"){

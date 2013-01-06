@@ -219,8 +219,7 @@ if($action == "edit_block"){
  <form method=\"POST\" action=\"blocks.php\">  
  <input type=hidden name=\"action\" value='edit_ok'>
  <input type=hidden name=\"id\" value='$id'>
-                       
- <center><table border=\"0\" width=\"99%\"  class=\"grid\" >
+        <table border=\"0\" width=\"99%\"  class=\"grid\" >
 
                  <tr>
                  <td width=150>
@@ -275,7 +274,12 @@ if($action == "edit_block"){
                 <b>$phrases[the_order]</b></td><td>
                 <input type='text' name='ord' value='$data[ord]' size='2'></td>
                         </tr>
-                        <tr><td> <b> $phrases[appearance_places]</b></td><td><table width=100%><tr><td>";
+                        </table>
+                        
+                        <fieldset>
+                        <legend>$phrases[appearance_places]</legend>
+                            
+<table width=100%><tr><td>";
 
                          $pages_view = explode(",",$data['pages']);
 
@@ -308,11 +312,23 @@ $i++;
 
 
 
-                          print "</td></tr></table>" ;
-           print "</td></tr><tr><td colspan=2 align=center><input type=\"submit\" value=\"$phrases[edit]\"> </td></tr>
-    
-</table>
- </center>
+                          print "
+                              
+
+          
+</td></tr></table>
+
+<img src='images/arrow_" . $global_dir . ".gif'>    
+        
+          <a href='#' onclick=\"CheckAll(); return false;\"> $phrases[select_all] </a> -
+          <a href='#' onclick=\"UncheckAll(); return false;\">$phrases[select_none] </a>
+          &nbsp;  &nbsp;
+                                  
+           </fieldset>
+         
+<fieldset>
+               <center><input type=\"submit\" value=\"$phrases[edit]\"> </center>
+    </fieldset>
 </form>";
 
            code_editor_init('file');
@@ -330,10 +346,8 @@ if($action=="add"){
    print "
     <form method=\"POST\" action=\"blocks.php\" name=submit_form>
     <input type=hidden name=\"action\" value='add_ok'>
-                
-                
-    <center>
-    <table border=\"0\" width=\"99%\" class=\"grid\">
+   
+    <table class=\"grid\">
 
     <tr>
                                 <td>
@@ -382,8 +396,12 @@ if($action=="add"){
                 <b>$phrases[the_order]</b></td><td>
                 <input type=\"text\" name=\"ord\" value=\"1\" size=\"2\"></td>
                         </tr>
-
- <tr><td> <b> $phrases[appearance_places]</b></td><td><table width=100%><tr><td>";
+                        </table>
+                        
+                        <fieldset>
+                        <legend>$phrases[appearance_places]</legend>
+                            <table width=100%><tr><td>
+";
 
 
   if(is_array($actions_checks)){
@@ -407,11 +425,23 @@ $i++;
 // next($actions_checks);
 }
 }
-        print " </td></tr></table></td></tr><tr><td colspan=2 align=center><input type=\"submit\" value=\"$phrases[add_button]\"></td></tr>
+        print "
+            </tr></table>
+<img src='images/arrow_" . $global_dir . ".gif'>    
+        
+          <a href='#' onclick=\"CheckAll(); return false;\"> $phrases[select_all] </a> -
+          <a href='#' onclick=\"UncheckAll(); return false;\">$phrases[select_none] </a>
+          &nbsp;  &nbsp;
+          
+
+            </fieldset>
+            
+            <fieldset>
+            <center><input type=\"submit\" value=\"$phrases[add_button]\"></center>
 
 
-</table>
-</center>
+</fieldset>
+
 </form>";
 
         code_editor_init("file");

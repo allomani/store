@@ -1429,11 +1429,7 @@ function print_redirection($link, $print_header = 1) {
     $re_link = htmlspecialchars($link);
 
     if ($print_header) {
-        print "<html dir=$global_dir>
-<title>$sitename</title>
-<META http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
-<META http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">
-<link href=\"css.php\" type=text/css rel=stylesheet><br><br>";
+        run_template('page_head');
     }
 
 
