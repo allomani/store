@@ -886,12 +886,15 @@ if($action == "product_edit"){
  
   
    
-   print " <center>
+   print "
    
    <table class=grid><tr>
-   <td align=center><a href='products_fields.php?id=$id'>Fields</a></td>
-   <td align=center><a href='products_options.php?id=$id'>Order Options</a></td>
-   <td align=center><a href='products_photos.php?id=$id'> $phrases[manage_product_photos] </a></td>
+   <td align=center>
+   <a href='products_fields.php?id=$id'><img src=\"images/product_features.png\" title=\"$phrases[features]\"><br>$phrases[features]</a></td>
+   <td align=center>
+   <a href='products_options.php?id=$id'><img src=\"images/order_options.png\" title=\"$phrases[order_options]\"><br>$phrases[order_options]</a></td>
+   <td align=center>
+   <a href='products_photos.php?id=$id'><img src=\"images/photos_manage.png\" title=\"$phrases[manage_product_photos]\"><br>$phrases[manage_product_photos]</a></td>
    </tr></table><br>
    
    
@@ -911,7 +914,7 @@ if($action == "product_edit"){
        
                  <td width=\"100\">
                 <b>$phrases[the_name]</b></td><td >
-                <input type=\"text\" name=\"name\" size=\"50\" value=\"$data[name]\"></td>
+                <input type=\"text\" name=\"name\" size=\"50\" value=\"$data[name]\" required=\"required\"></td>
                         </tr>
                   
 
@@ -1009,8 +1012,7 @@ if($action=="product_add"){
     if_products_cat_admin($cat,false);
     print_admin_path_links($cat);
     
-   print "<center>
-               
+   print "
                    
                 <form name=sender method=\"POST\" action=\"products.php\" enctype=\"multipart/form-data\">
 
@@ -1133,9 +1135,9 @@ if($action=="product_add"){
                               
                               </table>
                               </fieldset><br><br>
-                 <fieldset>
+                 <fieldset style='text-align:center;'>
                               <legend><b>$phrases[product_photos]</b></legend>
-                              <center>$phrases[product_add_photos_note]</center>
+                             $phrases[product_add_photos_note]
                               <br>
                               </fieldset><br><br>
                                      

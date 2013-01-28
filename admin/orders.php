@@ -152,7 +152,7 @@ if($action=="orders_search"){
 print "<p align=center class=title>$phrases[orders_seach]</p> 
 
 
-  <center>
+ 
   <form action=orders.php method=get>
   <input type=hidden name=op value='search'>
   
@@ -165,7 +165,12 @@ print "<p align=center class=title>$phrases[orders_seach]</p>
   <input type=text name=username size=20>
   </td></tr>
  
- <tr><td><b>$phrases[order_date]</b></td><td><input type=text name=\"order_date\"  dir=ltr size=30></td></tr>
+ <tr><td><b>$phrases[order_date]</b></td>
+     <td>
+     <input type=text name=\"order_date_from\" dir=ltr size=15>
+     -
+     <input type=text name=\"order_date_to\" dir=ltr size=15>
+     </td></tr>
  <tr><td><b>$phrases[paid]</b></td><td>
  <select name='paid'>
  <option value=''>$phrases[all]</option>
@@ -272,7 +277,14 @@ print "<option value=0>$phrases[other]</option> ";
  </form>";
  
  
-
+?>
+<script>
+$(document).ready(function(){
+    $('input[name="order_date_from"]').datepicker({dateFormat: 'yy-mm-dd'});
+    $('input[name="order_date_to"]').datepicker({dateFormat: 'yy-mm-dd'});
+});
+</script>
+<?
     
 }
 

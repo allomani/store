@@ -1654,6 +1654,33 @@ function redirect($url) {
     die();
 }
 
+//---- Js Redirect -----//
+function js_redirect($url,$with_body=false){
+    global $phrases;
+    
+if($with_body){
+print "<html>
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=$settings[site_pages_encoding]\" />
+<head>
+</head><body>";
+}
+
+print "<script>
+var url = \"$url\";
+ var a = document.createElement(\"a\");
+ if(!a.click) { 
+  window.location = url;
+ }else{
+ a.setAttribute(\"href\", url);
+ a.style.display = \"none\";
+ document.body.appendChild(a);
+ a.click();
+ }
+ </script>
+ 
+ <center> $phrases[redirection_msg] <a href=\"$url\">$phrases[click_here]</a></center>";
+   
+ }
 //--------- load plugins function --------     
 function load_plugins($file) {
     $dhx = @opendir(CWD . "/plugins");

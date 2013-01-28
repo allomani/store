@@ -180,7 +180,7 @@ print "</script>\n";
         $tables = db_query("SHOW TABLE STATUS");
         print "<form name=\"form1\" method=\"post\" action=\"index.php\"/>
         <input type=hidden name=action value='repair_db_ok'>
-        <center><table width=\"96%\"  class=grid>";
+        <center><table  class=grid>";
         print "<tr><td colspan=\"5\"> <font size=4><b>$phrases[the_database]</b></font> </td></tr>
         <tr><td>
         <input type=\"checkbox\" name=\"check_all\" checked=\"checked\" onClick=\"checkAll(this.form)\"/></td>

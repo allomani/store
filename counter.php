@@ -78,8 +78,7 @@ if ($settings['count_visitors_info']) {
 
 if ($settings['count_visitors_hits']) {
 //------ Visitors Count ----------------
-    $today = date("d-m-Y");
-    db_query("insert into info_hits (date,hits) values ('$today','1') ON DUPLICATE KEY UPDATE hits=hits+1");
+    db_query("insert into info_hits (date,hits) values (curdate(),'1') ON DUPLICATE KEY UPDATE hits=hits+1");
 }
 
 

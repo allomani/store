@@ -16,10 +16,10 @@ require('./start.php');
     
  //----------- edit ---------//
  if($action=="edit_ok"){
-      $pic_id = (int) $pic_id;
-   
-     db_query("update store_products_photos set name='".db_escape($name)."' where id='$pic_id'");
-    
+      $pic_id = (array) $pic_id;
+   for($i=0;$i< count($pic_id);$i++){
+     db_query("update store_products_photos set name='".db_escape($name[$i])."' where id='$pic_id[$i]'");
+     }   
  }
  //----------- del ----------//
  if($action=="del"){
@@ -108,6 +108,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
   
     <br>
    <img src=\"$scripturl/".get_image($data['thumb'])."\" title=\"$data[name]\"><br>
+       $data[name]
    <br>
    <input type='checkbox' name='pic_id[]' value='$data[id]'>
    <a href='products_photos.php?action=edit&pic_id=$data[id]&id=$id'>$phrases[edit]</a> - 
@@ -131,6 +132,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
           &nbsp;  &nbsp;
           
          <select name='action'>
+            <option value='edit'>$phrases[edit]</option>
          <option value='del'>$phrases[delete]</option>
          </select>
         <input type=submit value=\"$phrases[do_button]\" onClick=\"return confirm('$phrases[are_you_sure]');\">
@@ -190,32 +192,41 @@ if($action=="add"){
 
 //------------ Products Photos Add ---------
 if($action=="edit"){
-    $pic_id=intval($pic_id);
+    $pic_id= (array) $pic_id;
+    $id = (int) $id;
+    
+  if(count($pic_id)){
+      
+  $data=db_qr_fetch("select * from store_products_data where id='$id'");
+    if_products_cat_admin($data['cat']);
+    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / <a href='products_photos.php?action=products_photos&id=$data[id]'>$phrases[product_photos]</a> / $phrases[edit]");
   
     
     
-    $qrp=db_query("select id,name,product_id,img,thumb from store_products_photos where id='$pic_id'");
+    $qrp=db_query("select id,name,product_id,img,thumb from store_products_photos where product_id='$id' and id IN (".implode(",",$pic_id).")");
     
     if(db_num($qrp)){
-    
-        $datap=db_fetch($qrp);
-        $data=db_qr_fetch("select * from store_products_data where id='$datap[product_id]'");
         
-        
-    if_products_cat_admin($data['cat']);
-    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$data[id]&cat=$data[cat]'>$data[name]</a> / <a href='products_photos.php?action=products_photos&id=$data[id]'>$phrases[product_photos]</a> / $datap[name]");
-     
-   print "<form action=products_photos.php method=post >
+    print "<form action=products_photos.php method=post >
    <input type=hidden name=action value='edit_ok'>
-   <input type=hidden name=id value='$data[id]'>
-    <input type=hidden name=pic_id value='$datap[id]'> 
+   <input type=hidden name=id value='$data[id]'>";
+    $c=0;
+        while($datap=db_fetch($qrp)){
+     
+   print "
+    <input type=hidden name=\"pic_id[$c]\" value='$datap[id]'> 
           
-  
-        <center><table width=50% class=grid>
-        <tr><td colspan=2 align=center><a href=\"$scripturl/".$datap['img']."\" target=_blank><img src=\"$scripturl/".get_image($datap['thumb'])."\" border=0></a></td></tr>
-         <tr><td>$phrases[the_name] : </td><td><input type=text name=\"name\" value=\"$datap[name]\" size=30></td></tr>
-         <tr><td colspan=2 align=center><input type=submit value=' $phrases[edit] '></td></tr>
-        </table>
+     <table width=50% class=grid>
+        <tr><td colspan=2 align=center>
+        <a href=\"$scripturl/".$datap['img']."\" target=_blank>
+            <img src=\"$scripturl/".get_image($datap['thumb'])."\" border=0></a></td></tr>
+         <tr><td>$phrases[the_name] : </td><td><input type=text name=\"name[$c]\" value=\"$datap[name]\" size=30></td></tr>
+                </table>
+        ";
+   $c++;
+      }
+      print "<center><input type=submit value=' $phrases[edit] '></center>
+     
       
    
  </form>";
@@ -223,6 +234,9 @@ if($action=="edit"){
     }else{
         print_admin_table("<center>$phrases[err_wrong_url]</center>");
     }
+    }else{
+          print_admin_table("<center>$phrases[please_select_photos_first]</center>");
+        }
 }
 
 //-----------end ----------------

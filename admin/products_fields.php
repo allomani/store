@@ -1,7 +1,7 @@
 <?
 require('./start.php');
 
-if(!$action || $action=="product_fields_edit_ok"){
+if(!$action || $action=="edit_ok"){
     
     
 
@@ -15,10 +15,10 @@ if(!$action || $action=="product_fields_edit_ok"){
      
      
          
-    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$id'>$data[name]</a> / Fields");
+    print_admin_path_links($data['cat'],"<a href='products.php?action=product_edit&id=$id'>$data[name]</a> / $phrases[features]");
     
  //----------- edit ---------------
-   if($action=="product_fields_edit_ok"){
+   if($action=="edit_ok"){
     
     db_query("delete from store_fields_data where  product_id='$id'");  
  for($i=0;$i<count($field_id);$i++){
@@ -29,10 +29,6 @@ if(!$action || $action=="product_fields_edit_ok"){
    db_query("insert into store_fields_data (cat,value,product_id) values('".$field_id[$i]."','".$cur_field_value."','$id')");
 
  }
- 
- print_admin_table("<img src=\"images/done.gif\">&nbsp; Edit done");
- print "<br>";
-    
    }
    
      
@@ -42,7 +38,7 @@ if(!$action || $action=="product_fields_edit_ok"){
                       if(count($fields_array)){  
                       print " <center>
              <form action='products_fields.php' method=post>
-             <input type='hidden' name='action' value='product_fields_edit_ok'>
+             <input type='hidden' name='action' value='edit_ok'>
              <input type='hidden' name='id' value='$id'>
                 
  <table border=0 width=\"90%\"  class=grid>";
@@ -93,7 +89,7 @@ if(!$action || $action=="product_fields_edit_ok"){
 
 </form>    </center>";
  }else{
-     print_admin_table("<center> No Fields </center>");
+     print_admin_table("<center> $phrases[no_features]</center>");
  }
   
  }else{

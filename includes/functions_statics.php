@@ -1,7 +1,7 @@
 <?
 function get_statics_info($sql,$count_name,$count_data){
 
-global $if_img,$year,$global_align,$style ;
+global $if_img,$year,$global_align,$style,$scripturl ;
 
  $qr_stat=db_query($sql);
 if (db_num($qr_stat)){
@@ -15,8 +15,8 @@ $name_suffix = rand(0,99);
 
 ?>
  <div id="stats_<?=$name_suffix;?>" style="width:600px;height:300px;"></div>
-  <script language="javascript" type="text/javascript" src="js/jquery.flot.js"></script>
-    <script language="javascript" type="text/javascript" src="js/jquery.flot.categories.js"></script>
+  <script language="javascript" type="text/javascript" src="<?=$scripturl;?>/js/jquery.flot.js"></script>
+    <script language="javascript" type="text/javascript" src="<?=$scripturl;?>/js/jquery.flot.categories.js"></script>
 <script type="text/javascript">
 $(function () {
     var data = [ <? foreach($stats as $key=>$val){ print "['".$key."',".$val."],";}?> ];

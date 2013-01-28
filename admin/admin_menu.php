@@ -14,6 +14,7 @@ print "
 <table width=100%>";
 print "<tr><td width=24><img src='images/orders.gif' width=24></td><td class=row_1><a href='orders.php'>$phrases[the_orders]</a></td></tr>";
 print "<tr><td width=24><img src='images/orders_status.gif' width=24></td><td class=row_2><a href='orders_status.php'>$phrases[orders_status]</a></td></tr>";
+print "<tr><td width=24><img src='images/votes.gif' width=24></td><td class=row_1><a href='statistics.php'>$phrases[the_statics]</a></td></tr>";
 
 
 print "</table></fieldset>"; 

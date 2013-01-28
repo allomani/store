@@ -362,7 +362,7 @@ if($action=="add"){
                      <tr> <td>
                 <b>$phrases[the_position]</b></td>
                                 <td>";
-                print_select_row("pos",array("r"=>$phrases['right'],"c"=>$phrases['center'],"l"=>$phrases['left']));     
+                print_select_row("pos",array("r"=>$phrases['right'],"c"=>$phrases['center'],"l"=>$phrases['left']),"r"," onchange=\"set_menu_pages(this)\"");     
                         print "
                         </td>
                         </tr>

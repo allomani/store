@@ -1,7 +1,5 @@
 <?
-require("global.php");
-require(CWD . "/includes/framework_start.php");   
-//----------------------------------------------------
+require("./start.php");
 
    $year = intval($year);
 $month = intval($month);
@@ -10,13 +8,13 @@ $month = intval($month);
 
  //-------- browser and os statics ---------
 if($settings['count_visitors_info']){
-open_table("$phrases[operating_systems]");
+print "<p class='title' align=center>$phrases[operating_systems]</p>" ;
 get_statics_info("select * from info_os where count > 0 order by count DESC","name","count");
-close_table();
 
-open_table("$phrases[the_browsers]");
+
+print "<p class='title' align=center>$phrases[the_browsers]</p>";
 get_statics_info("select * from info_browser where count > 0 order by count DESC","name","count");
-close_table();
+
 
 $printed  = 1 ;
 }
@@ -27,7 +25,7 @@ $printed  = 1 ;
 
 if (!$year){$year = date("Y");}
 
-open_table("$phrases[monthly_statics_for] $year ");
+print "<p class='title' align=center>$phrases[monthly_statics_for] $year </p>";
 
 for ($i=1;$i <= 12;$i++){
 
@@ -95,7 +93,6 @@ print "</table>";
       $yl++;
       }
   print "]";
-close_table();
 
 if (!$month){
         $month =  date("m")."-$year" ;
@@ -103,7 +100,8 @@ if (!$month){
                 $month= "$month-$year";
                 }
 
-open_table("$phrases[daily_statics_for] $month ");
+print "<p class='title' align=center>$phrases[daily_statics_for] $month </p>";
+
 $dot = $month;
 get_statics_info("select * from info_hits where date like '%$dot' order by date","date","hits");
 
@@ -122,14 +120,14 @@ print "<br><center>
           <a href='statistics.php?year=$year&month=11'>11</a> -
           <a href='statistics.php?year=$year&month=12'>12</a>
           ]";
-          close_table();
+   
 }
 
 if(!$printed){
-    open_table();
-   print "<center>$phrases[no_results]</center>";
-    close_table();
+
+   print_admin_table("<center>$phrases[no_results]</center>");
+ 
     }
     
-//---------------------------------------------------
-require(CWD . "/includes/framework_end.php");  
+//-----------end ----------------
+ require(ADMIN_DIR.'/end.php');
