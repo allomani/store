@@ -14,7 +14,13 @@ if (db_num($qr)) {
     $data = db_fetch($qr);
 
     db_query("update store_products_data set views=views+1 where id='$id'");
-    
+ 
+    check_member_login();
+    if($member_data['id']){
+    $is_favorite  = db_fetch_first("select count(*) from store_clients_favorites where userid = '$member_data[id]' and product_id='$id'");
+    }else{
+        $is_favorite = false;
+    }
     
     compile_hook('product_details_start');
 
@@ -185,7 +191,7 @@ if (db_num($qr)) {
  
  
  <div align='$global_align_x'>
- <a href=\"#\" onClick=\"return add_to_fav($data[id]);\" title=\"$phrases[add2favorite]\" class='add_to_fav'></a>
+ <a href=\"#\" onClick=\"return add_to_fav($data[id]);\" title=\"$phrases[add2favorite]\" class=\"add_to_fav".iif($is_favorite," success")."\"></a>
  &nbsp;
  <a href='http://www.facebook.com/sharer.php?u=" . urlencode($scripturl . "/" . str_replace('{id}', $data['id'], $links['product_details'])) . "' target=_blank><img src='$style[images]/facebook.gif' alt='Share with Facebook' border=0></a>
  </div>";

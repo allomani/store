@@ -629,10 +629,21 @@ if ($action == "comments_get") {
 
 if ($action == "add_to_fav") {
     $id = (int) $id;
-    if (check_member_login()) {
+    if (check_member_login()) { 
         db_query("insert ignore into store_clients_favorites (userid,product_id) values('$member_data[id]','$id')");
     } else {
-        print "<center> $phrases[please_login_first] </center>";
+        print "$phrases[please_login_first]";
     }
 }
+
+
+if ($action == "remove_from_fav") {
+    $id = (int) $id;
+    if (check_member_login()) { 
+        db_query("delete from store_clients_favorites where userid = '$member_data[id]' and product_id='$id'");
+    } else {
+        print "$phrases[please_login_first]";
+    }
+}
+
 ?>

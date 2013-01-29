@@ -299,6 +299,34 @@ function init_new_stores_sortlist(){
         );
 }
 
+function init_dynatree(div_id,input_id){
+      $("#"+div_id).dynatree({
+                    checkbox: true,
+                    selectMode: 3,
+                    onCreate: function(node, nodeSpan) {
+                        tree_get_selected_nodes(node);	
+                    },
+                    onSelect: function(select, node) {
+                        tree_get_selected_nodes(node);
+                    },
+                    onDblClick: function(node, event) {
+                        node.toggleSelect();
+                    },
+                    onKeydown: function(node, event) {
+                        if( event.which == 32 ) {
+                            node.toggleSelect();
+                            return false;
+                        }
+                    }
+                });
+                function tree_get_selected_nodes(node){
+                    var selRootKeys = $.map(node.tree.getSelectedNodes(true), function(node){
+                        return node.data.key;
+                    });
+                    $("#"+input_id).val(selRootKeys.join(","));
+                }
+    }
+    
 /*
 
 function init_sortlist(div_name,action_name){

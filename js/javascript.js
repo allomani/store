@@ -10,25 +10,37 @@ function banner_pop_close(url,name){
 
 
 function add_to_fav(id){
-  $.post('ajax.php',{
-      action: 'add_to_fav',
-      id: id
-      },function(data){
-          if(data == ""){
-    $('.add_to_fav').addClass('success');    
+    var action ='';
+    
+    if($('.add_to_fav').hasClass('success')){
+        action = 'remove_from_fav';
     }else{
-        alert(data);
+        action = 'add_to_fav';   
+    }
+    $.post('ajax.php',{
+        action: action,
+        id: id
+    },function(data){
+        if(data == ""){
+            if(action == 'remove_from_fav'){
+                $('.add_to_fav').removeClass('success');    
+            }else{
+                $('.add_to_fav').addClass('success');    
+            }
+        }else{
+            alert(data);
         }
-          }
-          );
-            return false;
+    }
+    );
+    return false;
 }
 
+
 function init_tabs(div_id){
-  $(function() {
-  $('#'+div_id).tabs();
-  });
-  }
+    $(function() {
+        $('#'+div_id).tabs();
+    });
+}
 
 function CheckAll(form_name){
 
@@ -110,14 +122,14 @@ function get_saved_address(id,type){
             sid: Math.random()
         },
         function(data){
-     
-            $('#info_name').val(data.name);
-            $('#info_country').val(data.country);
-            $('#info_city').val(data.city);  
-            $('#info_address_1').val(data.address_1);
-            $('#info_address_2').val(data.address_2);
-            $('#info_telephone').val(data.tel);
-                                             
+            if(data){
+                $('#info_name').val(data.name);
+                $('#info_country').val(data.country);
+                $('#info_city').val(data.city);  
+                $('#info_address_1').val(data.address_1);
+                $('#info_address_2').val(data.address_2);
+                $('#info_telephone').val(data.tel);
+            }           
             $('#address_loading_div').css('display', 'none');   
         },'json'
         );
@@ -291,7 +303,7 @@ function rating_send(type,id,score){
 //------------- Reports ---------------------
 function report(id,report_type){
 
-  var $dialog =  $('<div id="report_dialog"><img src="images/ajax_loading.gif"></div>').dialog({
+    var $dialog =  $('<div id="report_dialog"><img src="images/ajax_loading.gif"></div>').dialog({
         modal: true,
         width:'30%',
         height:'auto',
@@ -300,21 +312,25 @@ function report(id,report_type){
         }
     }); 
         
-    $.post('ajax.php',{action:'report',id: id,report_type: report_type},
-        function(data){
-            $dialog.html(data);
-            $dialog.dialog('option', 'position', 'center');
+    $.post('ajax.php',{
+        action:'report',
+        id: id,
+        report_type: report_type
+    },
+    function(data){
+        $dialog.html(data);
+        $dialog.dialog('option', 'position', 'center');
           
-        });
+    });
  
 }
 
 
 function report_send(){
     
-$('#send_button').disabled=true;
+    $('#send_button').disabled=true;
 
-  $.post('ajax.php',$('#report_submit').serializeArray(),
+    $.post('ajax.php',$('#report_submit').serializeArray(),
         function(data){
             $('#report_dialog').html(data);
             $('#report_dialog').dialog('option', 'position', 'center');
@@ -339,7 +355,7 @@ function comments_add(type,id){
         type: type,
         id: id,
         content: $('#comment_content').val()
-        },
+    },
     function(data){
       
         $('#comment_add_button').removeAttr('disabled');
@@ -390,7 +406,7 @@ function comments_get(type,id){
     },function(data){
     
         $('#comments_div').append(data); 
-   $('#comments_loading_div').css('display','none'); 
+        $('#comments_loading_div').css('display','none'); 
         comments_offset++;  
  
     });

@@ -5,6 +5,8 @@ require("global.php");
 define(THIS_PAGE, "index");
 require(CWD . "/includes/framework_start.php");
 //----------------------------------------------------
+
+
 //---------------------------- Pages -------------------------------------
 if ($action == "pages") {
     $qr = db_query("select * from store_pages where active=1 and id='" . intval($id) . "'");
@@ -34,12 +36,13 @@ if ($action == "copyrights") {
     open_table();
     if ($global_lang == "arabic") {
         print "<center>
-     ���� �� : $_SERVER[HTTP_HOST]   �� <a href='http://allomani.com/' target='_blank'>  �������� ������� �������� </a> <br><br>
+             مرخص لـ : $_SERVER[HTTP_HOST]" ;
+  	print "   من <a href='http://allomani.com/' target='_blank'>  اللوماني للخدمات البرمجية </a>
+   <br><br>
+برمجة <a target=\"_blank\" href=\"http://allomani.com/\"> اللوماني للخدمات البرمجية </a> © " . SCRIPT_YEAR;
 
-   ���� ���� ������� ������
-                        <a target=\"_blank\" href=\"http://allomani.com/\">
-                       ������� ������� ��������
-                        � " . SCRIPT_YEAR;
+        print "</center>";
+     
     } else {
         print "<center>
      Licensed for : $_SERVER[HTTP_HOST]   by <a href='http://allomani.com/' target='_blank'>Allomani&trade; Programming Services </a> <br><br>

@@ -1,5 +1,6 @@
 <?
-require('./start.php'); 
+
+require('./start.php');
 
 //----------- Payment Methods --------
 if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action == "del" ||
@@ -22,6 +23,9 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
     }
     //--- edit ----
     if ($action == "edit_ok") {
+        
+$all_cats = (int) $all_cats;
+
 
         if ($geo_zones_all) {
             $geo_zones_txt = '';
@@ -31,13 +35,27 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
             $geo_zones_txt = implode(',', $geo_zones);
         }
 
-  db_query("update store_shipping_methods set class='" . db_escape($class) . "',name='" . db_escape($name) . "',geo_zones='" . db_escape($geo_zones_txt) . "'
+        db_query("update store_shipping_methods set class='" . db_escape($class) . "',name='" . db_escape($name) . "',geo_zones='" . db_escape($geo_zones_txt) . "'
   ,min_price='" . db_escape($min_price) . "',max_price='" . db_escape($max_price) . "'
   ,min_items='" . db_escape($min_items) . "',max_items='" . db_escape($max_items) . "'
   ,min_weight='" . db_escape($min_weight) . "',max_weight='" . db_escape($max_weight) . "'
-  ,default_status='".db_escape($default_status)."' where id='$id'");
+  ,default_status='" . db_escape($default_status) . "',all_cats='{$all_cats}' where id='$id'");
 
 
+//--------------
+$shipping_cats_arr = (array) explode(",",$shipping_cats);
+$qr  = db_query("select id,shipping_methods from store_products_cats");
+while($data=db_fetch($qr)){
+$cat_shipping_methods = (array) explode(",",$data['shipping_methods']);
+if(($key = array_search($id, $cat_shipping_methods)) !== false) {
+    unset($cat_shipping_methods[$key]);
+}
+if(in_array($data['id'],$shipping_cats_arr)){
+    $cat_shipping_methods[] = $id;
+}
+db_query("update store_products_cats set shipping_methods = '".implode(",",$cat_shipping_methods)."' where id='$data[id]'");
+}
+//---------------
 
 //------------------------ 
         $qr = db_query("select name from store_shipping_methods_settings where cat='$id'");
@@ -46,7 +64,7 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
         }
         $availabe_settings = (array) $availabe_settings;
 
-$shipping_settings = (array) $shipping_settings;
+        $shipping_settings = (array) $shipping_settings;
         foreach ($shipping_settings as $key => $value) {
             if (!in_array($key, $availabe_settings)) {
                 db_query("insert into store_shipping_methods_settings (cat,name,value) values ('$id','" . db_escape($key) . "','" . db_escape($value) . "')");
@@ -59,30 +77,55 @@ $shipping_settings = (array) $shipping_settings;
 
     //--- add ----
     if ($action == "add_ok") {
-        db_query("insert store_shipping_methods (class,name,active) values ('" . db_escape($class) . "','" . db_escape($name) . "','1')");
+        $class= 'shipping_manual';
+        db_query("insert store_shipping_methods (class,name,active,all_cats) values ('" . db_escape($class) . "','" . db_escape($name) . "','1','1')");
 
         $new_id = db_inserted_id();
         if ($new_id) {
             $ord = db_fetch_first("select max(ord) from store_shipping_methods") + 1;
             db_query("update store_shipping_methods set ord = $ord where id='$new_id'");
-            print "<script>window.location = 'shipping_methods.php?action=edit&id=$new_id';</script>";
+           js_redirect("shipping_methods.php?action=edit&id=$new_id");
         }
     }
 
     //--------------------------------  
     print "<p align=center class=title>$phrases[shipping_methods]</p>";
     $qr = db_query("select * from store_shipping_methods order by ord asc");
+?>
+<div id="add_form" style="display:none;">
+<form action='shipping_methods.php' method=post>
+        <input type=hidden name=id value='$id'>
+        <input type=hidden name=action value='add_ok'>
+        <table width=90% class=grid>
+        <tr><td><b><?=$phrases['the_name'];?></b></td><td><input type=text name='name'  size=30></td></tr>
+        <tr><td colspan=2 align=center><input type=submit value=' <?=$phrases['add_button'];?> '></td></tr>
+        </table>
+        </form>
+</div>
 
-    print "<a href='shipping_methods.php?action=add' class='add'>$phrases[add_button]</a><br><br>";
+<script>
+    $(document).ready(function(){
+        $('#add_method_btn').click(function(e){
+            e.preventDefault();
+            $('#add_form').dialog({modal: true});
+            });
+        });
+</script>
+<?
+    print "<a href=\"#\" id='add_method_btn' class='add'>$phrases[add_button]</a><br><br>";
     if (db_num($qr)) {
-        print "<center><table width=100% class=grid>
+        print "<table width=100% class=grid>
 <tr><td width=100%>
 <div id=\"shipping_methods_data_list\">";
         while ($data = db_fetch($qr)) {
-            
-  if($row_class == 'row_1'){$row_class = 'row_2';}else{  $row_class = 'row_1';}
 
-  
+            if ($row_class == 'row_1') {
+                $row_class = 'row_2';
+            } else {
+                $row_class = 'row_1';
+            }
+
+
             print "<div id=\"item_$data[id]\" class='$row_class'>
 <table width=100%>
 <tr>
@@ -124,7 +167,7 @@ if ($action == "edit") {
         <li>$data[name]</li>
             </ul>
         
-        <center><form action=shipping_methods.php method=post>
+        <form action=shipping_methods.php method=post>
         <input type=hidden name=id value='$id'>
         <input type=hidden name=action value='edit_ok'>
         <table width=90% class=grid>
@@ -162,16 +205,47 @@ if ($action == "edit") {
         <tr><td><b>Default Order Status</b></td><td>
         <select name='default_status'>";
         $qrs = db_query("select * from store_orders_status where active=1 order by id asc");
-        while($datas=db_fetch($qrs)){
-            print "<option value=\"$datas[id]\"".iif($data['default_status']==$datas['id']," selected").">$datas[name]</option>";
+        while ($datas = db_fetch($qrs)) {
+            print "<option value=\"$datas[id]\"" . iif($data['default_status'] == $datas['id'], " selected") . ">$datas[name]</option>";
         }
-       print "</select></td></tr> 
+        print "</select></td></tr> 
        
         
        
        
          </table>";
+//--------------- shipping categories -------------------
 
+          $qr_cats = db_query("select id, name ,cat,shipping_methods from store_products_cats order by ord");
+        while ($data_cats = db_fetch($qr_cats)) {
+            //  $shipping_methods_arr = ;// get_product_cat_shipping_methods($data_cats['id'],true);//
+
+            $categories[] = array(
+                "key" => $data_cats['id'],
+                "title" => $data_cats['name'],
+                "parent" => $data_cats['cat'],
+                "select" => iif(in_array($id, explode(',', $data_cats['shipping_methods'])), true, false)
+            );
+        }
+
+   
+print "<fieldset>
+    <legend>$phrases[the_cats]</legend>
+        
+    <input type='radio' id='all_cats_yes' name='all_cats' value=1 onClick=\"\$('#cats_tree_wrapper').hide();\" " . iif($data['all_cats'], " checked") . ">
+    <label for='all_cats_yes'>جميع الأقسام </label><br>
+           
+    <input type='radio' id='all_cat_no' name='all_cats' value=0 onClick=\"\$('#cats_tree_wrapper').show();\"" . iif(!$data['all_cats'], " checked") . ">
+    <label for='all_cat_no'>أقسام محددة </label> 
+    ";
+   
+    print "<div id='cats_tree_wrapper'>";
+  print_dynatree_div($categories,'cats_tree');
+  print "</div>
+      <input type='hidden' name='shipping_cats' id='shipping_cats' value=''>";
+  print "</fieldset>";
+  print iif($data['all_cats'],"<script>$('#cats_tree_wrapper').hide();</script>");
+  
 //--------- shipping module settings ------------
         $qrs = db_query("select name,value from store_shipping_methods_settings where cat='$id'");
         while ($datas = db_fetch($qrs)) {
@@ -180,32 +254,32 @@ if ($action == "edit") {
 
 
         print "<br>
-<fieldset style=\"width:94%;\">
+<fieldset>
 <legend><b>$phrases[the_settings]</b></legend>";
 //$module_file = CWD."/includes/shipping/{$data['class']}.php"; 
 //if(file_exists($module_file)){ 
 //require($module_file); 
-if(class_exists($data['class'])){
-        $m = new $data['class'](array(), $shipping_settings);
-        print "<table width=100%>";
-        foreach ($m->settings as $n => $s) {
+        if (class_exists($data['class'])) {
+            $m = new $data['class'](array(), $shipping_settings);
+            print "<table width=100%>";
+            foreach ($m->settings as $n => $s) {
 
-            print "<tr><td><b>" . iif($s['title'], $s['title'], $n) . "</b></td><td>";
-            if ($s['type'] == "select") {
-                print_select_row("shipping_settings[$n]", $s['options'], $shipping_settings[$n]);
-            } else {
-                print "<input type='text' name=\"shipping_settings[$n]\" value=\"{$shipping_settings[$n]}\">";
+                print "<tr><td><b>" . iif($s['title'], $s['title'], $n) . "</b></td><td>";
+                if ($s['type'] == "select") {
+                    print_select_row("shipping_settings[$n]", $s['options'], $shipping_settings[$n]);
+                } else {
+                    print "<input type='text' name=\"shipping_settings[$n]\" value=\"{$shipping_settings[$n]}\">";
+                }
+
+                print iif($s['ext'], " $s[ext]") . "</td></tr>";
             }
-
-            print iif($s['ext'], " $s[ext]") . "</td></tr>";
-        }
-        print "</table>";
+            print "</table>";
 //}else{ 
-        //  print " Shipping Class Not Exists";
+            //  print " Shipping Class Not Exists";
 //}
-}else{
-            print " Shipping File Not Exists";   
-}
+        } else {
+            print " Shipping File Not Exists";
+        }
         print "</fieldset><br>";
 
 //-----------------------------------------         
@@ -216,119 +290,26 @@ if(class_exists($data['class'])){
         </form>
         </center>";
 
-$qr_cats = db_query("select id, name ,cat,shipping_methods from store_products_cats");
-while($data_cats=db_fetch($qr_cats)){
- //  $shipping_methods_arr = ;// get_product_cat_shipping_methods($data_cats['id'],true);//
- 
-$categories[] = array(
-    "key"=>$data_cats['id'],
-    "title"=>$data_cats['name'],
-    "parent"=>$data_cats['cat'],
-    "isFolder"=>true,
-    "select"=> iif(in_array($id,explode(',',$data_cats['shipping_methods'])),true,false)
-    );
-}
-
-foreach($categories as $catg){
-if($catg['select']){
-$scr .= "jQuery('#tree').dynatree('getTree').getNodeByKey('$catg[key]').select();\n";
-}
-}
-/*
-print "<pre>";
-var_dump($categories);
-print "</pre>";*/
-
-//
-
-$arr = categoriesToTree($categories);
-//$arr = array("children"=>$arr);
-       // $arr = array(array("title"=>"عربي 1","key"=>1,"children"=>array(array("title"=>"item1"),array("title"=>"item2"))));
+      
+  
         ?>
-<script type="text/javascript">
-	/*var treeData = [
-		
-		{title: "item2: selected on init", select: true },
-		{title: "Folder", isFolder: true, select: true, key: "id3",expand: true,
-			children: [
-				{title: "Sub-item 3.1",key: "3.1"
-					
-				},
-				{title: "Sub-item 3.2",key: "3.2",select: true
-					
-				}
-			]
-		}
-		
-	];*/
-    var treeData = <? print json_encode($arr);?>;
-	jQuery(function(){jQuery("#tree").dynatree({
-			checkbox: true,
-			selectMode: 3,
-			children: treeData,
-			onSelect: function(select, node) {
-                                var selRootKeys = jQuery.map(node.tree.getSelectedNodes(true), function(node){
-					return node.data.key;
-				});
-				jQuery("#echoSelectionRootKeys3").text(selRootKeys.join(","));
-				
-			},
-			onDblClick: function(node, event) {
-				node.toggleSelect();
-			},
-			onKeydown: function(node, event) {
-				if( event.which == 32 ) {
-					node.toggleSelect();
-					return false;
-				}
-                                }
-                       
-			//,
-			// The following options are only required, if we have more than one tree on one page:
-//			initId: "treeData",
-//			cookieId: "dynatree-Cb3",
-//			idPrefix: "dynatree-Cb3-"
-		});
 
-<?=$scr;?>
-});
+        <script type="text/javascript">
+                	
+                  
+            $(function(){
+              init_dynatree('cats_tree','shipping_cats');
+            });
+                                          
+        </script>
 
-                                
-                                
-</script>
+      
+        <?
 
-<div id="tree" style="direction:rtl;text-align: right"></div>
-	
-	<div>Selected root keys: <span id="echoSelectionRootKeys3">-</span></div>
-	
-<?
     } else {
         print_admin_table("<center>" . $phrases['err_wrong_url'] . "</center>");
     }
 }
 
-///----------- Add ------------
-if ($action == "add") {
-    if_admin();
-
-    print "
-       <ul class='nav-bar'>
-       <li><a href='shipping_methods.php'>$phrases[shipping_methods]</a></li>
-    <li>$phrases[add]</li>
-        </ul>
-        
-        <center><form action='shipping_methods.php' method=post>
-        <input type=hidden name=id value='$id'>
-        <input type=hidden name=action value='add_ok'>
-        <table width=90% class=grid>
-        <tr><td><b>$phrases[the_name]</b></td><td><input type=text name=name value=\"$data[name]\" size=30></td></tr>
-         
-           
-         <tr><td colspan=2 align=center><input type=submit value=' $phrases[add_button] '></td></tr>
-        </table>
-        </form>
-        </center>";
-}
-
 //-----------end ----------------
- require(ADMIN_DIR.'/end.php');
+require(ADMIN_DIR . '/end.php');

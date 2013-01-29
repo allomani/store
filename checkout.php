@@ -26,8 +26,8 @@ require(CWD . "/includes/framework_start.php");
  
  for($i=0;$i<count($items);$i++){
 
-$items[$i]['id'] = intval($items[$i]['id']);
-$items[$i]['qty'] = intval($items[$i]['qty']);
+$items[$i]['id'] = (int) $items[$i]['id'];
+$items[$i]['qty'] = (int) $items[$i]['qty'];
 
 
  $data =  cart_item_info($items[$i]);  
@@ -316,7 +316,7 @@ open_table("$phrases[checkout]");
  if($op=="shipping_method"){  
  if(count($shipping_ids)){
   $shipping_method_session = $session->get("checkout_shipping_method");    
- $qr_sm = db_query("select * from store_shipping_methods where id IN (".implode(",",$shipping_ids).") and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) order by ord asc");
+ $qr_sm = db_query("select * from store_shipping_methods where (id IN (".implode(",",$shipping_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) order by ord asc");
   if(db_num($qr_sm)){
   print "<fieldset style=\"width:100%;\">  
   <legend>$phrases[shipping_method]</legend>";

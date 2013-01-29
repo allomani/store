@@ -1225,8 +1225,6 @@ function get_product_cat_shipping_methods($id, $fields_only = false) {
     while ($dir_data['cat'] != 0) {
         $dir_data = db_qr_fetch("select id,cat from store_products_cats where id='$dir_data[cat]'");
 
-
-
         $data = db_qr_fetch("select `shipping_methods` from store_products_cats where id='" . $dir_data['id'] . "'");
         if (trim($data['shipping_methods'])) {
             $cat_fields = explode(",", $data['shipping_methods']);
@@ -1630,7 +1628,7 @@ function toggle_tr_class() {
 }
 
 //-------- Categories to Tree Array --------------
-function categoriesToTree(&$categories) {
+function cats_to_tree(&$categories) {
 
     $map = array(
         0 => array('children' => array())
@@ -1648,6 +1646,28 @@ function categoriesToTree(&$categories) {
     return $map[0]['children'];
 }
 
+     function print_dynatree_node($data, $parent_selected = false) {
+
+            foreach ($data as $x) {
+                print "<li id='$x[key]' class='folder" . iif($x['select'] || $parent_selected, ' selected') . "'>$x[title]
+                    ";
+                if ($x['children']) {
+                    print "<ul>";
+                    print_dynatree_node($x['children'], ($x['select'] || $parent_selected));
+                    print "</ul>";
+                }
+                //  print "</li>";
+            }
+        }
+
+        function print_dynatree_div($cats_arr, $div_name = 'cats_tree', $ul_name = 'treeData') {
+            $arr = cats_to_tree($cats_arr);
+            print "<div id='$div_name'>
+    <ul id='$ul_name'>";
+            print_dynatree_node($arr);
+            print "</ul>
+    </div>";
+        }
 //----- header redirect ------
 function redirect($url) {
     header("Location: $url");
