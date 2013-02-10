@@ -38,8 +38,9 @@ if($action=="pages_add_ok"){
 
 
          while($data= db_fetch($qr)){
-     print "            <tr>
-                <td >$data[title]</td>
+             toggle_tr_class();
+     print "<tr class='$tr_class'>
+                <td>$data[title]</td>
                 <td align=center> <a target=_blank href='../".str_replace('{id}',$data['id'],$links['pages'])."'>$phrases[view_page]</a> </td>
                 <td align=left>" ;
 
