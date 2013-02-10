@@ -15,19 +15,18 @@ class captcha {
     }
 
     function generate_string() {
-        global $session;
+    
         // Create random string
         $this->string = substr(sha1(mt_rand()), 17, 6);
 
         // Set session variable
-        $session->set('gd_string',$this->string);
+        session::instance()->set('gd_string',$this->string);
     }
 
     function verify_string($gd_string) {
-        global $session;
         
         // Check if the original string and the passed string match...
-        if (strtolower($session->get('gd_string')) === strtolower($gd_string)) {
+        if (strtolower(session::instance()->get('gd_string')) === strtolower($gd_string)) {
             return TRUE;
         } else {
             return FALSE;

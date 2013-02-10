@@ -4,7 +4,7 @@ define('GLOBAL_LOADED', true);
 //----------------------------------
 define('SCRIPT_NAME', "store");
 define('SCRIPT_VER', "2.0");
-define('SCRIPT_YEAR', "2012");
+define('SCRIPT_YEAR', "2013");
 //---------------------------------------------
 //----------- current work dir definition -------
 define('CWD', str_replace(DIRECTORY_SEPARATOR, "/", dirname(__FILE__)));
@@ -74,8 +74,8 @@ if ($cat) {
 }
 
 //--------------- Session ---------------------
-$session = new session();
-
+$session = session::instance($session_config);
+cookie::instance($cookies_config);
 
 //---------------- Cache -------------------
 require(CWD . "/includes/functions_".$cache_srv['engine'].".php");
@@ -688,26 +688,6 @@ function iif($expression, $returntrue, $returnfalse = '') {
     return ($expression ? $returntrue : $returnfalse);
 }
 
-//------- set cookies function -----------
-function set_cookie($name, $value = "",$expire=null) {
-    global $cookies_prefix, $cookies_timemout, $cookies_path, $cookies_domain;
-    $name = $cookies_prefix . $name;
-    
-    if(!isset($expire)){
-    $k_timeout = time() + (60 * 60 * 24 * intval($cookies_timemout));
-    }else{
-    $k_timeout = time() + (60 * 60 * 24 * intval($expire));
-   }
-    
-    setcookie($name, $value, $k_timeout, $cookies_path, $cookies_domain);
-}
-
-//--------- get cookies funtion ---------
-function get_cookie($name) {
-    global $cookies_prefix, $_COOKIE;
-    $name = $cookies_prefix . $name;
-    return $_COOKIE[$name];
-}
 
 function array_get_key($arr, $value) {
     foreach ($arr as $key => $val) {

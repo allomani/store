@@ -89,15 +89,15 @@ $smtp_settings['show_errors'] = 1;
 
 
 //-------- Cookies Settings  -----------
-$cookies_prefix = "store200_";
-$cookies_timemout = 365 ; //days
-$cookies_path = "/" ;
-$cookies_domain = "";
+$cookies_config['prefix'] = "store200_";
+$cookies_config['timemout'] = 365 ; //days
+$cookies_config['path'] = "/" ;
+$cookies_config['domain'] = "";
 
 //---- session Settings ----
-$session_cookie_expire = $cookies_timemout;
-$session_cookie_name = "sid";
-$session_prefix = "store";
-$session_ip_check = true;
+$session_config['cookie_expire'] = $cookies_config['timemout'];
+$session_config['cookie_name'] = "sid";
+$session_config['prefix'] = "store";
+$session_config['ip_check'] = true;
 
 ?>

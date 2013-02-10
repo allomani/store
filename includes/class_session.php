@@ -2,15 +2,14 @@
 
 class session {
 
-    var $prefix = '';
+    private static $prefix = '';
+    private static $instance;
+    
+    private  function __construct($config) {
+    
+       $this->prefix = $config['prefix'];
 
-    function __construct() {
-
-        global $session_prefix, $session_cookie_name, $session_cookie_expire, $session_ip_check;
-
-        $this->prefix = $session_prefix;
-
-        $sid = get_cookie($session_cookie_name);
+        $sid = cookie::instance()->get($config['cookie_name']);
 
         if (!$sid || !$this->is_valid_session_id($sid)) {
             $sid = $this->gen_session_id();
@@ -18,35 +17,42 @@ class session {
 
         $this->start($sid);
         
-        if ($session_ip_check && $this->get('ip') != $_SERVER['REMOTE_ADDR']) {
+        if ($config['ip_check'] && $this->get('ip') != $_SERVER['REMOTE_ADDR']) {
             session_destroy();
             $sid = $this->gen_session_id();
             $this->start($sid);
             $this->set('ip', $_SERVER['REMOTE_ADDR']);
         }
 
-        set_cookie($session_cookie_name, $sid, $session_cookie_expire);
+        cookie::instance()->set($config['cookie_name'], $sid, $config['cookie_expire']);
     }
-
-    function start($sid) {
+    
+      public static function instance($config=array()) {
+        if (!self::$instance) {
+            self::$instance = new self($config);
+        }
+        return self::$instance;
+    }
+    
+    private function start($sid) {
         session_id($sid);
         session_start();
     }
 
-    function set($name, $value) {
+    public function set($name, $value) {
         $_SESSION[$this->prefix][$name] = $value;
         return true;
     }
 
-    function get($name) {
+    public function get($name) {
         return $_SESSION[$this->prefix][$name];
     }
 
-    function is_valid_session_id($session_id) {
+    private function is_valid_session_id($session_id) {
         return !empty($session_id) && preg_match('/^[a-zA-Z0-9]{32}$/', $session_id);
     }
 
-    function gen_session_id() {
+    private function gen_session_id() {
         return md5($_SERVER['HTTP_HOST'] . $_SERVER['REMOTE_ADDR'] . time() . rand(1, 999));
     }
 

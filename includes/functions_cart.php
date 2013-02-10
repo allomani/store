@@ -73,10 +73,7 @@ function cart_item_delete($hash) {
 
 //---------- Cart Items Array ---------
 function cart_items_array() {
-global $session;
- 
-
-    return (array) $session->get('cart');
+  return (array) session::instance()->get('cart');
 }
 
 //-----------Cart Exclude Item ---------
@@ -118,9 +115,7 @@ function cart_update_qty($items) {
 
 //--------- Cart Set Value ------
 function cart_set_value($value) {
-    global $session;
- 
-    $session->set('cart', (array) $value);
+   session::instance()->set('cart', (array) $value);
 }
 
 //----------- Order total price- ----------
