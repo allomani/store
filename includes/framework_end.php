@@ -17,7 +17,7 @@ db_query("update store_banners set views=views+1 where id='$data[id]'");
 if($data['c_type']=="code"){
     run_php($data['content']);
     }else{
-        compile_template("center_banners");     
+        run_template("center_banners");     
 }
         }
  print "<br>";
