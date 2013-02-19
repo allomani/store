@@ -2,11 +2,11 @@
 
 class cookie {
 
-    private static $instance;
-    private static $path;
-    private static $domain;
-    private static $prefix;
-    private static $timeout;
+    private  static $instance;
+    private  $path;
+    private  $domain;
+    private  $prefix;
+    private  $timeout;
 
     private function __construct($config) {
         $this->path = $config['path'];

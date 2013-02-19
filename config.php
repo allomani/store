@@ -1,13 +1,12 @@
 <?
 //----------- Database Settings -------------- 
 
-$db_host = "127.0.0.1" ;
-$db_name = "store200" ;
-$db_username = "root" ;
-$db_password = "" ;
-$db_charset = "utf8"; 
-$db_extension = "mysqli";
-
+$config['db']['host'] = "127.0.0.1" ;
+$config['db']['name'] = "store200" ;
+$config['db']['username'] = "root" ;
+$config['db']['password'] = "" ;
+$config['db']['charset'] = "utf8"; 
+$config['db']['extension'] = 'mysqli';
 
 //---------- Script Settings ---------- 
 
@@ -51,20 +50,21 @@ $cache_srv['prefix'] = "main:";
 
 
 //----------- Error Handling  ---------
-$custom_error_handler = true;
 
-$display_errors = true;
-$log_errors  = false;
+$config['debug']['enable'] =true;
+
+$config['debug']['custom_error_handler'] = true;
+
+$config['debug']['display_errors'] = true;
+$config['debug']['log_errors']  = false;
  
  
-$show_mysql_errors = true ;
-$log_mysql_errors = false;
+$config['debug']['show_mysql_errors'] = true ;
+$config['debug']['log_mysql_errors'] = false;
 
 
-$logs_path = "data/logs";
-$log_max_size = 1024*1024;
-
-$debug =true;
+$config['debug']['logs_path'] = "data/logs";
+$config['debug']['log_max_size'] = 1024*1024;
 
 //---------- to use remote members database ----------
 $members_connector['enable'] = 0;
@@ -77,27 +77,27 @@ $members_connector['custom_members_table'] = "";
 $members_connector['connector_file'] = "vbulliten.php";
 
 //--------------- to use SMTP Server ---------
-$smtp_settings['enable'] = 0;
-$smtp_settings['host_name']="mail.allomani.com";
-$smtp_settings['host_port']= 25;
-$smtp_settings['ssl']=0;
-$smtp_settings['username'] = "info@allomani.com";
-$smtp_settings['password'] = "password_here";
-$smtp_settings['timeout'] = 10;
-$smtp_settings['debug'] = 0;
-$smtp_settings['show_errors'] = 1;
+$config['smtp']['enable'] = 0;
+$config['smtp']['host_name']="mail.allomani.com";
+$config['smtp']['host_port']= 25;
+$config['smtp']['ssl']=0;
+$config['smtp']['username'] = "info@allomani.com";
+$config['smtp']['password'] = "password_here";
+$config['smtp']['timeout'] = 10;
+$config['smtp']['debug'] = 0;
+$config['smtp']['show_errors'] = 1;
 
 
 //-------- Cookies Settings  -----------
-$cookies_config['prefix'] = "store200_";
-$cookies_config['timemout'] = 365 ; //days
-$cookies_config['path'] = "/" ;
-$cookies_config['domain'] = "";
+$config['cookies']['prefix'] = "store200_";
+$config['cookies']['timemout'] = 365 ; //days
+$config['cookies']['path'] = "/" ;
+$config['cookies']['domain'] = "";
 
 //---- session Settings ----
-$session_config['cookie_expire'] = $cookies_config['timemout'];
-$session_config['cookie_name'] = "sid";
-$session_config['prefix'] = "store";
-$session_config['ip_check'] = true;
+$config['session']['cookie_expire'] = $config['cookies']['timemout'];
+$config['session']['cookie_name'] = "sid";
+$config['session']['prefix'] = "store";
+$config['session']['ip_check'] = true;
 
 ?>

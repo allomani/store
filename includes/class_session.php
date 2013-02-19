@@ -2,7 +2,7 @@
 
 class session {
 
-    private static $prefix = '';
+    private  $prefix = '';
     private static $instance;
     
     private  function __construct($config) {

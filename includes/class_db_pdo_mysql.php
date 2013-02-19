@@ -1,11 +1,24 @@
 <?
 
-$queries = 0;
-$last_sql = '';
+class db_pdo_mysql {
 
+    private static $instance;
+    private $link;
+    private $config;
+
+    private function __construct($config) {
+        $this->config = $config;
+    }
+
+    public static function instance($config = array()) {
+        if (!self::$instance) {
+            self::$instance = new self($config);
+        }
+        return self::$instance;
+    }
 
 //------------ db escape -------------//
-function db_escape($str, $specialchars = true) {
+public function escape($str, $specialchars = true) {
     global $cn;
     if ($specialchars) {
         $str = htmlspecialchars($str);
@@ -14,7 +27,7 @@ function db_escape($str, $specialchars = true) {
 }
 
 //----------- Connect ----------
-function db_connect($host, $user, $pass, $dbname, $dbcharset = "") {
+public function connect($host, $user, $pass, $dbname, $dbcharset = "") {
     global $log_mysql_errors, $db_charset,$cn;
 
     if (!$dbcharset) {
@@ -45,7 +58,7 @@ $cn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 }
 
 //--------- select db ------------
-function db_select($db_name, $db_charset = "") {
+public function select($db_name, $db_charset = "") {
     global $log_mysql_errors,$cn;
   //db_qr_fetch("use $db_name");
    
@@ -68,7 +81,7 @@ function db_select($db_name, $db_charset = "") {
 }
 
 //----------- query ------------------
-function db_query($sql, $type = "") {
+public function query($sql, $type = "") {
 
     global $show_mysql_errors, $log_mysql_errors, $queries, $last_sql,$cn;
 
@@ -121,38 +134,38 @@ function db_query($sql, $type = "") {
 }
 
 //---------------- fetch -------------------
-function db_fetch($qr) {
+public function fetch($qr) {
     $qr->setFetchMode(PDO::FETCH_ASSOC);
     return $qr->fetch();
 }
 
 // ------------------------ num -----------------------
-function db_num($qr) {
+public function num($qr) {
  
     return $qr->rowCount();
 }
 
 //------------------ Query + fetch ----------------------
-function db_qr_fetch($sql, $type = "") {
+public function qr_fetch($sql, $type = "") {
 
    $qr =  db_query($sql, $type);
     return $qr->fetchAll();
 }
 
 //--------------- Fetch First ---------------
-function db_qr_first($sql, $type = "") {
+public function qr_first($sql, $type = "") {
     $data = db_fetch(db_query($sql, $type));
     return $data[0];
 }
 
 // ------------------- query + num --------------------
-function db_qr_num($sql, $type = "") {
+public function qr_num($sql, $type = "") {
 
   //  return db_num(db_query($sql, $type));
 }
 
 //------------- query and return array ----------------
-function db_qr_array($sql, $type = "") {
+public function qr_array($sql, $type = "") {
   //  $qr = db_query($sql, $type);
     while ($data = db_fetch($qr)) {
         $result[] = $data;
@@ -165,6 +178,7 @@ function db_qr_array($sql, $type = "") {
  * return last inserted ID
  * 
  */
-function db_inserted_id(){
+public function inserted_id(){
     return mysql_insert_id();
+    }
     }

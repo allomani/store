@@ -103,7 +103,7 @@ compile_hook('site_before_footer');
 site_footer();
 compile_hook('site_after_footer');                         
            
-if($debug){ 
+if($$config['debug']['enable']){ 
 print "<br><div dir=ltr><b>Excution Time :</b> " .  (microtime()-$start_time)." Sec";                                                          
 print "<br><b>Memory Usage :</b> " .  convert_number_format(memory_get_usage(),2,true,true);
 print "<br><div dir=ltr><b>Queries :</b> " .  $queries."<br>"; 

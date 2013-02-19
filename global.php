@@ -10,11 +10,12 @@ define('SCRIPT_YEAR', "2013");
 define('CWD', str_replace(DIRECTORY_SEPARATOR, "/", dirname(__FILE__)));
 define('CFN', basename($_SERVER['SCRIPT_FILENAME']));
 //---------------------------------------------
+$config = array();
 require(CWD . "/config.php");
 
 
 //---------- custom error handler --------//
-if ($custom_error_handler) {
+if ($config['debug']['custom_error_handler']) {
     $old_error_handler = set_error_handler("error_handler");
 }
 
@@ -74,17 +75,24 @@ if ($cat) {
 }
 
 //--------------- Session ---------------------
-$session = session::instance($session_config);
-cookie::instance($cookies_config);
+$session = session::instance($config['session']);
+cookie::instance($config['cookies']);
 
 //---------------- Cache -------------------
 require(CWD . "/includes/functions_".$cache_srv['engine'].".php");
 cache_init();
 
 //-------------- Database -------------------
-require(CWD . "/includes/functions_db_".$db_extension.".php");
+//require(CWD . "/includes/functions_db_".$db_extension.".php");
+require(CWD . "/includes/functions_db.php");
 
-db_connect($db_host, $db_username, $db_password, $db_name, $db_charset);
+try {
+$db  = db::instance($config)->connect();
+}catch(Exception $e){
+    die($e->getMessage());
+}
+
+//db_connect($db_host, $db_username, $db_password, $db_name, $db_charset);
 
 //---------------------------
 
@@ -456,7 +464,7 @@ function rand_string($length = 8) {
 
 //---------------------- Send Email Function -------------------
 function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 0, $encoding = "") {
-    global $PHP_SELF, $smtp_settings, $settings;
+    global $PHP_SELF, $config, $settings;
     $from_name = htmlspecialchars($from_name);
     $from_email = htmlspecialchars($from_email);
     $to_email = htmlspecialchars($to_email);
@@ -480,7 +488,7 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
     $mailheader.="MIME-Version: 1.0\r\n";
     $mailHeader .= "Content-Type: " . iif($html, "text/html", "text/plain") . "; charset=" . $encoding . "\r\n";
 
-    if ($smtp_settings['enable']) {
+    if ($config['smtp']['enable']) {
         $mailHeader .= "Subject: $subject\r\n";
     }
 
@@ -493,7 +501,7 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
 
 
 
-    if ($smtp_settings['enable']) {
+    if ($config['smtp']['enable']) {
 
         if (!class_exists("smtp_class")) {
             require_once(CWD . "/includes/class_smtp.php");
@@ -501,21 +509,21 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
 
         $smtp = new smtp_class;
 
-        $smtp->host_name = $smtp_settings['host_name'];
-        $smtp->host_port = $smtp_settings['host_port'];
-        $smtp->ssl = $smtp_settings['ssl'];
+        $smtp->host_name = $config['smtp']['host_name'];
+        $smtp->host_port = $config['smtp']['host_port'];
+        $smtp->ssl = $config['smtp']['ssl'];
         $smtp->localhost = "localhost";       /* Your computer address */
         $smtp->direct_delivery = 0;           /* Set to 1 to deliver directly to the recepient SMTP server */
-        $smtp->timeout = $smtp_settings['timeout'];    /* Set to the number of seconds wait for a successful connection to the SMTP server */
+        $smtp->timeout = $config['smtp']['timeout'];    /* Set to the number of seconds wait for a successful connection to the SMTP server */
         $smtp->data_timeout = 0;              /* Set to the number seconds wait for sending or retrieving data from the SMTP server.
           Set to 0 to use the same defined in the timeout variable */
-        $smtp->debug = $smtp_settings['debug'];                     /* Set to 1 to output the communication with the SMTP server */
+        $smtp->debug = $config['smtp']['debug'];                     /* Set to 1 to output the communication with the SMTP server */
         $smtp->html_debug = 1;                /* Set to 1 to format the debug output as HTML */
 
-        if ($smtp_settings['username'] && $smtp_settings['password']) {
-            $smtp->pop3_auth_host = $smtp_settings['host_name'];           /* Set to the POP3 authentication host if your SMTP server requires prior POP3 authentication */
-            $smtp->user = $smtp_settings['username'];                     /* Set to the user name if the server requires authetication */
-            $smtp->password = $smtp_settings['password'];                 /* Set to the authetication password */
+        if ($config['smtp']['username'] && $config['smtp']['password']) {
+            $smtp->pop3_auth_host = $config['smtp']['host_name'];           /* Set to the POP3 authentication host if your SMTP server requires prior POP3 authentication */
+            $smtp->user = $config['smtp']['username'];                     /* Set to the user name if the server requires authetication */
+            $smtp->password = $config['smtp']['password'];                 /* Set to the authetication password */
             $smtp->realm = "";                    /* Set to the authetication realm, usually the authentication user e-mail domain */
         }
 
@@ -533,7 +541,7 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
         if ($mailResult) {
             return true;
         } else {
-            if ($smtp_settings['show_errors']) {
+            if ($config['smtp']['show_errors']) {
                 print "<b>SMTP Error: </b> " . $smtp->error . "<br>";
             }
             return false;
@@ -1485,7 +1493,7 @@ function datetime($format = "", $time = "") {
 
 //------- Error Handler ----------//
 function error_handler($errno, $errstr, $errfile, $errline, $vars) {
-    global $display_errors, $log_errors;
+    global  $config;
 
     switch ($errno) {
         case E_WARNING:
@@ -1493,13 +1501,13 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars) {
             /* Don't log warnings due to to the false bug reports about valid warnings that we suppress, but still appear in the log
              */
 
-            if ($log_errors) {
+            if ($config['debug']['log_errors']) {
                 $message = "Warning: $errstr in $errfile on line $errline";
                 do_error_log($message, 'php');
             }
 
 
-            if (!$display_errors || !error_reporting()) {
+            if (!$config['debug']['display_errors'] || !error_reporting()) {
                 return;
             }
 
@@ -1509,13 +1517,13 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars) {
 
         case E_USER_ERROR:
 
-            if ($log_errors) {
+            if ($config['debug']['log_errors']) {
                 $message = "Fatal error: $errstr in $errfile on line $errline";
                 do_error_log($message, 'php');
             }
 
 
-            if ($display_errors) {
+            if ($config['debug']['display_errors']) {
                 $errfile = str_replace(CWD . DIRECTORY_SEPARATOR, '', $errfile);
                 echo "<br /><strong>Fatal error:</strong> $errstr in <strong>$errfile</strong> on line <strong>$errline</strong><br />";
             }
@@ -1526,7 +1534,7 @@ function error_handler($errno, $errstr, $errfile, $errline, $vars) {
 
 //--------- Error Log ---------//
 function do_error_log($msg, $type = 'php') {
-    global $logs_path, $log_max_size, $custom_error_handler;
+    global $config;
 
     $trace = @debug_backtrace();
 
@@ -1540,20 +1548,20 @@ function do_error_log($msg, $type = 'php') {
     }
     $err .= "-------------- \r\n";
 
-    if ($custom_error_handler) {
-        if (!file_exists($logs_path)) {
-            @mkdir($logs_path);
+    if ($config['debug']['custom_error_handler']) {
+        if (!file_exists($config['debug']['logs_path'])) {
+            @mkdir($config['debug']['logs_path']);
         }
 
         if ($type == "db") {
-            $log_file = "$logs_path/error_db.log";
-            $log_file_new = "$logs_path/error_db_" . date("Y_m_d_h_i_s") . ".log";
+            $log_file = $config['debug']['logs_path']."/error_db.log";
+            $log_file_new = $config['debug']['logs_path']."/error_db_" . date("Y_m_d_h_i_s") . ".log";
         } else {
-            $log_file = "$logs_path/error.log";
-            $log_file_new = "$logs_path/error_" . date("Y_m_d_h_i_s") . ".log";
+            $log_file = $config['debug']['logs_path']."/error.log";
+            $log_file_new = $config['debug']['logs_path']."/error_" . date("Y_m_d_h_i_s") . ".log";
         }
 
-        if (@filesize($log_file) >= $log_max_size) {
+        if (@filesize($log_file) >= $config['debug']['log_max_size']) {
             @rename($log_file, $log_file_new);
         }
 
