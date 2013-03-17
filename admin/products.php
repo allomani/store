@@ -252,6 +252,8 @@ if($idx > 0){
  $fields = @implode(',',(array) $field_id);
  
  $shipping_methods = @implode(',',(array) $shipping_id); 
+ $payment_methods = @implode(',',(array) $payment_id); 
+  
  
  if(if_admin("",true)){
  $users_str = @implode(',',(array) $user_id);
@@ -261,7 +263,7 @@ if($idx > 0){
      $update_cat_users=false; 
  }
  
- db_query("update store_products_cats set name='".db_escape($name)."',img='".db_escape($img)."',`fields`='".db_escape($fields)."',shipping_methods='".db_escape($shipping_methods)."'".iif($update_cat_users,",users='".db_escape($users_str)."'").",page_title='".db_escape($page_title)."',page_description='".db_escape($page_description)."',page_keywords='".db_escape($page_keywords)."' where id='$id'");
+ db_query("update store_products_cats set name='".db_escape($name)."',img='".db_escape($img)."',`fields`='".db_escape($fields)."',shipping_methods='".db_escape($shipping_methods)."',payment_methods='".db_escape($payment_methods)."'".iif($update_cat_users,",users='".db_escape($users_str)."'").",page_title='".db_escape($page_title)."',page_description='".db_escape($page_description)."',page_keywords='".db_escape($page_keywords)."' where id='$id'");
  
   }
   
@@ -787,21 +789,44 @@ print "<center><p class=title>$phrases[add_cat] </p>
                        <td>
                        <table width=100%><tr>";
                        $shipping_array = get_product_cat_shipping_methods($id);
-                     
+                       $shipping_methods_data = db_fetch_all("select * from store_shipping_methods order by ord");
                     
-                       $qro=db_query("select * from store_shipping_methods order by ord");
+                     
                        $c=0;
-                       while($datao=db_fetch($qro)){
-   if($c==4){
-    print "</tr><tr>" ;
-    $c=0;
-    }
+                       foreach( $shipping_methods_data as $datao){
+                        if($c==4){
+                         print "</tr><tr>" ;
+                         $c=0;
+                         }
     
                            print "<td><input type=\"checkbox\" name=\"shipping_id[]\" value=\"$datao[id]\"".iif($shipping_array[$datao['id']] || $datao['all_cats'],' checked').iif(($shipping_array[$datao['id']] && $shipping_array[$datao['id']] !=$id) || $datao['all_cats'],' disabled').">$datao[name]</td>";
                            $c++;
                        }
                        print "</table></td></tr>
-                       </table><br>";                     
+                       </table><br>";   
+ 
+ //-------------------- Payment Methods --------------//
+    print "<table border=0 width=\"100%\"   class=grid>
+    
+                       <tr><td><b>$phrases[payment_methods]</b></td>
+                       <td>
+                       <table width=100%><tr>";
+                       $payment_array = get_product_cat_payment_methods($id);
+                       $payment_methods_data = (array) db_fetch_all("select * from store_payment_methods order by ord");
+                    
+                   
+                       $c=0;
+                       foreach($payment_methods_data as $datao){
+                            if($c==4){
+                             print "</tr><tr>" ;
+                             $c=0;
+                             }
+    
+                           print "<td><input type=\"checkbox\" name=\"payment_id[]\" value=\"$datao[id]\"".iif($payment_array[$datao['id']] || $datao['all_cats'],' checked').iif(($payment_array[$datao['id']] && $payment_array[$datao['id']] !=$id) || $datao['all_cats'],' disabled').">$datao[name]</td>";
+                           $c++;
+                       }
+                       print "</table></td></tr>
+                       </table><br>";                       
  //-------------- Moderators --------------//                      
                        if(if_admin("",true)){
                        

@@ -27,7 +27,7 @@ print "
         </tr>
         <tr>
                 <td height=\"38\" colspan=2><span>
-                <a href=\"index.php?action=register\">$phrases[newuser]</a><br>
+                <a href=\"register.php\">$phrases[newuser]</a><br>
                 <a href=\"index.php?action=forget_pass\">$phrases[forgot_pass]</a></span></td>
         </tr>
 </table>

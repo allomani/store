@@ -79,7 +79,7 @@ $session = session::instance($config['session']);
 cookie::instance($config['cookies']);
 
 //---------------- Cache -------------------
-require(CWD . "/includes/functions_".$cache_srv['engine'].".php");
+require(CWD . "/includes/functions_" . $cache_srv['engine'] . ".php");
 cache_init();
 
 //-------------- Database -------------------
@@ -87,13 +87,12 @@ cache_init();
 require(CWD . "/includes/functions_db.php");
 
 try {
-$db  = db::instance($config)->connect();
-}catch(Exception $e){
+    $db = db::instance($config)->connect();
+} catch (Exception $e) {
     die($e->getMessage());
 }
 
 //db_connect($db_host, $db_username, $db_password, $db_name, $db_charset);
-
 //---------------------------
 
 $data_cat_cache = array();
@@ -125,7 +124,6 @@ while ($data = db_fetch($qr)) {
     $phrases["$data[name]"] = $data['value'];
 }
 //------------------------------  
-       
 //-------- fields in short details count ----//
 $data = db_qr_fetch("select count(*) as count from store_fields_sets where in_short_details=1 and active=1");
 $short_details_fields_count = intval($data['count']);
@@ -178,21 +176,21 @@ $orderby_checks = array(
 
 //---- comments --------
 $comments_types_phrases = array(
-"product"=>"$phrases[the_products]",
-"news"=>"$phrases[the_news]");
+    "product" => "$phrases[the_products]",
+    "news" => "$phrases[the_news]");
 
 $comments_types = array_keys($comments_types_phrases);
 
 //----- reports ----- 
 $reports_types_phrases = array(
-"comment"=>$phrases['the_comments'],
-"product"=>$phrases['the_products']
-        );
+    "comment" => $phrases['the_comments'],
+    "product" => $phrases['the_products']
+);
 
 $reports_types = array_keys($reports_types_phrases);
 
 //--------------------
-$rating_types = array('news','products');
+$rating_types = array('news', 'products');
 
 $settings = array();
 
@@ -272,8 +270,7 @@ init_members_connector();
 
 require(CWD . '/includes/class_tabs.php');
 
-require(CWD . '/includes/functions_comments.php') ; 
-
+require(CWD . '/includes/functions_comments.php');
 
 function if_admin($dep = "", $continue = 0) {
     global $user_info, $phrases;
@@ -406,7 +403,7 @@ function run_php($content) {
 $user_info = array();
 
 function check_admin_login() {
-    global $user_info,$session;
+    global $user_info, $session;
 
     $user_info['username'] = $session->get('admin_username');
     $user_info['password'] = $session->get('admin_password');
@@ -496,7 +493,7 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
     $mailHeader .= "X-EWESITE: Allomani\r\n";
     $mailHeader .= "X-Mailer: PHP/" . phpversion() . "\r\n";
     $mailHeader .= "X-Mailer-File: " . "http://" . $_SERVER['HTTP_HOST'] . ($script_path ? "/" . $script_path : "") . $PHP_SELF . "\r\n";
-    $mailHeader .= "X-Sender-IP: ".get_ip()."\r\n";
+    $mailHeader .= "X-Sender-IP: " . get_ip() . "\r\n";
 
 
 
@@ -561,25 +558,24 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
 function get_plugins_hooks() {
 
     $hooklocations = array();
- 
+
     $handle = opendir(CWD . '/xml/');
     while (($file = readdir($handle)) !== false) {
         if (!preg_match('#^hooks_(.*).xml$#i', $file, $matches)) {
             continue;
         }
-       $product = $matches[1];
-        
-        $xml =  @simplexml_load_file(CWD . "/xml/$file");
-   if(count($xml->hooktype)){
-        foreach($xml->hooktype as $hooktype){
-           foreach($hooktype->hook as $hook){
-               $type = $product . " : " .(string) $hooktype['type'];
-               $value = (string) $hook;
-               $hooklocations[$type][$value] = $value;
-               }
+        $product = $matches[1];
+
+        $xml = @simplexml_load_file(CWD . "/xml/$file");
+        if (count($xml->hooktype)) {
+            foreach ($xml->hooktype as $hooktype) {
+                foreach ($hooktype->hook as $hook) {
+                    $type = $product . " : " . (string) $hooktype['type'];
+                    $value = (string) $hook;
+                    $hooklocations[$type][$value] = $value;
+                }
             }
-            }
-            
+        }
     }
     ksort($hooklocations);
     return $hooklocations;
@@ -695,7 +691,6 @@ function time_duration($seconds, $use = null, $zeros = false) {
 function iif($expression, $returntrue, $returnfalse = '') {
     return ($expression ? $returntrue : $returnfalse);
 }
-
 
 function array_get_key($arr, $value) {
     foreach ($arr as $key => $val) {
@@ -988,7 +983,7 @@ function convert2en($filename) {
 
 //--------------------------- Create Thumb ----------------------------
 function create_thumb($filename, $width = 65, $height = 65, $fixed = false, $suffix = '', $replace_exists = false, $save_filename = '') {
-  //  require_once(CWD . '/includes/class_img_resize.php');
+    //  require_once(CWD . '/includes/class_img_resize.php');
 
     if (function_exists("ImageCreateTrueColor") && file_exists(CWD . "/$filename")) {
 
@@ -1201,6 +1196,34 @@ function get_product_cat_fields($id, $fields_only = false, $in_search = true, $i
 
 
 
+
+    return $fields_array;
+}
+
+//-------- Get Cat Payment Methods -------
+function get_product_cat_payment_methods($id, $fields_only = false) {
+
+    $fields_array = array();
+    $dir_data['cat'] = intval($id);
+    while ($dir_data['cat'] != 0) {
+        $dir_data = db_qr_fetch("select id,cat from store_products_cats where id='$dir_data[cat]'");
+
+        $data = db_qr_fetch("select name,`payment_methods` from store_products_cats where id='" . $dir_data['id'] . "'");
+        if (trim($data['payment_methods'])) {
+            $cat_fields = explode(",", $data['payment_methods']);
+         
+            for ($z = 0; $z < count($cat_fields); $z++) {
+
+                if ($fields_only) {
+                    if (!in_array($cat_fields[$z], $fields_array)) {
+                        $fields_array[] = (int) $cat_fields[$z];
+                    }
+                } else {
+                    $fields_array[$cat_fields[$z]] = (int) $dir_data['id'];
+                }
+            }
+        }
+    }
 
     return $fields_array;
 }
@@ -1493,7 +1516,7 @@ function datetime($format = "", $time = "") {
 
 //------- Error Handler ----------//
 function error_handler($errno, $errstr, $errfile, $errline, $vars) {
-    global  $config;
+    global $config;
 
     switch ($errno) {
         case E_WARNING:
@@ -1554,11 +1577,11 @@ function do_error_log($msg, $type = 'php') {
         }
 
         if ($type == "db") {
-            $log_file = $config['debug']['logs_path']."/error_db.log";
-            $log_file_new = $config['debug']['logs_path']."/error_db_" . date("Y_m_d_h_i_s") . ".log";
+            $log_file = $config['debug']['logs_path'] . "/error_db.log";
+            $log_file_new = $config['debug']['logs_path'] . "/error_db_" . date("Y_m_d_h_i_s") . ".log";
         } else {
-            $log_file = $config['debug']['logs_path']."/error.log";
-            $log_file_new = $config['debug']['logs_path']."/error_" . date("Y_m_d_h_i_s") . ".log";
+            $log_file = $config['debug']['logs_path'] . "/error.log";
+            $log_file_new = $config['debug']['logs_path'] . "/error_" . date("Y_m_d_h_i_s") . ".log";
         }
 
         if (@filesize($log_file) >= $config['debug']['log_max_size']) {
@@ -1634,34 +1657,34 @@ function cats_to_tree(&$categories) {
     return $map[0]['children'];
 }
 
-     function print_dynatree_node($data, $parent_selected = false) {
+function print_dynatree_node($data, $parent_selected = false) {
 
-            foreach ($data as $x) {
-                print "<li id='$x[key]' class='folder" . iif($x['select'] || $parent_selected, ' selected') . "'>$x[title]
+    foreach ($data as $x) {
+        print "<li id='$x[key]' class='folder" . iif($x['select'] || $parent_selected, ' selected') . "'>$x[title]
                     ";
-                if ($x['children']) {
-                    print "<ul>";
-                    print_dynatree_node($x['children'], ($x['select'] || $parent_selected));
-                    print "</ul>";
-                }
-                //  print "</li>";
-            }
+        if ($x['children']) {
+            print "<ul>";
+            print_dynatree_node($x['children'], ($x['select'] || $parent_selected));
+            print "</ul>";
         }
+        //  print "</li>";
+    }
+}
 
-        function print_dynatree_div($cats_arr, $div_name = 'cats_tree', $ul_name = 'treeData') {
-            $arr = cats_to_tree($cats_arr);
-            print "<div id='$div_name'>
+function print_dynatree_div($cats_arr, $div_name = 'cats_tree', $ul_name = 'treeData') {
+    $arr = cats_to_tree($cats_arr);
+    print "<div id='$div_name'>
     <ul id='$ul_name'>";
-            print_dynatree_node($arr);
-            print "</ul>
+    print_dynatree_node($arr);
+    print "</ul>
     </div>";
-        }
-        
- function get_ip(){
-     // $_SERVER['HTTP_X_FORWARDED_FOR'];
-     return $_SERVER['REMOTE_ADDR'];
-     }
-     
+}
+
+function get_ip() {
+    // $_SERVER['HTTP_X_FORWARDED_FOR'];
+    return $_SERVER['REMOTE_ADDR'];
+}
+
 //----- header redirect ------
 function redirect($url) {
     header("Location: $url");
@@ -1669,17 +1692,17 @@ function redirect($url) {
 }
 
 //---- Js Redirect -----//
-function js_redirect($url,$with_body=false){
+function js_redirect($url, $with_body = false) {
     global $phrases;
-    
-if($with_body){
-print "<html>
+
+    if ($with_body) {
+        print "<html>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$settings[site_pages_encoding]\" />
 <head>
 </head><body>";
-}
+    }
 
-print "<script>
+    print "<script>
 var url = \"$url\";
  var a = document.createElement(\"a\");
  if(!a.click) { 
@@ -1693,8 +1716,74 @@ var url = \"$url\";
  </script>
  
  <center> $phrases[redirection_msg] <a href=\"$url\">$phrases[click_here]</a></center>";
+}
+
+//----- get items shared shipping methods -----//
+function items_available_shipping_methods($items) {
    
- }
+$items_cats = array();
+
+   foreach ($items as $item) {
+       
+       $data = $item['data'];
+       
+if(!in_array($data['cat'],$items_cats)){
+$items_cats[] = $data['cat'];
+
+$cat_shipping = get_product_cat_shipping_methods($data['cat'],true);
+  
+if(count($shipping_ids)){
+  
+unset($tmp_arr);
+  foreach($cat_shipping as $cat_shipping_id){
+  
+  if(in_array($cat_shipping_id,$shipping_ids)){
+$tmp_arr[] = $cat_shipping_id ;  
+  }  
+  }
+$shipping_ids  = $tmp_arr ;   
+}else{
+    $shipping_ids =  $cat_shipping ;
+}
+ unset($cat_shipping);
+}
+}
+$shipping_ids[] = 0;
+
+ return (array) $shipping_ids;
+}
+//----- get items shared payment methods -----//
+function items_available_payment_methods($items) {
+$items_cats = array();
+    foreach ($items as $item) {
+        
+        $data = $item['data'];
+        
+        if (!in_array($data['cat'], $items_cats)) {
+            $items_cats[] = $data['cat'];
+
+            $cat_payment = get_product_cat_payment_methods($data['cat'], true);
+
+            if (count($payment_ids)) {
+
+                unset($tmp_arr);
+                foreach ($cat_payment as $cat_payment_id) {
+
+                    if (in_array($cat_payment_id, $payment_ids)) {
+                        $tmp_arr[] = $cat_payment_id;
+                    }
+                }
+                $payment_ids = $tmp_arr;
+            } else {
+                $payment_ids = $cat_payment;
+            }
+            unset($cat_payment);
+        }
+    }
+    $payment_ids[] = 0;
+    return (array) $payment_ids;
+}
+
 //--------- load plugins function --------     
 function load_plugins($file) {
     $dhx = @opendir(CWD . "/plugins");

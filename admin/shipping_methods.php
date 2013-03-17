@@ -1,5 +1,4 @@
 <?
-
 require('./start.php');
 
 //----------- Payment Methods --------
@@ -23,8 +22,8 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
     }
     //--- edit ----
     if ($action == "edit_ok") {
-        
-$all_cats = (int) $all_cats;
+
+        $all_cats = (int) $all_cats;
 
 
         if ($geo_zones_all) {
@@ -43,20 +42,19 @@ $all_cats = (int) $all_cats;
 
 
 //--------------
-$shipping_cats_arr = (array) explode(",",$shipping_cats);
-$qr  = db_query("select id,shipping_methods from store_products_cats");
-while($data=db_fetch($qr)){
-$cat_shipping_methods = (array) explode(",",$data['shipping_methods']);
-if(($key = array_search($id, $cat_shipping_methods)) !== false) {
-    unset($cat_shipping_methods[$key]);
-}
-if(in_array($data['id'],$shipping_cats_arr)){
-    $cat_shipping_methods[] = $id;
-}
-db_query("update store_products_cats set shipping_methods = '".implode(",",$cat_shipping_methods)."' where id='$data[id]'");
-}
+        $shipping_cats_arr = (array) explode(",", $shipping_cats);
+        $qr = db_query("select id,shipping_methods from store_products_cats");
+        while ($data = db_fetch($qr)) {
+            $cat_shipping_methods = (array) explode(",", $data['shipping_methods']);
+            if (($key = array_search($id, $cat_shipping_methods)) !== false) {
+                unset($cat_shipping_methods[$key]);
+            }
+            if (in_array($data['id'], $shipping_cats_arr)) {
+                $cat_shipping_methods[] = $id;
+            }
+            db_query("update store_products_cats set shipping_methods = '" . implode(",", $cat_shipping_methods) . "' where id='$data[id]'");
+        }
 //---------------
-
 //------------------------ 
         $qr = db_query("select name from store_shipping_methods_settings where cat='$id'");
         while ($data = db_fetch($qr)) {
@@ -77,39 +75,38 @@ db_query("update store_products_cats set shipping_methods = '".implode(",",$cat_
 
     //--- add ----
     if ($action == "add_ok") {
-        $class= 'shipping_manual';
-         $ord = db_fetch_first("select max(ord) from store_shipping_methods") + 1;
+        $class = 'shipping_manual';
+        $ord = db_fetch_first("select max(ord) from store_shipping_methods") + 1;
         db_query("insert store_shipping_methods (class,name,active,all_cats,ord) values ('" . db_escape($class) . "','" . db_escape($name) . "','1','1','$ord')");
 
         $new_id = db_inserted_id();
-       js_redirect("shipping_methods.php?action=edit&id=$new_id");
-      
+        js_redirect("shipping_methods.php?action=edit&id=$new_id");
     }
 
     //--------------------------------  
     print "<p align=center class=title>$phrases[shipping_methods]</p>";
     $qr = db_query("select * from store_shipping_methods order by ord asc");
-?>
-<div id="add_form" style="display:none;">
-<form action='shipping_methods.php' method=post>
-        <input type=hidden name=id value='$id'>
-        <input type=hidden name=action value='add_ok'>
-        <table width=90% class=grid>
-        <tr><td><b><?=$phrases['the_name'];?></b></td><td><input type=text name='name'  size=30></td></tr>
-        <tr><td colspan=2 align=center><input type=submit value=' <?=$phrases['add_button'];?> '></td></tr>
-        </table>
+    ?>
+    <div id="add_form" style="display:none;">
+        <form action='shipping_methods.php' method=post>
+            <input type=hidden name=id value='$id'>
+            <input type=hidden name=action value='add_ok'>
+            <table width=90% class=grid>
+                <tr><td><b><?= $phrases['the_name']; ?></b></td><td><input type=text name='name'  size=30></td></tr>
+                <tr><td colspan=2 align=center><input type=submit value=' <?= $phrases['add_button']; ?> '></td></tr>
+            </table>
         </form>
-</div>
+    </div>
 
-<script>
-    $(document).ready(function(){
-        $('#add_method_btn').click(function(e){
-            e.preventDefault();
-            $('#add_form').dialog({modal: true});
+    <script>
+        $(document).ready(function(){
+            $('#add_method_btn').click(function(e){
+                e.preventDefault();
+                $('#add_form').dialog({modal: true});
             });
         });
-</script>
-<?
+    </script>
+    <?
     print "<a href=\"#\" id='add_method_btn' class='add'>$phrases[add_button]</a><br><br>";
     if (db_num($qr)) {
         print "<table width=100% class=grid>
@@ -213,8 +210,8 @@ if ($action == "edit") {
        
          </table>";
 //--------------- shipping categories -------------------
-
-          $qr_cats = db_query("select id, name ,cat,shipping_methods from store_products_cats order by ord");
+        $categories = array();
+        $qr_cats = db_query("select id, name ,cat,shipping_methods from store_products_cats order by ord");
         while ($data_cats = db_fetch($qr_cats)) {
             //  $shipping_methods_arr = ;// get_product_cat_shipping_methods($data_cats['id'],true);//
 
@@ -226,8 +223,8 @@ if ($action == "edit") {
             );
         }
 
-   
-print "<fieldset>
+
+        print "<fieldset>
     <legend>$phrases[the_cats]</legend>
         
     <input type='radio' id='all_cats_yes' name='all_cats' value=1 onClick=\"\$('#cats_tree_wrapper').hide();\" " . iif($data['all_cats'], " checked") . ">
@@ -236,14 +233,14 @@ print "<fieldset>
     <input type='radio' id='all_cat_no' name='all_cats' value=0 onClick=\"\$('#cats_tree_wrapper').show();\"" . iif(!$data['all_cats'], " checked") . ">
     <label for='all_cat_no'>أقسام محددة </label> 
     ";
-   
-    print "<div id='cats_tree_wrapper'>";
-  print_dynatree_div($categories,'cats_tree');
-  print "</div>
+
+        print "<div id='cats_tree_wrapper'>";
+        print_dynatree_div($categories, 'cats_tree');
+        print "</div>
       <input type='hidden' name='shipping_cats' id='shipping_cats' value=''>";
-  print "</fieldset>";
-  print iif($data['all_cats'],"<script>$('#cats_tree_wrapper').hide();</script>");
-  
+        print "</fieldset>";
+        print iif($data['all_cats'], "<script>$('#cats_tree_wrapper').hide();</script>");
+
 //--------- shipping module settings ------------
         $qrs = db_query("select name,value from store_shipping_methods_settings where cat='$id'");
         while ($datas = db_fetch($qrs)) {
@@ -287,20 +284,16 @@ print "<fieldset>
 
         </form>
         </center>";
-
-      
-  
         ?>
-       <script type="text/javascript">
-                	
-                  
+        <script type="text/javascript">
+                        	
+                          
             $(function(){
-              init_dynatree('cats_tree','shipping_cats');
+                init_dynatree('cats_tree','shipping_cats');
             });
-                                          
+                                                  
         </script>
         <?
-
     } else {
         print_admin_table("<center>" . $phrases['err_wrong_url'] . "</center>");
     }
