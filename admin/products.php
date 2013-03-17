@@ -775,7 +775,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
     $c=0;
     }
     
-                           print "<td><input type=\"checkbox\" name=\"field_id[]\" value=\"$datao[id]\"".iif($fields_array[$datao['id']],' checked').iif($fields_array[$datao['id']] && $fields_array[$datao['id']] !=$id,' disabled').">$datao[name]</td>";
+                           print "<td><input type=\"checkbox\" name=\"field_id[]\" value=\"$datao[id]\"".iif($fields_array[$datao['id']] || $datao['all_cats'],' checked').iif(($fields_array[$datao['id']] && $fields_array[$datao['id']] !=$id) || $datao['all_cats'],' disabled').">$datao[name]</td>";
                            $c++;
                        }
                        print "</table></td></tr>

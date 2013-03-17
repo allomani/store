@@ -14,7 +14,27 @@ $total = $total + $data_stat[$count_data];
 $name_suffix = rand(0,99);
 
 ?>
- <div id="stats_<?=$name_suffix;?>" style="width:600px;height:300px;"></div>
+
+ <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+ var data = google.visualization.arrayToDataTable([['',''], <? foreach($stats as $key=>$val){ print "['".$key."',".$val."],";}?> ]);
+        var options = {
+          title: ''
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div_<?=$name_suffix;?>'));
+        chart.draw(data, options);
+      }
+    </script>
+  
+    <div id="chart_div_<?=$name_suffix;?>" style="width: 900px; height: 500px;"></div>
+    
+    
+<!-- <div id="stats_<?=$name_suffix;?>" style="width:600px;height:300px;"></div>
   <script language="javascript" type="text/javascript" src="<?=$scripturl;?>/js/jquery.flot.js"></script>
     <script language="javascript" type="text/javascript" src="<?=$scripturl;?>/js/jquery.flot.categories.js"></script>
 <script type="text/javascript">
@@ -34,8 +54,8 @@ $(function () {
         }
     });
 });
-</script>
- <?
+</script>-->
+ <?/*
          print "<br>";
 
   $l_size = @getimagesize("$style[images]/leftbar.gif");
@@ -62,7 +82,7 @@ while($data_stat=db_fetch($qr_stat)){
     </tr>\n";
 
 }
-print "</table>";
+print "</table>";*/
 }else{
         print "<center>$phrases[no_results]</center>" ;
         }

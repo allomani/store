@@ -1,10 +1,5 @@
 <?
-
-// Edited : 07-10-2009
-
-global $action,$cat,$id,$field_option,$price_from,$price_to,$style;
-
-
+global $cat,$id,$field_option,$price_from,$price_to,$style;
 
 if(CFN=="browse.php" || CFN=="product_details.php"){
 
@@ -19,7 +14,7 @@ $fields_array = get_product_cat_fields($data_cat['cat'],true);
 }
 //$fields_array=iif($data_fields['fields'],explode(',',$data_fields['fields']),array());
 
-  //$fields_array = array_map('intval',$fields_array);
+ $fields_array = array_map('intval',$fields_array);
 
 
 print "<form action='browse.php' method=get>
@@ -40,13 +35,18 @@ print "<hr class=separate_line size=1>";
    
 if(count($fields_array)){      
   
+   
+$data_arr = db_fetch_all("select * from store_fields_sets where (id IN (".implode(",",$fields_array).") or all_cats=1) and active=1 and type like 'select' and in_search=1 order by ord");
+
+if(count($data_arr)){
  
-      
-$qr = db_query("select * from store_fields_sets where id IN (".implode(",",$fields_array).") and active=1 and type like 'select' and in_search=1 order by ord");
-if(db_num($qr)){
-    
-    //----- cache options -----
-     $qr_options = db_query("select * from store_fields_options where field_id IN (".implode(",",$fields_array).") order by ord"); 
+ 
+//----- cache options -----
+    $all_ids = array();
+    foreach($data_arr as $data){
+        $all_ids[] = $data['id'];
+     }
+     $qr_options = db_query("select * from store_fields_options where field_id IN (".implode(",",$all_ids).") order by ord"); 
  unset($fields_options);
  while($data_options = db_fetch($qr_options)){
  $fields_options[$data_options['field_id']][] =  $data_options ;   
@@ -56,7 +56,7 @@ if(db_num($qr)){
  
 //open_block("$phrases[features]"); 
 
-while($data =db_fetch($qr)){
+foreach($data_arr as $data){
   
    
     if(is_array($fields_options[$data['id']])){
@@ -81,16 +81,16 @@ unset($fields_options,$data,$data_fields,$fields_array,$data_cat);
 
 
 //---- price --------
-if($price_from){$price_from = intval($price_from);}
-if($price_to){$price_to = intval($price_to);}
+if($price_from){$price_from = (int) $price_from;}
+if($price_to){$price_to = (int) $price_to;}
 
 print "<b> $phrases[the_price] : </b><br><br>
-$phrases[from] : <input type=text size=2 name=price_from value=\"".iif($price_from,$price_from)."\">
-$phrases[to] : <input type=text size=2 name=price_to value=\"".iif($price_to,$price_to)."\">
+$phrases[from] : <input type=text size=2 name=\"price_from\" value=\"".iif($price_from,$price_from)."\">
+$phrases[to] : <input type=text size=2 name=\"price_to\" value=\"".iif($price_to,$price_to)."\">
 <br><br>";
 //-------
 
-print "<center><input type=submit value=' $phrases[update] '></center>
+print "<center><input type=submit value=\"$phrases[update]\"></center>
 </form>";
 }else{
     print "<center>$phrases[no_options]</center>";

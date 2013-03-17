@@ -6,7 +6,6 @@ define(THIS_PAGE, "index");
 require(CWD . "/includes/framework_start.php");
 //----------------------------------------------------
 
-
 //---------------------------- Pages -------------------------------------
 if ($action == "pages") {
     $qr = db_query("select * from store_pages where active=1 and id='" . intval($id) . "'");

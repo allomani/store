@@ -2,6 +2,13 @@
 
 require('./start.php');
 
+$option_types = array(
+    'text'=>$phrases['textbox'],
+    'select'=>$phrases['select_menu'],
+    'checkbox'=>$phrases['checkbox']
+    );
+
+
 //---------------------- Store Fields ---------------------
 if (!$action || $action == "edit_ok" || $action == "add_ok" ||
         $action == "del" || $action == "disable" || $action == "enable") {
@@ -27,31 +34,89 @@ if (!$action || $action == "edit_ok" || $action == "add_ok" ||
 
 //----- edit -----//
     if ($action == "edit_ok") {
-        $id = intval($id);
-        if ($name) {
+        $id = (int) $id;
+        $all_cats = (int) $all_cats;
+        
+          db_query("update store_fields_sets set name='" . db_escape($name) . "',title='" . db_escape($title, false) . "',img='" . db_escape($img) . "',in_search='" . intval($in_search) . "',in_details='" . intval($in_details) . "',in_short_details='" . intval($in_short_details) . "',type='" . db_escape($type) . "',value='" . db_escape($value, false) . "',all_cats='" . $all_cats . "' where id='$id'");
+       
+//--------------
+$fields_cats_arr = (array) explode(",",$field_cats);
 
-            db_query("update store_fields_sets set name='" . db_escape($name) . "',title='" . db_escape($title, false) . "',img='" . db_escape($img) . "',in_search='" . intval($in_search) . "',in_details='" . intval($in_details) . "',in_short_details='" . intval($in_short_details) . "',type='" . db_escape($type) . "',value='" . db_escape($value, false) . "',ord='" . intval($ord) . "' where id='$id'");
-        }
+$qr  = db_query("select id,`fields` from store_products_cats");
+while($data=db_fetch($qr)){
+$cat_fields = (array) explode(",",$data['fields']);
+if(($key = array_search($id, $cat_fields)) !== false) {
+    unset($cat_fields[$key]);
+}
+if(in_array($data['id'],$fields_cats_arr)){
+    $cat_fields[] = $id;
+}
+db_query("update store_products_cats set `fields` = '".implode(",",$cat_fields)."' where id='$data[id]'");
+}
+//---------------
+
+
+
     }
 
 //------- add -------//
     if ($action == "add_ok") {
-        $id = intval($id);
-        if ($name) {
+        $id = (int) $id;
+        
             $max_ord = db_qr_fetch("select max(ord)+1 as ord from store_fields_sets limit 1");
-
             db_query("insert into store_fields_sets  (name,title,img,type,value,in_search,in_details,in_short_details,active,ord) values('" . db_escape($name) . "','" . db_escape($title, false) . "','" . db_escape($img) . "','" . db_escape($type) . "','" . db_escape($value, false) . "','" . intval($in_search) . "','" . intval($in_details) . "','" . intval($in_short_details) . "','1','$max_ord[ord]')");
-        }
+            $new_id = db_inserted_id();
+            js_redirect("store_fields.php?action=edit&id=$new_id");
+           
     }
 
 //------------------------------
 
+     print "
+<div id='add_form' style='display:none;'>
+<form action=store_fields.php method=post name=sender>
+<input type=hidden name=action value='add_ok'>
+<input type=hidden name=id value='$id'>
+<table width=100% class=grid>";
+    print "<tr>
+<td><b>$phrases[the_name]</b> </td><td><input type=text size=20  name=name value=\"$data[name]\"></td></tr>
+<td><b>$phrases[the_title]</b> </td><td><input type=text size=20  name=title value=\"$data[title]\"></td></tr> 
+
+<tr><td><b>$phrases[the_type]</b></td><td>";
+    print_select_row('type', $option_types,''," onChange=\"show_hide_fields_divs(this.value);\"");    
+    print "
+</td></tr>
+<tr id='fields_default_value_div'><td><b>$phrases[default_value]</b></td><td>
+<textarea name='value' rows=10 cols=30>$data[value]</textarea></td></tr>
+
+ <tr id='fields_options_div' style=\"display:none;\"><td colspan=2>$phrases[fields_options_add_note]</td></tr>
+ 
+ <tr><td><b>$phrases[appearance_places]</b> </td><td>
+<input type='checkbox' name=in_search value=\"1\" checked>$phrases[fields_search_menu] <br>
+<input type='checkbox' name=in_short_details value=\"1\" checked> $phrases[short_description] <br> 
+<input type='checkbox' name=in_details value=\"1\" checked> $phrases[product_details]
+</td></tr>   
+ 
+<tr><td colspan=2 align=center><input type=submit value=' $phrases[add_button] '></td></tr>";
+    print "</table>
+        </div>";
+    ?>
+<script>
+    $(document).ready(function(){
+        $('#add_btn').click(function(e){
+            e.preventDefault();
+            $('#add_form').dialog({modal: true,width:500});
+            });
+        });
+</script>
+<?
+ //---------------------------------------------
+    
 
     print "<p align=center class=title> $phrases[products_fields] </p>
 
-<p align=$global_align><a href='store_fields.php?action=add' class='add'>$phrases[store_field_add] </a></p>
-
-<center>";
+<p align=$global_align><a href='#' id='add_btn' class='add'>$phrases[store_field_add] </a></p>
+";
 
     $qr = db_query("select * from store_fields_sets order by ord asc");
     if (db_num($qr)) {
@@ -114,65 +179,8 @@ if (!$action || $action == "edit_ok" || $action == "add_ok" ||
         print_admin_table("<center>  $phrases[no_data] </center>");
     }
 
-    print "<br>";
-    print_admin_table("<center>$phrases[store_fields_note]</center>");
 }
 
-//---------- Add Store Field -------------
-if ($action == "add") {
-    if_admin("store_fields");
-
-    print "<ul class='nav-bar'>
-        <li><a href='store_fields.php'>$phrases[products_fields]</a></li>
-        <li>$phrases[store_field_add]</li>
-    </ul>";
-
-
-    print "<center>
-<p align=center class=title>$phrases[store_field_add]</p>
-<form action=store_fields.php method=post name=sender>
-<input type=hidden name=action value='add_ok'>
-<input type=hidden name=id value='$id'>
-<table width=80% class=grid>";
-    print "<tr>
-<td><b>$phrases[the_name]</b> </td><td><input type=text size=20  name=name value=\"$data[name]\"></td></tr>
-<td><b>$phrases[the_title]</b> </td><td><input type=text size=20  name=title value=\"$data[title]\"></td></tr> 
-
-<tr>
-                <td><b>$phrases[the_image]</b></td>
-                <td>
-
-                <table><tr><td>
-                                 <input type=\"text\" name=\"img\" size=\"30\" dir=ltr>   </td>
-
-                                <td> <a href=\"javascript:uploader('fields','img');\"><img src='images/file_up.gif' border=0 alt='$phrases[upload_file]'></a>
-                                 </td></tr></table>
-
-                                 </td>
-        </tr>
-
-<tr><td><b>$phrases[the_type]</b></td><td><select name='type' id='type' onChange=\"show_hide_fields_divs(this.value);\">
-<option value='text'>$phrases[textbox]</option>
-
-<option value='select'>$phrases[select_menu]</option>
-
-<option value='checkbox'>$phrases[checkbox]</option>
-</select>
-</td></tr>
-<tr id='fields_default_value_div'><td><b>$phrases[default_value]</b></td><td>
-<textarea name='value' rows=10 cols=30>$data[value]</textarea></td></tr>
-
- <tr id='fields_options_div' style=\"display:none;\"><td colspan=2>$phrases[fields_options_add_note]</td></tr>
- 
- <tr><td><b>$phrases[appearance_places]</b> </td><td>
-<input type='checkbox' name=in_search value=\"1\" checked>$phrases[fields_search_menu] <br>
-<input type='checkbox' name=in_short_details value=\"1\" checked> $phrases[short_description] <br> 
-<input type='checkbox' name=in_details value=\"1\" checked> $phrases[product_details]
-</td></tr>   
- 
-<tr><td colspan=2 align=center><input type=submit value=' $phrases[add_button] '></td></tr>";
-    print "</table></center>";
-}
 
 
 //---------- Edit Store Field -------------
@@ -196,13 +204,15 @@ if ($action == "edit" || $action == "fields_options_edit_ok") {
 
     if (db_num($qr)) {
         $data = db_fetch($qr);
-        print "<center><form action=store_fields.php method=post name=sender>
+        print "
+<form action=store_fields.php method=post name=sender>
 <input type=hidden name=action value='edit_ok'>
 <input type=hidden name=id value='$id'>
-<table width=80% class=grid>";
+ <fieldset>
+<table width=100%>";
         print "
-<tr><td><b>$phrases[the_name]</b> </td><td><input type=text size=20  name=name value=\"$data[name]\"></td></tr>
-<tr><td><b>$phrases[the_title]</b> </td><td><input type=text size=20  name=title value=\"$data[title]\"></td></tr> 
+<tr><td><b>$phrases[the_name]</b> </td><td><input type=text size=20  name='name' value=\"$data[name]\" required=\"required\"></td></tr>
+<tr><td><b>$phrases[the_title]</b> </td><td><input type=text size=20  name='title' value=\"$data[title]\"></td></tr> 
 
 <tr>
                 <td><b>$phrases[the_image]</b></td>
@@ -218,26 +228,9 @@ if ($action == "edit" || $action == "fields_options_edit_ok") {
         </tr>
         
          
-<tr><td><b>$phrases[the_type]</b></td><td><select name='type' id='type' onChange=\"show_hide_fields_divs(this.value);\">";
-
-        if ($data['type'] == "text") {
-            $chk1 = "selected";
-            $chk2 = "";
-            $chk3 = "";
-        } elseif ($data['type'] == "select") {
-            $chk1 = "";
-            $chk2 = "selected";
-            $chk3 = "";
-        } elseif ($data['type'] == "checkbox") {
-            $chk1 = "";
-            $chk2 = "";
-            $chk3 = "selected";
-        }
-
-        print "<option value='text' $chk1>$phrases[textbox]</option>
-<option value='select' $chk2>$phrases[select_menu]</option>
-<option value='checkbox' $chk3>$phrases[checkbox]</option>
-</select>
+<tr><td><b>$phrases[the_type]</b></td><td>";
+         print_select_row('type', $option_types,$data['type']," onChange=\"show_hide_fields_divs(this.value);\"");    
+       print "
 </td></tr>
 <tr id='fields_default_value_div'><td><b>$phrases[default_value]</b></td><td>
 <textarea name='value' rows=10 cols=30>" . htmlspecialchars($data['value']) . "</textarea></td></tr>
@@ -256,24 +249,64 @@ if ($action == "edit" || $action == "fields_options_edit_ok") {
 
         print "<br><br>
 <a href='store_fields.php?action=fields_options_edit&id=$data[id]'>$phrases[options_edit]</a></td></tr>
+</table>
+</fieldset>
 
-
-<tr><td><b>$phrases[appearance_places]</b> </td><td>
+<fieldset>
+        <legend>$phrases[appearance_places]</legend>
 <input type='checkbox' name=in_search value=\"1\"" . iif($data['in_search'], " checked") . ">$phrases[fields_search_menu] <br>
 <input type='checkbox' name=in_short_details value=\"1\"" . iif($data['in_short_details'], " checked") . "> $phrases[short_description] <br> 
 <input type='checkbox' name=in_details value=\"1\"" . iif($data['in_details'], " checked") . "> $phrases[product_details]
-</td></tr>   
+</fieldset>  "; 
 
+//---- cats -----
+        
+            $qr_cats = db_query("select id, name ,cat,fields from store_products_cats order by ord");
+        while ($data_cats = db_fetch($qr_cats)) {
+            //  $shipping_methods_arr = ;// get_product_cat_shipping_methods($data_cats['id'],true);//
 
-<tr><td><b>$phrases[the_order]</b> </td><td><input type=text size=3  name=ord value=\"$data[ord]\"></td></tr>
-
-<tr><td colspan=2 align=center><input type=submit value=' $phrases[edit] '></td></tr>";
-        print "</table></center></form>
-
-<script>
-show_hide_fields_divs($('#type').val());
-</script>
-";
+            $categories[] = array(
+                "key" => $data_cats['id'],
+                "title" => $data_cats['name'],
+                "parent" => $data_cats['cat'],
+                "select" => iif(in_array($id, explode(',', $data_cats['fields'])), true, false)
+            );
+        }
+        
+        
+print "<fieldset>
+    <legend>$phrases[the_cats]</legend>
+        
+    <input type='radio' id='all_cats_yes' name='all_cats' value=1 onClick=\"\$('#cats_tree_wrapper').hide();\" " . iif($data['all_cats'], " checked") . ">
+    <label for='all_cats_yes'>جميع الأقسام </label><br>
+           
+    <input type='radio' id='all_cat_no' name='all_cats' value=0 onClick=\"\$('#cats_tree_wrapper').show();\"" . iif(!$data['all_cats'], " checked") . ">
+    <label for='all_cat_no'>أقسام محددة </label> 
+    ";
+   
+    print "<div id='cats_tree_wrapper'>";
+  print_dynatree_div($categories,'cats_tree');
+  print "</div>
+      <input type='hidden' name='field_cats' id='field_cats' value=''>";
+  print "</fieldset>";
+  print iif($data['all_cats'],"<script>$('#cats_tree_wrapper').hide();</script>");
+//--------
+  
+  
+print "
+    <center><input type=submit value=' $phrases[edit] '></center>";
+        print "</form>";
+        ?>
+       <script type="text/javascript">
+                	
+                  
+            $(function(){
+              init_dynatree('cats_tree','field_cats');
+              show_hide_fields_divs($('#type').val());
+            });
+                                          
+        </script>
+        <?
     } else {
         print "<center><table width=70% class=grid>";
         print "<tr><td align=center>$phrases[err_wrong_url]</td></tr>";

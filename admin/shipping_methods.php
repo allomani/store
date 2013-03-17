@@ -78,14 +78,12 @@ db_query("update store_products_cats set shipping_methods = '".implode(",",$cat_
     //--- add ----
     if ($action == "add_ok") {
         $class= 'shipping_manual';
-        db_query("insert store_shipping_methods (class,name,active,all_cats) values ('" . db_escape($class) . "','" . db_escape($name) . "','1','1')");
+         $ord = db_fetch_first("select max(ord) from store_shipping_methods") + 1;
+        db_query("insert store_shipping_methods (class,name,active,all_cats,ord) values ('" . db_escape($class) . "','" . db_escape($name) . "','1','1','$ord')");
 
         $new_id = db_inserted_id();
-        if ($new_id) {
-            $ord = db_fetch_first("select max(ord) from store_shipping_methods") + 1;
-            db_query("update store_shipping_methods set ord = $ord where id='$new_id'");
-           js_redirect("shipping_methods.php?action=edit&id=$new_id");
-        }
+       js_redirect("shipping_methods.php?action=edit&id=$new_id");
+      
     }
 
     //--------------------------------  
@@ -174,9 +172,9 @@ if ($action == "edit") {
         <tr><td><b>$phrases[the_type]</b></td><td><input type=text name='class' size=30 value=\"$data[class]\"></td></tr>    
         <tr><td><b>$phrases[the_name]</b></td><td><input type=text name=name value=\"$data[name]\" size=30></td></tr>
        
-       <tr><td><b>Geo Zones</b></td><td>
+       <tr><td><b>المناطق الجغرافية</b></td><td>
        <input type='radio' id='geo_zones_all_yes' name='geo_zones_all' value=1 onClick=\"\$('#geo_zones_div').css('display','none');\" " . iif(!count($geo_zones), " checked") . ">
-           <label for='geo_zones_all_yes'>جميع المناطق</label><br>
+     <label for='geo_zones_all_yes'>جميع المناطق</label><br>
            
        <input type='radio' id='geo_zones_all_no' name='geo_zones_all' value=0 onClick=\"\$('#geo_zones_div').css('display','');\"" . iif(count($geo_zones), " checked") . ">
            <label for='geo_zones_all_no'>مناطق محددة</label>
@@ -193,16 +191,16 @@ if ($action == "edit") {
        </div>
        </td></tr>
        
-       <tr><td><b>Min Price</b></td><td><input type=text name='min_price' value=\"$data[min_price]\" size=30></td></tr> 
-       <tr><td><b>Max Price</b></td><td><input type=text name='max_price' value=\"$data[max_price]\" size=30></td></tr> 
+       <tr><td><b>أقل اجمالي الطلب</b></td><td><input type=text name='min_price' value=\"$data[min_price]\" size=30></td></tr> 
+       <tr><td><b>اعلى اجمالي الطلب</b></td><td><input type=text name='max_price' value=\"$data[max_price]\" size=30></td></tr> 
        
-       <tr><td><b>Min Items</b></td><td><input type=text name='min_items' value=\"$data[min_items]\" size=30></td></tr> 
-       <tr><td><b>Max Items</b></td><td><input type=text name='max_items' value=\"$data[max_items]\" size=30></td></tr> 
+       <tr><td><b>اقل عدد سلع</b></td><td><input type=text name='min_items' value=\"$data[min_items]\" size=30></td></tr> 
+       <tr><td><b>اقصى عدد سلع</b></td><td><input type=text name='max_items' value=\"$data[max_items]\" size=30></td></tr> 
        
-        <tr><td><b>Min Weight</b></td><td><input type=text name='min_weight' value=\"$data[min_weight]\" size=30></td></tr> 
-       <tr><td><b>Max Weight</b></td><td><input type=text name='max_weight' value=\"$data[max_weight]\" size=30></td></tr> 
+        <tr><td><b>اقل وزن</b></td><td><input type=text name='min_weight' value=\"$data[min_weight]\" size=30></td></tr> 
+       <tr><td><b>اقصى وزن</b></td><td><input type=text name='max_weight' value=\"$data[max_weight]\" size=30></td></tr> 
        
-        <tr><td><b>Default Order Status</b></td><td>
+        <tr><td><b>الحالة الافتراضية للطلب</b></td><td>
         <select name='default_status'>";
         $qrs = db_query("select * from store_orders_status where active=1 order by id asc");
         while ($datas = db_fetch($qrs)) {
@@ -293,8 +291,7 @@ print "<fieldset>
       
   
         ?>
-
-        <script type="text/javascript">
+       <script type="text/javascript">
                 	
                   
             $(function(){
@@ -302,8 +299,6 @@ print "<fieldset>
             });
                                           
         </script>
-
-      
         <?
 
     } else {

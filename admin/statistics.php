@@ -5,7 +5,10 @@ require("./start.php");
 $month = intval($month);
  require(CWD . '/includes/functions_statics.php');
 
+ ?>
 
+  
+<?
  //-------- browser and os statics ---------
 if($settings['count_visitors_info']){
 print "<p class='title' align=center>$phrases[operating_systems]</p>" ;

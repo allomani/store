@@ -231,7 +231,9 @@ fieldset {
 }
 
 
-
+ul#product_photos{
+    padding:0;
+}
 ul#product_photos li{
     padding: 0;
     margin: 3px;
@@ -239,8 +241,8 @@ ul#product_photos li{
 }
 
 ul#product_photos li > a > img{
- width:60px;
-     height:60px;
+ width:80px;
+     height:80px;
 }
 
 .loading {
@@ -652,6 +654,18 @@ table th {
 }
 .row_2{
     background-color: #FCFCFC 
+}
+
+.row_1:hover{
+    background-color: #E8F8FF;
+}
+
+.row_2:hover{
+    background-color: #E8F8FF;
+}
+
+.row_checked{
+    background-color: #EAFFEA;  
 }
 
 /*--------- MEMBERS MESSAGES FONT--------*/

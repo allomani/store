@@ -127,8 +127,6 @@ require(ADMIN_DIR ."/countries.php");
 require(ADMIN_DIR ."/cities.php");
 require(ADMIN_DIR ."/geo_zones.php"); 
 
-//------- Settings ------------
-require(ADMIN_DIR ."/settings.php");
 
 
 

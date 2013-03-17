@@ -14,14 +14,14 @@ if (db_num($qr)) {
     $data = db_fetch($qr);
 
     db_query("update store_products_data set views=views+1 where id='$id'");
- 
+
     check_member_login();
-    if($member_data['id']){
-    $is_favorite  = db_fetch_first("select count(*) from store_clients_favorites where userid = '$member_data[id]' and product_id='$id'");
-    }else{
+    if ($member_data['id']) {
+        $is_favorite = db_fetch_first("select count(*) from store_clients_favorites where userid = '$member_data[id]' and product_id='$id'");
+    } else {
         $is_favorite = false;
     }
-    
+
     compile_hook('product_details_start');
 
     print_path_links($data['cat'], $data['name']);
@@ -93,7 +93,7 @@ if (db_num($qr)) {
     }
 
     //------------------------------
-//compile_template(get_template('product_details'));
+//run_template('product_details');
 //------------ PRODUCT DETAILS TABLE -------------------------------------------
 
     print "<table width=100%><tr><td valign=top align=center width='" . ($settings['products_img_width'] + 20) . "'>";
@@ -105,19 +105,172 @@ if (db_num($qr)) {
 
     //-------- photos -------//
     $qrp = db_query("select * from store_products_photos where product_id='$id' order by ord");
-    if (db_num($qrp)) {
+    $p_photos = array();
+    while ($datap = db_fetch($qrp)) {
+        $p_photos[] = $datap;
+    }
+    //----------------
+    $c = 0;
+    if (count($p_photos)) {
         print "<ul id='product_photos'>";
-        while ($datap = db_fetch($qrp)) {
-            print "<li><a href=\"$datap[img]\" class=\"fancybox\" rel=\"group\"><img src=\"$datap[thumb]\"></a></li>";
+        foreach ($p_photos as $datap) {
+            print "<li><a href=\"#\" rel=\"{$datap['id']}\"><img src=\"$datap[thumb]\"></a></li>";
+            $c++;
+            if ($c >= 5) {
+                if (count($p_photos) > 5) {
+                    print "<li><a href=\"#\" rel=\"\"><img src=\"images/product_photos_more.png\" title=\"المزيد\"></a></li>";
+                }
+                break;
+            }
         }
         print "</ul>";
     }
+
+    //------------ photos dialog ------------//
+    print "<div id='product_photos_dialog'>";
+
+    if (count($p_photos)) {
+        print "<div class='selector'>
+            <ul>";
+        foreach ($p_photos as $datap) {
+            print "<li id=\"dialog_product_img_{$datap['id']}\"><a href=\"$datap[img]\" class='product_img'><img src=\"$datap[thumb]\"></a></li>";
+        }
+        print "</ul>
+            </div>";
+    }
+    print "
+       <div id='image_preview_wrapper'>
+       <div id='image_preview'></div>
+       </div>
+   </div>";
     //----------------
-
-
+//class=\"fancybox\" rel=\"group\"
     print "</td><td>";
+    ?>
+    <style>
+        #product_photos_dialog > .selector {
+            overflow:auto;
+            width:305px;
+            float:right;
+            border: 1px solid #ccc;
+            height:98%;
+        }
+
+        #product_photos_dialog > .selector > ul {
+            padding:0;
+        }
+
+        #product_photos_dialog li {
+            display:inline-block;
+            list-style-type: none;
+            margin:3px;
+            padding:3px;
+        }
+
+        .active_border {
+            border: 2px solid #EA7500;
+        }
+        .inactive_border {
+            border: 1px solid #ccc;
+        }
+        #image_preview_wrapper {
+            padding-right:320px;
+            height:100%; 
+        }
+        #image_preview {
+            height:100%; 
+            overflow: hidden;
+            text-align:center;
+        }
+        #product_photos_dialog {
+            display:none;
+        }
+        .cursor_zoomin {
+            cursor: url(images/zoom-in.bmp),auto;
+        }
+        .cursor_zoomout {
+            cursor: url(images/zoom-out.bmp),auto;
+        }
+
+    </style>
+    <script src="js/jquery.zoom.js"></script>
+    <script>
+        $(document).ready(function(){
+            var dialog_padding=30; 
+       
+            init_photos_dialog();
+
+            function init_photos_dialog(){
+                $('#product_photos_dialog').dialog({
+                    modal: true,
+                    autoOpen: false,
+                    width: ($(window).width() - dialog_padding),
+                    height: ($(window).height() - dialog_padding),
+                     open: function( event, ui ) {$('body').css({'overflow':'hidden'});},
+                     close: function( event, ui ) {$('body').css({'overflow':'visible'});}
+                });
+              
+            }
+        
+            $('#product_photos > li > a').click(function(e){
+                e.preventDefault();
+                $('#product_photos_dialog').dialog("open");
+                if($(this).attr('rel')){
+                    $('#dialog_product_img_'+$(this).attr('rel')).trigger('click');
+                }else{
+                    $('#product_photos_dialog li:first').trigger('click');
+                }
+            });
+
+            $(window).resize(function() {
+                init_photos_dialog();
+            });
 
 
+            $('#product_photos_dialog li').click(function(e){
+                e.preventDefault();
+                product_photos_dialog_li_clicked($(this));
+            });
+        
+            function product_photos_dialog_li_clicked(li){
+
+                $('#product_photos_dialog li').removeClass('active_border');
+                $('#product_photos_dialog li').addClass('inactive_border');
+                $(li).removeClass('inactive_border');
+                $(li).addClass('active_border');
+                var img_url = $(li).find('a').attr('href');
+     
+                $('#image_preview').html($('<img />').attr({'src' : img_url}));
+      
+                $('#image_preview > img').load(function(){
+                    if($('#image_preview > img').width() > $('#image_preview').width() || $('#image_preview > img').height() > $('#image_preview').height()){
+                        if($('#image_preview > img').width() > $('#image_preview > img').height()){  
+                            $('#image_preview > img').attr({
+                                width: $('#image_preview').width(),
+                                height:'auto'
+                            })
+                            $('#image_preview > img').css('padding-top',(($('#image_preview').height()/2)-($('#image_preview > img').height()/2)));
+           
+                        }else{
+                            $('#image_preview > img').attr({
+                                width: 'auto',
+                                height:$('#image_preview').height()
+                            })
+             
+                        }
+        
+                        $('#image_preview').zoom({ on:'click' });
+                    }else{
+                        $('#image_preview').unbind();
+                        $('#image_preview > img').css('padding-top',(($('#image_preview').height()/2)-($('#image_preview > img').height()/2)));
+                    }
+                });    
+            }
+        });
+
+
+    </script>
+    <?
 
 //----- add to cart form -----------
     print "<form action='ajax.php' method=post id='add_to_cart_form' onSubmit=\"cart_add_item('add_to_cart_form');return false;\">
@@ -191,45 +344,41 @@ if (db_num($qr)) {
  
  
  <div align='$global_align_x'>
- <a href=\"#\" onClick=\"return add_to_fav($data[id]);\" title=\"$phrases[add2favorite]\" class=\"add_to_fav".iif($is_favorite," success")."\"></a>
+ <a href=\"#\" onClick=\"return add_to_fav($data[id]);\" title=\"$phrases[add2favorite]\" class=\"add_to_fav" . iif($is_favorite, " success") . "\"></a>
  &nbsp;
  <a href='http://www.facebook.com/sharer.php?u=" . urlencode($scripturl . "/" . str_replace('{id}', $data['id'], $links['product_details'])) . "' target=_blank><img src='$style[images]/facebook.gif' alt='Share with Facebook' border=0></a>
  </div>";
 
 
-    print_rating('products',$data['id'],$data['rate']); 
-    
+    print_rating('products', $data['id'], $data['rate']);
+
     close_table();
 
- 
-   
-
-$tabs = new tabs('product_details');
-
-$tabs->start($phrases['the_details']);
-print  $data['details'] ;
-$tabs->end();
-
-$tabs->start("المواصفات");
-print $fields_content;
-$tabs->end();
 
 
 
+    $tabs = new tabs('product_details');
+
+    $tabs->start($phrases['the_details']);
+    print iif($data['details'], $data['details'], "لا توجد تفاصيل");
+    ;
+    $tabs->end();
+
+    $tabs->start("المواصفات");
+    print $fields_content;
+    $tabs->end();
 
 
-    
-    
 //------ Comments -------------------
     if ($settings['enable_product_comments']) {
-    //    open_table($phrases['members_comments']);
+        //    open_table($phrases['members_comments']);
         $tabs->start($phrases['members_comments']);
         get_comments_box('product', $id);
-       // close_table();
+        // close_table();
         $tabs->end();
     }
-    
-$tabs->run();
+
+    $tabs->run();
 
     /*
       //-------- photos -------//

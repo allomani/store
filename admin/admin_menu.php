@@ -13,7 +13,6 @@ print "
 <legend>$phrases[the_orders]</legend>
 <table width=100%>";
 print "<tr><td width=24><img src='images/orders.gif' width=24></td><td class=row_1><a href='orders.php'>$phrases[the_orders]</a></td></tr>";
-print "<tr><td width=24><img src='images/orders_status.gif' width=24></td><td class=row_2><a href='orders_status.php'>$phrases[orders_status]</a></td></tr>";
 print "<tr><td width=24><img src='images/votes.gif' width=24></td><td class=row_1><a href='statistics.php'>$phrases[the_statics]</a></td></tr>";
 
 
@@ -38,17 +37,7 @@ print "<tr><td width=24><img src='images/fields.gif' width=24></td><td class=row
 print "</table></fieldset>"; 
 
 
-if(if_admin("",true)){ 
-print "
-<fieldset>
-<legend>$phrases[payment_and_shipping]</legend>
-<table width=100%>";
-print "<tr><td width=24><img src='images/payment_methods.gif' width=24></td><td class=row_1><a href='payment_methods.php'>$phrases[payment_methods]</a></td></tr>";
-print "<tr><td width=24><img src='images/gateways.gif' width=24></td><td class=row_2><a href='payment_gateways.php'>$phrases[payment_gateways]</a></td></tr>";
-print "<tr><td width=24><img src='images/shipping_methods.gif' width=24></td><td class=row_1><a href='shipping_methods.php'>$phrases[shipping_methods]</a></td></tr>";
 
-print "</table></fieldset>"; 
-}
 
 //-----------------------------
 $admin_menu_content  = "";
@@ -113,37 +102,11 @@ print "
 <legend>$phrases[the_members]</legend>
 <table width=100%>";
 print "<tr><td width=24><img src='images/clients.gif' width=24></td><td class=row_1><a href='index.php?action=clients'> $phrases[cp_mng_members]</a></td></tr>\n";
-print "<tr><td width=24><img src='images/clients_custom_fields.gif' width=24></td><td class=row_2><a href='index.php?action=clients_fields'> $phrases[members_custom_fields]</a></td></tr>\n";
 print "<tr><td width=24><img src='images/clients_mailing.gif' width=24></td><td class=row_1><a href='index.php?action=clients_mailing'> $phrases[members_mailing]</a></td></tr>\n";
-
-if(if_admin("",true)){  
-print "<tr><td width=24><img src='images/clients_remote_db.gif' width=24></td><td class=row_2><a href='index.php?action=clients_remote_db'>$phrases[cp_members_remote_db]</a></td></tr>\n";
-print "<tr><td width=24><img src='images/db_clean.gif' width=24></td><td class=row_1><a href='index.php?action=clients_local_db_clean'>$phrases[members_local_db_clean_wizzard]</a></td></tr>\n";
-}
 print "</table></fieldset>";
 }
 
-if(if_admin("",true)){
-print "
-<fieldset>
-<legend>Geo Settings</legend>
-<table width=100%>
-<tr><td width=24><img src='images/db_backup.gif' width=24></td><td class=row_2><a href='index.php?action=geo_zones'>Geo Zones</a></td></tr>
-<tr><td width=24><img src='images/db_info.gif' width=24></td><td class=row_1><a href='index.php?action=countries'>Countries</a></td></tr>
 
-</table></fieldset>";
-}
-
-
-if(if_admin("",true)){
-print "
-<fieldset>
-<legend>$phrases[the_database]</legend>
-<table width=100%>
-<tr><td width=24><img src='images/db_info.gif' width=24></td><td class=row_1><a href='index.php?action=db_info'>$phrases[cp_db_check_repair]</a></td></tr>
-<tr><td width=24><img src='images/db_backup.gif' width=24></td><td class=row_2><a href='index.php?action=backup_db'>$phrases[backup]</a></td></tr>
-</table></fieldset>";
-}
 
 //--------------- Load Menu Plugins --------------------------
 $pls = load_plugins("menu.php");
@@ -158,27 +121,10 @@ $admin_menu_content .= "<tr><td width=24><img src='images/adv.gif' width=24></td
 if(if_admin("",true)){
 $admin_menu_content .= "<tr><td width=24><img src='images/statics.gif' width=24></td><td class=row_2><a href='index.php?action=statics'>$phrases[the_statics_and_counters]</a></td></tr>";
 }
-if(if_admin("templates",true)){
-$admin_menu_content .= "<tr><td width=24><img src='images/templates.gif' width=24></td><td class=row_1><a href='templates.php'> $phrases[the_templates] </a></td></tr>";
-}
-
-if(if_admin("phrases",true)){
-$admin_menu_content .= "<tr><td width=24><img src='images/phrases.gif' width=24></td><td class=row_2><a href='phrases.php'>$phrases[the_phrases]</a></td></tr>";
-}
 
 
-if(if_admin("",true)){ 
-$admin_menu_content .= "<tr><td width=24><img src='images/seo_settings.gif' width=24></td><td class=row_1><a href='seo.php'> $phrases[seo_settings]</a></td></tr>";
-}
+$admin_menu_content .= "<tr><td width=24><img src='images/stng.gif' width=24></td><td class=row_2><a href='settings.php'> $phrases[the_settings]</a></td></tr>";
 
-
-if(if_admin("",true)){  
-$admin_menu_content .= "<tr><td width=24><img src='images/hooks.gif' width=24></td><td class=row_1><a href='hooks.php'>$phrases[cp_hooks]</a></td></tr>\n";
-
-
-
-$admin_menu_content .= "<tr><td width=24><img src='images/stng.gif' width=24></td><td class=row_2><a href='index.php?action=settings'> $phrases[the_settings]</a></td></tr>";
-} 
 
 
 //--------------------

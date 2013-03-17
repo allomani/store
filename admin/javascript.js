@@ -303,6 +303,7 @@ function init_dynatree(div_id,input_id){
       $("#"+div_id).dynatree({
                     checkbox: true,
                     selectMode: 3,
+                    debugLevel: 0,
                     onCreate: function(node, nodeSpan) {
                         tree_get_selected_nodes(node);	
                     },
@@ -321,6 +322,7 @@ function init_dynatree(div_id,input_id){
                 });
                 function tree_get_selected_nodes(node){
                     var selRootKeys = $.map(node.tree.getSelectedNodes(true), function(node){
+                         node.makeVisible();
                         return node.data.key;
                     });
                     $("#"+input_id).val(selRootKeys.join(","));
