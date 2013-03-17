@@ -34,10 +34,7 @@ if ($action == "login") {
 
                 $session->set('member_data_id', $data['id']);
                 $session->set('member_data_password', $data['password']);
-
-                print "<SCRIPT>window.location=\"$re_link\";</script>";
-
-
+                js_redirect($re_link,true);
                 // ------------- Closed Account -----------------       
             } elseif (in_array($data['usr_group'], $members_connector['disallowed_login_groups'])) {
                 site_header();
@@ -101,8 +98,8 @@ if ($action == "login") {
 
     $session->set('member_data_id', "");
     $session->set('member_data_password', "");
-
-    print "<SCRIPT>window.location=\"$re_link\";</script>";
+    js_redirect($re_link,true);
+  
 
     //---------- Login Form Redirect -----------------
 } else {

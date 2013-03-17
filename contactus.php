@@ -33,7 +33,7 @@ if ($action == "send") {
 
 
                 $email_msg = nl2br($email_msg);
-                $ip = getenv("REMOTE_ADDR");
+                $ip = get_ip();
                 $msg = get_template('contactus_msg');
                 $msg = str_replace(array('{name}', '{email}', '{message}', '{ip}'), array($email_name, $email_email, $email_msg, $ip), $msg);
 

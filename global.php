@@ -485,7 +485,7 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
     $mailHeader .= "Reply-To: $from_email\r\n";
     $mailHeader .= "Return-Path: $from_email\r\n";
     $mailHeader .= "To: $to_email\r\n";
-    $mailheader.="MIME-Version: 1.0\r\n";
+    $mailHeader.="MIME-Version: 1.0\r\n";
     $mailHeader .= "Content-Type: " . iif($html, "text/html", "text/plain") . "; charset=" . $encoding . "\r\n";
 
     if ($config['smtp']['enable']) {
@@ -496,7 +496,7 @@ function send_email($from_name, $from_email, $to_email, $subject, $msg, $html = 
     $mailHeader .= "X-EWESITE: Allomani\r\n";
     $mailHeader .= "X-Mailer: PHP/" . phpversion() . "\r\n";
     $mailHeader .= "X-Mailer-File: " . "http://" . $_SERVER['HTTP_HOST'] . ($script_path ? "/" . $script_path : "") . $PHP_SELF . "\r\n";
-    $mailHeader .= "X-Sender-IP: {$_SERVER['REMOTE_ADDR']}\r\n";
+    $mailHeader .= "X-Sender-IP: ".get_ip()."\r\n";
 
 
 
@@ -1656,6 +1656,12 @@ function cats_to_tree(&$categories) {
             print "</ul>
     </div>";
         }
+        
+ function get_ip(){
+     // $_SERVER['HTTP_X_FORWARDED_FOR'];
+     return $_SERVER['REMOTE_ADDR'];
+     }
+     
 //----- header redirect ------
 function redirect($url) {
     header("Location: $url");

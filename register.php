@@ -143,8 +143,8 @@ if($settings['auto_email_activate']){
     }
 
 
-   members_db_query("insert into {{store_clients}} (::email,::username::date,::usr_group,::birth,::country,::gender,::pm_email_notify,::privacy_settings,::members_list)
-  values(':email',':username',':date',':usr_group',':birth',':country',':gender',':pm_email_notify',':privacy_settings',':members_list')",
+   members_db_query("insert into {{store_clients}} (::email,::username::date,::usr_group,::birth,::country,::gender,::pm_email_notify,::privacy_settings,::members_list,::ip_address)
+  values(':email',':username',':date',':usr_group',':birth',':country',':gender',':pm_email_notify',':privacy_settings',':members_list',':ip_address')",
         array('email'=> db_escape($email),
             'username'=>db_escape($username),
             'date'=>connector_get_date(time(),'member_reg_date'),
@@ -154,7 +154,8 @@ if($settings['auto_email_activate']){
             'gender'=>db_escape($gender),
             'pm_email_notify'=>'1',
             'privacy_settings'=>$settings['defualt_privacy_settings'],
-            'members_list'=>'1'
+            'members_list'=>'1',
+            'ip_address'=>get_ip()
            ) 
            );
 

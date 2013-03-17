@@ -128,7 +128,7 @@ $gateway_settings[$datas['name']] = $datas['value'];
 
   
 print "<br>
-<fieldset style=\"width:100%;\">
+<fieldset>
 <legend><b>$phrases[the_settings]</b></legend>";
 $gateway_file = CWD."/includes/gateways/{$data['class']}.php"; 
 if(file_exists($gateway_file)){ 

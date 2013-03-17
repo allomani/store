@@ -171,10 +171,11 @@ function check_member_login() {
 
                 if (in_array($data['usr_group'], $members_connector['allowed_login_groups'])) {
 
-                    members_db_query("update {{store_clients}} set ::last_login=':last_login' where ::id=':id'", array(
+                    members_db_query("update {{store_clients}} set ::last_login=':last_login',::ip_address=':ip_address' where ::id=':id'", array(
                         'id' => $member_data['id'],
-                        'last_login' => connector_get_date(date("Y-m-d H:i:s"), 'member_last_login'
-                            ))
+                        'last_login' => connector_get_date(time(), 'member_last_login'),
+                        'ip_address' => get_ip()
+                            )
                     );
                     $member_data['username'] = $data['username'];
                     $member_data['email'] = $data['email'];

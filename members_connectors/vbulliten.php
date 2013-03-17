@@ -84,10 +84,12 @@ function connector_after_reg_process(){
 function connector_get_date($date,$op){
  
 if($op=="member_reg_date"){
-return strtotime($date);
+return $date;
 }elseif($op=="member_birth_date"){
     $tm = strtotime($date);
     return date("m-d-Y",$tm);
+}elseif($op=="member_last_login"){
+    return $date;
 }elseif($op=="member_birth_array"){
 $birth_data = explode("-",$date);
 $new_arr['year'] =  $birth_data[2];

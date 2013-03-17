@@ -17,11 +17,11 @@ class session {
 
         $this->start($sid);
         
-        if ($config['ip_check'] && $this->get('ip') != $_SERVER['REMOTE_ADDR']) {
+        if ($config['ip_check'] && $this->get('ip') != get_ip()) {
             session_destroy();
             $sid = $this->gen_session_id();
             $this->start($sid);
-            $this->set('ip', $_SERVER['REMOTE_ADDR']);
+            $this->set('ip', get_ip());
         }
 
         cookie::instance()->set($config['cookie_name'], $sid, $config['cookie_expire']);
@@ -53,7 +53,7 @@ class session {
     }
 
     private function gen_session_id() {
-        return md5($_SERVER['HTTP_HOST'] . $_SERVER['REMOTE_ADDR'] . time() . rand(1, 999));
+        return md5($_SERVER['HTTP_HOST'] . get_ip() . time() . rand(1, 999));
     }
 
 }

@@ -91,8 +91,7 @@ if ($settings['count_online_visitors']) {
     }
 
 
-    $ip = $_SERVER["REMOTE_ADDR"];
-//$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    $ip = get_ip();
 
     $time = time();
     $timeout = $time - $timeoutseconds;
