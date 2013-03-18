@@ -296,10 +296,11 @@ print "<center><p class=title> $phrases[cp_visitors_statics] </p>
      $qr=db_query("select * from store_access_log order by id desc");
      print "<center>
      <p class=title>$phrases[access_log]</p>
-     <table width=90% class=grid>";
-       print "<tr><td><b>$phrases[username]</b></td><td><b>$phrases[the_date]</b></td><td><b>$phrases[the_status]</b></td></tr>";   
+     <table class=grid>";
+       print "<tr><td><b>$phrases[username]</b></td><td><b>$phrases[the_date]</b></td><td><b>$phrases[the_status]</b></td><td><b>IP</b></td></tr>";   
      while($data = db_fetch($qr)){
-         print "<tr><td>$data[username]</td><td>$data[date]</td><td>$data[status]</td></tr>";
+         toggle_tr_class();
+         print "<tr class='$tr_class'><td>$data[username]</td><td>$data[date]</td><td>$data[status]</td><td>$data[ip]</td></tr>";
      }
      print "</table></center>";
  }

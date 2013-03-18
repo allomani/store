@@ -127,7 +127,7 @@ $tr_class="row_1";
  
     print "</b></td>
      <td>".get_date($data[date])."</td> 
-     <td><a href='index.php?action=client_edit&id=$data_user[id]'>$data_user[username]</a></td>
+     <td><a href='clients.php?action=edit&id=$data_user[id]'>$data_user[username]</a></td>
      <td>$data[billing_name]</td>
      <td><a href='orders.php?action=orders_edit&id=$data[id]'>$phrases[edit]</a> - <a href='orders.php?action=orders_del&id=$data[id]' onClick=\"return confirm('$phrases[are_you_sure]');\">$phrases[delete]</a></td>";
      
@@ -524,7 +524,7 @@ $tr_color="#F0F0F0";
   <table width=100%>
   <tr><td><b>$phrases[the_client]</b></td><td>";
   $data_client = db_qr_fetch("select username,id from store_clients where id='$data[userid]'");
-  print "<a href=\"index.php?action=client_edit&id=$data_client[id]\">$data_client[username]</a>";
+  print "<a href=\"clients.php?action=edit&id=$data_client[id]\">$data_client[username]</a>";
   print "</td></tr>
  
  <tr><td><b>$phrases[order_date]</b></td><td>".get_date($data['date'],"d M Y h:i")."</td></tr>";

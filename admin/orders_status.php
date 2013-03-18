@@ -126,7 +126,7 @@ print "<ul class='nav-bar'>
 
 <center><table width=95% class=grid>
 <tr><td>$phrases[the_name]</td><td><input type=text name=name size=30 value=\"$data[name]\"></td></tr>
-<tr><td>$phrases[text_color]</td><td><input type=text name=text_color size=30 value=\"$data[text_color]\" dir=ltr></td></tr>
+<tr><td>$phrases[text_color]</td><td><input type=color name=text_color size=30 value=\"$data[text_color]\" dir=ltr></td></tr>
 
 <tr><td>$phrases[the_description]</td><td><textarea name=details cols=40 rows=5>$data[details]</textarea></td></tr> 
 
@@ -158,7 +158,7 @@ print "<ul class='nav-bar'>
 
 <center><table width=95% class=grid>
 <tr><td>$phrases[the_name]</td><td><input type=text name=name size=30></td></tr>
-<tr><td>$phrases[text_color]</td><td><input type=text name=title size=30  dir=ltr></td></tr>
+<tr><td>$phrases[text_color]</td><td><input type=color name=title size=30  dir=ltr></td></tr>
 <tr><td>$phrases[the_description]</td><td><textarea name=details cols=40 rows=5></textarea></td></tr>   
 
  <tr><td> $phrases[show_payment_options] : </td><td>" ;

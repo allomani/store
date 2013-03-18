@@ -19,7 +19,7 @@ function get_timezones() {
 }
 //----------------- Admin Path Links ---------
 function print_admin_path_links($cat, $filename = "") {
-    global $phrases, $global_align;
+    global $phrases;
 
     $dir_data['cat'] = intval($cat);
     while ($dir_data['cat'] != 0) {
@@ -94,7 +94,7 @@ function print_admin_table($content, $width = "50%", $align = "center") {
         
        $expire_date  = datetime("",time()-(24*60*60*$access_log_expire));
        db_query("delete from store_access_log where date < '$expire_date'");
-       db_query("insert into store_access_log (username,date,status) values ('".db_escape($username)."','".datetime()."','$status')");
+       db_query("insert into store_access_log (username,date,status,ip) values ('".db_escape($username)."','".datetime()."','".db_escape($status)."','".db_escape(get_ip())."')");
    } 
    
    

@@ -37,7 +37,7 @@ $session->set('admin_password', md5($login_data['password']));
               }
             }else{
                   access_log_record($username,"Login Invalid Username");        
-                 print " <link href=\"smiletag-admin.css\" type=text/css rel=stylesheet>    \n";
+                 print " <link href=\"css/style.css\" type=text/css rel=stylesheet>    \n";
                     print "<br><center><table width=60% class=grid><tr><td align=center>   $phrases[cp_invalid_username] </td></tr></table></center>";
 
                     }
@@ -66,48 +66,47 @@ print "<html dir=$global_dir>
 print "<META http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
 <META http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
 print "<link href=\"css/style.css\" type=text/css rel=stylesheet>
-<center>
-<br>
-<table width=60% class=grid><tr><td align=center>
+
 
 <form action=\"login.php\" method=\"post\">
   <input type=\"hidden\" name=\"action\" value=\"login\" />
   <input type=\"hidden\" name=\"re_link\" value=\"".htmlspecialchars($re_link)."\">
-                 <table><tr><td><img src='images/users.gif'></td><td>
-
-                <table dir=$global_dir cellpadding=\"0\" cellspacing=\"3\" border=\"0\">
-                <tr>
-                        <td class=\"smallfont\">$phrases[cp_username]</td>
-                        <td><input type=\"text\" class=\"button\" name=\"username\"  size=\"10\" tabindex=\"1\" ></td>
-                        <td class=\"smallfont\" colspan=\"2\" nowrap=\"nowrap\"></td>
+           <div class='login_form_wrapper'>
+           <div class='login_form'>      
+<table>
+                  <tr>
+                   
+                        <td><input type=\"text\" class=\"button\" name=\"username\"  size=\"40\" tabindex=\"1\" placeholder=\"$phrases[cp_username]\" required='required'></td>
+                   
                 </tr>
                 <tr>
-                        <td class=\"smallfont\">$phrases[cp_password]</td>
-                        <td><input type=\"password\"  name=\"password\" size=\"10\" tabindex=\"2\" /></td>
+               
                         <td>
-                        <input type=\"submit\" class=\"button\" value=\"$phrases[cp_login_do]\" tabindex=\"4\" accesskey=\"s\" /></td>
+                       
+                        <input type=\"password\"  id='password' name=\"password\" size=\"40\" tabindex=\"2\" placeholder=\"$phrases[cp_password]\" required='required'></td> 
                 </tr>
 
-</td>
-</tr>
+                <tr>
+                <td class='text-center'>
+                   <input type=\"submit\" class=\"button\" value=\"$phrases[cp_login_do]\" tabindex=\"4\">
+                </td>
                 </table>
-             
-                </td></tr></table>
-                </form> </td></tr></table>
-                </center>\n";
+                </div>
+             </div>
+                </form>";
 
 
 if(COPYRIGHTS_TXT_ADMIN_LOGIN){
 if($global_lang=="arabic"){
     print "<br>
                 <center>
-<table width=60% class=grid><tr><td align=center>
+<table style='border-radius: 8px;position: absolute;bottom: 10px;margin: 5px;' class=grid><tr><td align=center>
   جميع حقوق البرمجة محفوظة <a href='http://allomani.com' target='_blank'> للوماني للخدمات البرمجية </a>  © ".SCRIPT_YEAR."
 </td></tr></table></center>";
 }else{
 print "<br>
                 <center>
-<table width=60% class=grid><tr><td align=center>
+<table style='border-radius: 8px;position: absolute;bottom: 10px;margin: 5px;' class=grid><tr><td align=center>
   Copyright © ".SCRIPT_YEAR." <a href='http://allomani.com' target='_blank'>Allomani&trade;</a>  - All Programming rights reserved
 </td></tr></table></center>";
 }
