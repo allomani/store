@@ -17,11 +17,11 @@ if ($action == "edit") {
 
 load_settings();
 
-print "<center>
+print "
  <p align=center class=title>  $phrases[the_settings] </p>
  <form action='settings_general.php' method=post>
  <input type=hidden name=action value='edit'>
- <table width=70% class=grid>
+ <table  class=grid>
   
  <tr><td>  $phrases[site_name] : </td><td><input type=text name=stng[sitename] size=30 value='$settings[sitename]'> &nbsp; </td></tr>
   <tr><td> $phrases[show_sitename_in_subpages] </td><td>";
@@ -59,7 +59,7 @@ print "<option value='rtl' $chk1>$phrases[right_to_left]</option>
    
   </table>
    <br>
-   <table width=70% class=grid>
+   <table  class=grid>
   <tr><td>  $phrases[cp_enable_browsing]</td><td><select name=stng[enable_browsing]>";
 if ($settings['enable_browsing'] == "1") {
     $chk1 = "selected";
@@ -75,7 +75,7 @@ print "<option value='1' $chk1>$phrases[cp_opened]</option>
   </td></tr>
    </table>
    <br>
-   <table width=70% class=grid>
+   <table  class=grid>
  <tr><td>  $phrases[products_perpage] : </td><td><input type=text name=stng[products_perpage] size=5 value='$settings[products_perpage]'></td></tr>
  <tr><td>  $phrases[admin_products_perpage] : </td><td><input type=text name=stng[admin_products_perpage] size=5 value='$settings[admin_products_perpage]'></td></tr>
   
@@ -96,7 +96,7 @@ print "<option value='1' $chk1>$phrases[cp_opened]</option>
 
     </table>
      <br>
-   <table width=70% class=grid>
+   <table  class=grid>
    <tr><td> $phrases[visitors_can_sort_products] : </td><td>";
 print_select_row("stng[visitors_can_sort_products]", array($phrases['no'], $phrases['yes']), $settings['visitors_can_sort_products']);
 print "</td></tr>
@@ -142,9 +142,9 @@ print "<option value='asc' $chk1>$phrases[asc]</option>
 
  
   <br>    
-  <fieldset style=\"width:70%;\">
+  <fieldset>
   <legend>$phrases[product_img]</legend>    
-   <table width=100%>
+   <table>
  
  <tr><td>  $phrases[width] : </td><td><input type=text name=stng[products_img_width] size=5 value='$settings[products_img_width]'></td></tr>
   <tr><td>  $phrases[height] : </td><td><input type=text name=stng[products_img_height] size=5 value='$settings[products_img_height]'></td></tr>
@@ -156,9 +156,9 @@ print "</td></tr>
   </fieldset>          
     
  <br>  
- <fieldset style=\"width:70%;\">
+ <fieldset>
   <legend>$phrases[product_thumb]</legend>    
-   <table width=100%>
+   <table>
  
  <tr><td>  $phrases[width] : </td><td><input type=text name=stng[products_thumb_width] size=5 value='$settings[products_thumb_width]'></td></tr>
   <tr><td>  $phrases[height] : </td><td><input type=text name=stng[products_thumb_height] size=5 value='$settings[products_thumb_height]'></td></tr>
@@ -171,9 +171,9 @@ print "</td></tr>
   
   
   <br>  
- <fieldset style=\"width:70%;\">
+ <fieldset>
   <legend>$phrases[products_photos_thumb]</legend>    
-   <table width=100%>
+   <table >
  
  <tr><td>  $phrases[width] : </td><td><input type=text name=stng[products_photos_thumb_width] size=5 value='$settings[products_photos_thumb_width]'></td></tr>
   <tr><td>  $phrases[height] : </td><td><input type=text name=stng[products_photos_thumb_height] size=5 value='$settings[products_photos_thumb_height]'></td></tr>
@@ -186,9 +186,9 @@ print "</td></tr>
   
   
     <br> 
-<fieldset style=\"width:70%\">
+<fieldset>
 <legend><b>$phrases[the_comments]</b></legend> 
-<table width=100%> 
+<table > 
      <tr><td> $phrases[max_letters] : </td><td><input type=text name=stng[comments_max_letters] size=5 value='$settings[comments_max_letters]'>  </td></tr>
  <tr><td> $phrases[commets_per_request] : </td><td><input type=text name=stng[commets_per_request] size=5 value='$settings[commets_per_request]'>  </td></tr>
 
@@ -211,9 +211,9 @@ print "</td></tr>
  </table>
  </fieldset>  
         <br>     
- <fieldset style=\"width:70%\">
+ <fieldset>
  <legend><b>$phrases[the_reports]</b></legend>
-  <table width=100%>
+  <table >
 
   <tr><td> $phrases[report_do] : </td><td>";
 print_select_row("stng[reports_enabled]", array("0" => $phrases['disabled'], "1" => $phrases['enabled']), $settings['reports_enabled']);
@@ -233,7 +233,7 @@ print "
  </fieldset>
  
 <br>
- <table width=70% class=grid>
+ <table  class=grid>
 
  <tr><td>$phrases[the_search] : </td><td><select name=stng[enable_search]>";
 if ($settings['enable_search']) {
@@ -252,7 +252,7 @@ print "<option value=1 $chk1>$phrases[enabled]</option>
 
    </table>
    <br>
- <table width=70% class=grid>
+ <table  class=grid>
   <tr><td>$phrases[default_style]</td><td><select name=stng[default_styleid]>";
 $qrt = db_query("select * from store_templates_cats order by id asc");
 while ($datat = db_fetch($qrt)) {
@@ -264,26 +264,27 @@ print "</select>
                      
    <br>
  
-  <fieldset style=\"width:70%\">
+  <fieldset>
  <legend><b>$phrases[time_and_date]</b></legend>
- <table width=100%>
+ <table >
  <tr><td>$phrases[timezone]</td><td>";
 print_select_row("stng[timezone]", get_timezones(), $settings['timezone'], "dir='ltr'");
-/*
-  <select name='stng[timezone]' dir='ltr'> ";
-  $zones = get_timezones();
-  foreach($zones as $zone){
-  print "<option value=\"$zone[value]\"".iif($zone[value]==$settings['timezone'], " selected").">$zone[name]</option>";
-  }
-
-  print "</select> */
 print "</td></tr>
     <tr><td>  $phrases[date_format] </td><td><input type=text dir=ltr name=stng[date_format] size=30 value=\"$settings[date_format]\"></td></tr>
+        
+ <tr><td>اسماء الأشهر بالعربية</td><td>";
+print_select_row("stng[arabic_date_months]", array(0=>$phrases['no'],1=>$phrases['yes']), $settings['arabic_date_months']);
+print "</td></tr>
+  
+ <tr><td>اسماء الأيام بالعربية</td><td>";
+print_select_row("stng[arabic_date_days]", array(0=>$phrases['no'],1=>$phrases['yes']), $settings['arabic_date_days']);
+print "</td></tr>
+
 </table>
  
  </fieldset>
    <br>
- <table width=70% class=grid>
+ <table  class=grid>
 
 
  <tr><td>$phrases[os_and_browsers_statics] : </td><td><select name=stng[count_visitors_info]>";
@@ -329,7 +330,7 @@ print "<option value=1 $chk1>$phrases[enabled]</option>
     </table>
                      
                      <br>
- <table width=70% class=grid>
+ <table  class=grid>
     <tr><td>$phrases[registration] : </td><td><select name=stng[members_register]>";
 if ($settings['members_register']) {
     $chk1 = "selected";
@@ -380,7 +381,7 @@ print "<option value=1 $chk1>$phrases[enabled]</option>
   </table>
                      <br>
     
- <table width=70% class=grid>                
+ <table  class=grid>                
                    
  <tr><td>$phrases[show_prev_votes] : </td><td><select name=stng[other_votes_show]>";
 if ($settings['other_votes_show']) {
@@ -402,7 +403,7 @@ print "</td></tr>
  </table><br>
  
  
- <table width=70% class=grid>
+ <table class=grid>
  <tr><td>$phrases[emails_msgs_default_type] : </td><td><select name=stng[mailing_default_use_html]>";
 if ($settings['mailing_default_use_html']) {
     $chk1 = "selected";
@@ -430,7 +431,7 @@ if (is_array($pls)) {
 
 print "
   <br>
-                    <table width=70% class=grid>
+                    <table  class=grid>
   <tr><td>  $phrases[uploader_system] : </td><td><select name=stng[uploader]>";
 if ($settings['uploader']) {
     $chk1 = "selected";
@@ -450,9 +451,11 @@ print "<option value=1 $chk1>$phrases[enabled]</option>
 <tr><td> $phrases[uploader_thumb_width] : </td><td><input type=text name=stng[uploader_thumb_width] size=5 value='$settings[uploader_thumb_width]'> $phrases[pixel] </td></tr>
 <tr><td>  $phrases[uploader_thumb_hieght]  : </td><td><input type=text name=stng[uploader_thumb_hieght] size=5 value='$settings[uploader_thumb_hieght]'> $phrases[pixel] </td></tr>
 
-
- <tr><td colspan=2 align=center><input type=submit value=' $phrases[edit] '></td></tr>
- </table></center>";
+</table>
+ <fieldset class='text-center'>
+ <input type=submit value=' $phrases[edit] '>
+</fieldset>
+ ";
 
 
 //-----------end ----------------

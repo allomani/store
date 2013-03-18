@@ -92,6 +92,9 @@ input{font-family:inherit}
     padding-right:5px;
 }
 
+table {
+    width:100%;
+}
 
 /*----------  TABLES COLORS ---------*/
 .row_1{
@@ -165,33 +168,6 @@ TD {
 FORM {
     margin: 0px
 }
-DIV.centermain {
-    PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px
-}
-DIV.main {
-    PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; WIDTH: 99%; PADDING-TOP: 0px
-}
-
-A.tooltip {
-    COLOR: black; BORDER-BOTTOM: #aaa 1px dashed; TEXT-DECORATION: none
-}
-A.tooltip:hover {
-    COLOR: black; BORDER-BOTTOM: #aaa 1px dashed; TEXT-DECORATION: none
-}
-A.tooltiplink {
-    DISPLAY: block; WIDTH: 100%
-}
-A.tooltiplink:hover {
-    TEXT-DECORATION: none
-}
-DIV.footer {
-    CLEAR: both; MARGIN-TOP: 10px
-}
-
-
-.small{
-    FONT-SIZE: 15px;
-}
 
 table.grid {
     border: 1px solid #ccc;
@@ -263,11 +239,14 @@ table.grid tr.odd th, table.grid tr.odd td {
 }
 
 
-.center {
+.text-center {
     text-align: center;
 
 }
 
+.center {
+    margin: 0 auto;
+}
 
 .blocks_group li {
     list-style-type: none;

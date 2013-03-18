@@ -27,8 +27,6 @@ $sitemap_perpage = 40000;
 $arabic_date_months = true;
 $arabic_date_days = true;
 
-$access_log_expire=90 ; // days
-
 $admin_referer_check = true;
 
 //$disable_backup = "عفوا , هذه الخاصية غير مفعلة في النسخة التجريبية" ;

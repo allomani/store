@@ -1466,7 +1466,7 @@ function is_serialized($string) {
 
 //--------------- date -------------
 function get_date($time = 0, $format = "") {
-    global $arabic_date_months, $arabic_date_days, $settings;
+    global $settings;
 
     if (!$time) {
         $time = time();
@@ -1475,11 +1475,11 @@ function get_date($time = 0, $format = "") {
         $format = $settings['date_format'];
     }
     $date = date($format, $time);
-    if ($arabic_date_months) {
+    if ($settings['arabic_date_months']) {
         $date = str_ireplace(array("jan", "feb", "mar", "apr", "may", "jun", "Jul", "aug", "sep", "oct", "nov", "dec"), array("يناير", "فبراير", "مارس", "ابريل", "مايو", "يونيو", "يوليو", "اغسطس", "سبتمبر", "اكتوبر", "نوفمبر", "ديسمبر"), $date);
     }
 
-    if ($arabic_date_days) {
+    if ($settings['arabic_date_days']) {
         $date = str_ireplace(array("sat", "sun", "mon", "tue", "wed", "thu", "fri"), array("السبت", "الاحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"), $date);
     }
 
