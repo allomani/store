@@ -40,8 +40,8 @@ print "<center>
 <input type=hidden name=op value='add_main_user'>
 <br><br><table width=50% class=grid>
 <tr><td colspan=2><h2>$phrases[create_main_user]</h2></td></tr>
-<tr><td>$phrases[username]</td><td><input type=text name=cp_username dir=ltr></td></tr>
-<tr><td>$phrases[password]</td><td><input type=text id='cp_password'  name=cp_password dir=ltr onChange=\"passwordStrength(this.value);\" onkeyup=\"passwordStrength(this.value);\"> &nbsp; <input type=button value=\"Generate\" onClick=\"document.getElementById('cp_password').value=GenerateAndValidate(12,1);passwordStrength(document.getElementById('cp_password').value);\"></td></tr>
+<tr><td>$phrases[username]</td><td><input type=text name=cp_username dir=ltr required='required'></td></tr>
+<tr><td>$phrases[password]</td><td><input type=text id='cp_password'  name='cp_password' dir=ltr required='required'> &nbsp; <input type=button value=\"Generate\" id='generate_pwd'></td></tr>
 <tr><td>$phrases[email]</td><td><input type=text name=cp_email dir=ltr></td></tr>
 
 <tr><td></td><td>
@@ -51,6 +51,23 @@ print "<center>
 <tr><td colspan=2 align=center><input type=submit value=' $phrases[add_button] '></td></tr>
 </table>
 </form></center>";
+?>
+ <script>
+        $(function(){
+           $('#generate_pwd').click(function(e){
+           $('#cp_password').val(GenerateAndValidate(12,1));
+             passwordStrength($('#cp_password').val());
+        });
+        $('#cp_password').on('change',function(){
+            passwordStrength($(this).val());
+        });
+         $('#cp_password').on('keyup',function(){
+            passwordStrength($(this).val());
+        });
+
+        });
+        </script>
+<?
 die();   
 }
 

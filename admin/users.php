@@ -13,85 +13,129 @@ if ($action == "permisions") {
     <li>$data[username]</li>
         </ul>
         
-    <form method=post action=users.php>
-           <input type=hidden value='$id' name='user_id'>
+    <form method=post action='users.php'>
+           <input type=hidden value='$id' name='id'>
                <input type=hidden value='permisions_edit' name='action'>";
 
-    print "<center><span class=title>$phrases[permissions_manage]</span><br><br>
-           <table  width=\"100%\" class=\"grid\">
+    print "<p class=title align=center>$phrases[permissions_manage]</p>
+   
+<fieldset>
+<legend>$phrases[cats_permissions]</legend>";
 
-        <tr><td>
-        <center><span class=title>$phrases[cats_permissions]</span> <br><br>
-$phrases[cats_permissions_note]";
+         //--------------- categories -------------------
+        $categories = array();
+        $qr_cats = db_query("select id, name ,cat,users from store_products_cats order by ord");
+        while ($data_cats = db_fetch($qr_cats)) {
+            //  $shipping_methods_arr = ;// get_product_cat_shipping_methods($data_cats['id'],true);//
 
-    print " </center></td></tr>
-           </table><br>";
+            $categories[] = array(
+                "key" => $data_cats['id'],
+                "title" => $data_cats['name'],
+                "parent" => $data_cats['cat'],
+                "select" => iif(in_array($id, explode(',', $data_cats['users'])), true, false)
+            );
+        }
+
+
+        print "
+        
+    <input type='radio' id='all_cats_yes' name='all_cats' value=1 onClick=\"\$('#cats_tree_wrapper').hide();\" " . iif($data['perm_all_cats'], " checked") . ">
+    <label for='all_cats_yes'>جميع الأقسام </label><br>
+           
+    <input type='radio' id='all_cat_no' name='all_cats' value=0 onClick=\"\$('#cats_tree_wrapper').show();\"" . iif(!$data['perm_all_cats'], " checked") . ">
+    <label for='all_cat_no'>أقسام محددة </label> 
+    ";
+
+        print "<div id='cats_tree_wrapper'>";
+        print_dynatree_div($categories, 'cats_tree');
+        print "</div>
+      <input type='hidden' name='cats' id='cats' value=''>";
+        print "</fieldset>";
+        print iif($data['perm_all_cats'], "<script>$('#cats_tree_wrapper').hide();</script>");
+
 
     //------------------------------------------------------------------------------
 
 
-    print "<table  width=\"100%\" class=\"grid\">
-     <tr> <td colspan=5 align=center><span class=title>$phrases[cp_sections_permissions]</span></td></tr>
-            <tr><td><table width=100%><tr>";
+    print "<fieldset>
+    <legend>$phrases[cp_sections_permissions]</legend>
+     <table width=100%><tr>";
 
     $prms = explode(",", $data['cp_permisions']);
 
-
-    if (is_array($permissions_checks)) {
+    $permissions_checks = (array) $permissions_checks;
+    
 
         $c = 0;
-        for ($i = 0; $i < count($permissions_checks); $i++) {
+       $i=0;
+       foreach($permissions_checks as $key=>$val){
 
-            $keyvalue = current($permissions_checks);
 
             if ($c == 4) {
                 print "</tr><tr>";
                 $c = 0;
             }
 
-            if (in_array($keyvalue, $prms)) {
-                $chk = "checked";
-            } else {
-                $chk = "";
-            }
-
-            print "<td width=25%><input  name=\"cp_permisions[$i]\" type=\"checkbox\" value=\"$keyvalue\" $chk>" . key($permissions_checks) . "</td>";
+         
+            print "<td width=25%><input  name=\"cp_permisions[$i]\" type=\"checkbox\" value=\"$val\" ".iif(in_array($val, $prms)," checked").">" . $key . "</td>";
 
 
             $c++;
+            $i++;
 
-            next($permissions_checks);
         }
-    }
-    print "</tr></table></td>
+    
+    print "
+        </table>
+        </fieldset>";
 
-            </tr></table>";
+    print "<fieldset style='text-align:center;'>
+        <input type=submit value='$phrases[edit]'>
+            </fieldset>
+            
+</form>";
+    
+      ?>
+        <script type="text/javascript">
+            $(function(){
+                init_dynatree('cats_tree','cats');
+            });                                                 
+        </script>
+        <?
 
-    print "<center> <br><input type=submit value='$phrases[edit]'></form>";
 }
 //---------------------------- Users ------------------------------------------
-if (!$action || $action == "users" or $action == "edit_ok" or $action == "add_ok" or $action == "del" || $action == "permisions_edit") {
+if (!$action || $action == "users" || $action == "edit_ok" || $action == "add_ok" || $action == "del" || $action == "permisions_edit") {
 
 
     if ($action == "permisions_edit") {
 
         if_admin();
 
-        $user_id = intval($user_id);
-
-        if ($cp_permisions) {
-            foreach ($cp_permisions as $value) {
-                $perms .= "$value,";
+        $id = (int) $id;
+        $all_cats = (int) $all_cats;
+        $perms = implode(",", (array) $cp_permisions);
+      
+        db_query("update store_user set cp_permisions='".db_escape($perms)."',perm_all_cats='$all_cats' where id='$id'");
+      
+          //--------------
+        $cats_arr = (array) explode(",", $cats);
+        $qr = db_query("select id,users from store_products_cats");
+        while ($data = db_fetch($qr)) {
+            $cat_users = (array) explode(",", $data['users']);
+            if (($key = array_search($id, $cat_users)) !== false) {
+                unset($cat_users[$key]);
             }
-        } else {
-            $perms = '';
+            if (in_array($data['id'], $cats_arr)) {
+                $cat_users[] = $id;
+            }
+            db_query("update store_products_cats set users = '" . implode(",", $cat_users) . "' where id='$data[id]'");
         }
-
-        db_query("update store_user set cp_permisions='$perms' where id='$user_id'");
+    //---------------
     }
 
     //---------------------------------------------
-    if ($action == "del" && $id) {
+    if ($action == "del") {
         if ($user_info['groupid'] == 1) {
             db_query("delete from store_user where id='$id'");
         } else {
@@ -137,11 +181,14 @@ if (!$action || $action == "users" or $action == "edit_ok" or $action == "add_ok
     }
 
     if ($user_info['groupid'] == 1) {
-        print "<a href='users.php?action=add' class='add'>$phrases[cp_add_user]</a>";
+   
 
 //----------------------------------------------------
         print "<p align=center class=title>$phrases[the_users]</p>";
-        $result = db_query("select * from store_user order by id asc");
+        
+             print "<p><a href='users.php?action=add' class='add'>$phrases[cp_add_user]</a></p>";
+             
+        $qr = db_query("select * from store_user order by id asc");
 
 
         print " <center> <table width=\"100%\" class=\"grid\">
@@ -153,13 +200,11 @@ if (!$action || $action == "users" or $action == "edit_ok" or $action == "add_ok
                 <td align='center'><b>$phrases[the_options]</b></td>
         </tr>";
 
-        while ($data = db_fetch($result)) {
+        while ($data = db_fetch($qr)) {
 
+            toggle_tr_class();
 
-
-
-
-            print "<tr>
+            print "<tr class='$tr_class'>
                 <td> $data[username]</td>
                 <td>" . iif($data[email], $data[email], '-') . "</td>
                 <td>" . iif($data['group_id'] == 1, $phrases[cp_user_admin], $phrases[cp_user_mod]) . "</td>
@@ -210,12 +255,12 @@ if ($action == "edit") {
     <INPUT TYPE=\"hidden\" NAME=\"id\" \" value=\"$data[id]\" >
 <INPUT TYPE=\"hidden\" NAME=\"action\"  value=\"edit_ok\" >
 
-   <TD width=\"100\"><font color=\"#006699\"><b>$phrases[cp_username] : </b></font> </TD>
-   <TD width=\"614\"><INPUT TYPE=\"text\" NAME=\"username\" size=\"32\" value=\"$data[username]\" > </TD>
+   <TD width=\"100\"><b>$phrases[cp_username] : </b></TD>
+   <TD width=\"614\"><INPUT TYPE=\"text\" NAME=\"username\" size=\"32\" value=\"$data[username]\" required='required'> </TD>
   </TR>
     <TR>
-   <TD width=\"100\"><font color=\"#006699\"><b>$phrases[cp_password] : </b></font> </TD>
-   <TD width=\"614\"><INPUT TYPE=\"text\" NAME=\"password\" size=\"32\" onChange=\"passwordStrength(this.value);\" onkeyup=\"passwordStrength(this.value);\"> &nbsp; <input type=button value=\"Generate\" onClick=\"document.getElementById('password').value=GenerateAndValidate(12,1);passwordStrength(document.getElementById('password').value);\">
+   <TD width=\"100\"><b>$phrases[cp_password] : </b></TD>
+   <TD width=\"614\"><INPUT type=\"text\" name=\"password\" id='password'  dir=ltr size=\"32\" required='required'> &nbsp; <input type=button value=\"Generate\" id='generate_pwd'>
     <br>* $phrases[leave_blank_for_no_change] </TD>
   </TR>
   <tr><td></td><td>
@@ -223,7 +268,7 @@ if ($action == "edit") {
 <div id=\"passwordStrength\" class=\"strength0\"></div>
 </td></tr>
    <TR>
-   <TD width=\"100\"><font color=\"#006699\"><b>$phrases[cp_email] : </b></font> </TD>
+   <TD width=\"100\"><b>$phrases[cp_email] : </b></TD>
    <TD width=\"614\"><INPUT TYPE=\"text\" NAME=\"email\" size=\"32\" value=\"$data[email]\" > </TD>
   </TR>\n";
 
@@ -231,8 +276,8 @@ if ($action == "edit") {
             print "<input type='hidden' name='group_id' value='2'>";
         } else {
             print "<TR>
-   <TD width=\"100\"><font color=\"#006699\"><b>$phrases[cp_user_group]: </b></font> </TD>
-   <TD width=\"614\">\n";
+   <td width=\"100\"><b>$phrases[cp_user_group]: </b> </TD>
+   <td>";
 
 
             if ($data['group_id'] == 1) {
@@ -254,12 +299,29 @@ if ($action == "edit") {
 
 
   <TR>
-   <TD COLSPAN=\"2\" width=\"685\">
-   <p align=\"center\"><INPUT TYPE=\"submit\" name=\"usereditbutton\" VALUE=\"$phrases[edit]\"></TD>
+   <td colspan=\"2\" align=center>
+  <input TYPE=\"submit\"  value=\"$phrases[edit]\"></td>
   </TR>
- </TABLE>
-</FORM>
-</center>\n";
+ </table>
+</form>";
+        
+      ?>
+        <script>
+        $(function(){
+           $('#generate_pwd').click(function(e){
+           $('#password').val(GenerateAndValidate(12,1));
+             passwordStrength($('#password').val());
+        });
+        $('#password').on('change',function(){
+            passwordStrength($(this).val());
+        });
+         $('#password').on('keyup',function(){
+            passwordStrength($(this).val());
+        });
+
+        });
+        </script>
+        <?
     } else {
         print "<center> $phrases[err_wrong_url]</center>";
     }
@@ -270,38 +332,35 @@ if ($action == "add") {
         <li><a href='users.php?action=users'>$phrases[the_users]</a></li>
     <li>$phrases[add_button]</li>
         </ul>
-        
-
-   <center>
-
+  
+<p class=title align=center> $phrases[cp_add_user] </p>
+    
 <form method=\"post\" action=\"users.php\">
-<INPUT TYPE=\"hidden\" name=\"action\"  value=\"add_ok\" >
+<input TYPE=\"hidden\" name=\"action\"  value=\"add_ok\" >
 
 
- <table width=\"70%\" class=grid>
-    <TR>
-   <td colspan=2 align=center><span class=title> $phrases[cp_add_user] </span></td></tr>
-   <tr>
+ <table class=grid>
+  
 
 
-   <TD width=\"150\"><font color=\"#006699\"><b>$phrases[cp_username]: </b></font> </TD>
-   <TD ><INPUT TYPE=\"text\" NAME=\"username\" size=\"32\"  </TD>
+   <TD width=\"150\"><b>$phrases[cp_username]: </b></TD>
+   <TD ><INPUT TYPE=\"text\" NAME=\"username\" size=\"32\" required='required'>  </TD>
   </TR>
     <TR>
-   <TD width=\"150\"><font color=\"#006699\"><b>$phrases[cp_password] : </b></font> </TD>
-   <TD ><INPUT TYPE=\"text\" NAME=\"password\" size=\"32\" onChange=\"passwordStrength(this.value);\" onkeyup=\"passwordStrength(this.value);\"> &nbsp; <input type=button value=\"Generate\" onClick=\"document.getElementById('password').value=GenerateAndValidate(12,1);passwordStrength(document.getElementById('password').value);\"> </TD>
+   <TD width=\"150\"><b>$phrases[cp_password] : </b> </TD>
+   <TD ><INPUT TYPE=\"text\" name=\"password\" id='password' size=\"32\" required='required'>  &nbsp; <input type=button value=\"Generate\" id='generate_pwd'> </td>
   </TR>
   <tr><td></td><td>
 <div id=\"passwordDescription\">-</div>
 <div id=\"passwordStrength\" class=\"strength0\"></div>
 </td></tr>
    <TR>
-   <TD width=\"150\"><font color=\"#006699\"><b>$phrases[cp_email] : </b></font> </TD>
-   <TD ><INPUT TYPE=\"text\" NAME=\"email\" size=\"32\" > </TD>
+   <TD width=\"150\"><b>$phrases[cp_email] : </b> </TD>
+   <TD ><input type=\"text\" name=\"email\" size=\"32\" > </TD>
   </TR>
 
    <TR>
-   <TD width=\"150\"><font color=\"#006699\"><b>$phrases[cp_user_group]: </b></font> </TD>
+   <TD width=\"150\"><b>$phrases[cp_user_group]: </b> </TD>
    <TD >\n";
 
 
@@ -318,12 +377,29 @@ if ($action == "add") {
 
 
   <TR>
-   <TD COLSPAN=\"2\" >
-   <p align=\"center\"><INPUT TYPE=\"submit\" name=\"addbutton\" VALUE=\"$phrases[add_button]\"></TD>
+   <TD colspan=\"2\" align=center>
+<input TYPE=\"submit\" value=\"$phrases[add_button]\"></td>
   </TR>
  </TABLE>
 </form>
-</center><br><br>\n";
+";
+    ?>
+      <script>
+        $(function(){
+           $('#generate_pwd').click(function(e){
+           $('#password').val(GenerateAndValidate(12,1));
+             passwordStrength($('#password').val());
+        });
+        $('#password').on('change',function(){
+            passwordStrength($(this).val());
+        });
+         $('#password').on('keyup',function(){
+            passwordStrength($(this).val());
+        });
+
+        });
+        </script>
+ <?
 }
 
 //-----------end ----------------

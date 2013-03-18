@@ -418,6 +418,8 @@ function check_admin_login() {
             if ($data['username'] == $user_info['username'] && md5($data['password']) == $user_info['password']) {
                 $user_info['email'] = $data['email'];
                 $user_info['groupid'] = $data['group_id'];
+                $user_info['perm_all_cats'] = $data['perm_all_cats'];
+                
                 return true;
             } else {
                 return false;
@@ -1080,7 +1082,11 @@ function print_pages_links($start, $items_count, $items_perpage, $page_string) {
 function if_products_cat_admin($cats, $skip_zero_id = true) {
     global $user_info, $phrases;
 
-    if ($user_info['groupid'] != 1) {
+    if($user_info['perm_all_cats'] || $user_info['groupid'] == 1){
+        return true;
+    }
+  
+        
         $cats = (array) $cats;
 
         foreach ($cats as $cat) {
@@ -1099,7 +1105,7 @@ function if_products_cat_admin($cats, $skip_zero_id = true) {
                 }
             }
         }
-    }
+    
 }
 
 //---------- Get Products Cats --------//

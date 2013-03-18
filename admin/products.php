@@ -847,7 +847,7 @@ print "<center><p class=title>$phrases[add_cat] </p>
     $c=0;
     }
     
-                           print "<td><input type=\"checkbox\" name=\"user_id[]\" value=\"$datao[id]\"".iif($users_array[$datao['id']],' checked').iif($users_array[$datao['id']] && $users_array[$datao['id']] !=$id,' disabled').">$datao[username]</td>";
+                           print "<td><input type=\"checkbox\" name=\"user_id[]\" value=\"$datao[id]\"".iif($users_array[$datao['id']] || $datao['perm_all_cats'],' checked').iif($users_array[$datao['id']] && $users_array[$datao['id']] !=$id,' disabled').">$datao[username]</td>";
                            $c++;
                        }
                        print "</tr></table>";
