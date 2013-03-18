@@ -142,7 +142,7 @@ print "<p align=center class=title>$phrases[the_blocks]</p><br>
      print "<li id=\"item_$data[id]\" class='".iif($data['active'],"active","inactive")."'><center>
      <table width=100%>
      <tr>
-     <td class=\"handle\">
+     <td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'>
      
       </td>
      

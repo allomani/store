@@ -68,7 +68,7 @@ while($data = db_fetch($qr)){
     print "<div id=\"item_$data[id]\" class='$tr_class'>
 <table width=100%>
 <tr>
-<td class=\"handle\"></td>
+<td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
     <td width=30%>$data[class]</td><td width=30%>$data[name]</td>
     <td align='$global_align_x'>".iif($data['active'],"<a href='payment_gateways.php?action=disable&id=$data[id]'>$phrases[disable]</a>",
     "<a href='payment_gateways.php?action=enable&id=$data[id]'>$phrases[enable]</a>")." - 

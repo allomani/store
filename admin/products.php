@@ -441,8 +441,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
 
 
 //-------- List Cats ---------//
- print "<p align=$global_align><a href='products.php?action=products_cat_add&cat=$cat'><img src='images/add.gif' border=0> $phrases[add_cat]</a></p>";   
-
+ print "<p><a href='products.php?action=products_cat_add&cat=$cat' class='add'>$phrases[add_cat]</a></p>";   
 
 
        $qr = db_query("select * from store_products_cats where cat='$cat' order by ord asc");
@@ -467,7 +466,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
       <td width=2>
       <input type=checkbox name=id[] value='$data[id]'>
       </td>
-      <td class=\"handle\"></td>
+      <td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
       
       <td>
       

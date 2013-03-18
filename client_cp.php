@@ -11,8 +11,6 @@
 
                 //------------ update profile info ---------------------
 
-
-
                 //---------- email change confirmation -----------
                 if(check_email_address($email)){ 
                     if($settings['auto_email_activate']){
@@ -65,13 +63,10 @@
                             $m_custom_id=intval($custom_id[$i]);
                             $m_custom_name =$custom[$i] ;
 
-                            $qr = db_query("select id from store_clients_fields where cat='$m_custom_id' and member='".intval($member_data['id'])."'");
-                            if(db_num($qr)){
-                                db_query("update store_clients_fields set value='".db_escape($m_custom_name)."' where cat='$m_custom_id' and member='".intval($member_data['id'])."'");
-                            }else{
-                                db_query("insert into store_clients_fields (member,cat,value) values('".intval($member_data['id'])."','$m_custom_id','".db_escape($m_custom_name)."')");
-                            }
-
+                            members_db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ::id=':id'",
+                                    array('id'=>$member_data['id'])
+                                    );
+ 
                         }
                     }
                 }

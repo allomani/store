@@ -104,7 +104,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
                        
                         print "<div id=\"item_$data[id]\" style=\"float: $global_align;padding:10px;border: #CCC 1px dashed; margin:10px;\" onmouseover=\"this.style.backgroundColor='#EFEFEE'\" onmouseout=\"this.style.backgroundColor='#FFFFFF'\">
   
-    <div style=\"cursor: move;text-align:right;\" class=\"handle\"></div>  
+    <div class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></div>  
   
     <br>
    <img src=\"$scripturl/".get_image($data['thumb'])."\" title=\"$data[name]\"><br>

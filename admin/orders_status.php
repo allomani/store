@@ -80,7 +80,7 @@ while($data = db_fetch($qr)){
     print "<div id=\"item_$data[id]\" class='$row_class'>
 <table width=100%>
 <tr>
-<td class=\"handle\"></td>
+<td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
     <td width=20%><b>".iif($data['text_color'],"<font color=\"$data[text_color]\">$data[name]</font>",$data['name'])."</b></td>
     
     <td width=160 align=center>".iif($data['default'],"<b>$phrases[default]</b>","<a href='orders_status.php?action=set_default&id=$data[id]'>$phrases[set_default]</a>")."</td>";

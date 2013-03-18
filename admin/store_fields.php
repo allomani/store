@@ -148,7 +148,7 @@ db_query("update store_products_cats set `fields` = '".implode(",",$cat_fields).
 <div id=\"item_$data[id]\">
 <table width=100%>
 <tr class='$tr_class'>
-<td  class=\"handle\"></td>
+<td  class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
       
 <td width=400>$data[name]</td><td width=400>$data[title]</td>
 
@@ -381,7 +381,7 @@ if ($action == "fields_options_edit" || $action == "fields_options_add_ok" || $a
 <table width=100%>
             <input type=hidden name=\"option_id[$i]\" value=\"$data[id]\">
             
-            <tr><td class=\"handle\"></td>
+            <tr><td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
       <td><b>" . ($i + 1) . "</b></td>
             <td>$phrases[the_value] : <br><input name=\"option_value[$i]\" type=text size=20 value=\"$data[value]\"></td>
             <td>

@@ -122,7 +122,7 @@ if (!$action || $action == "news" || $action == "news_del" || $action == "news_e
                     print "<div id=\"item_$data[id]\" class='$tr_class'>
       <table width=100%><tr>
       
-      <td width=25 class=\"handle\">
+      <td width=25 class=\"handle\" title='$phrases[click_and_drag_to_change_order]'>
       </td>
       
       <td width=75%><a href='news.php?cat=$data[id]'>$data[name]</a></td>

@@ -17,11 +17,11 @@ print "
 <fieldset>
 <legend>$phrases[the_members]</legend>
 <table width=100%>";
-print "<tr><td width=24><img src='images/clients_custom_fields.gif' width=24></td><td class=row_2><a href='index.php?action=clients_fields'> $phrases[members_custom_fields]</a></td></tr>\n";
+print "<tr><td width=24><img src='images/clients_custom_fields.gif' width=24></td><td class=row_2><a href='clients_fields.php'> $phrases[members_custom_fields]</a></td></tr>\n";
 
 if(if_admin("",true)){  
-print "<tr><td width=24><img src='images/clients_remote_db.gif' width=24></td><td class=row_2><a href='index.php?action=clients_remote_db'>$phrases[cp_members_remote_db]</a></td></tr>\n";
-print "<tr><td width=24><img src='images/db_clean.gif' width=24></td><td class=row_1><a href='index.php?action=clients_local_db_clean'>$phrases[members_local_db_clean_wizzard]</a></td></tr>\n";
+print "<tr><td width=24><img src='images/clients_remote_db.gif' width=24></td><td class=row_2><a href='clients_remote_db.php'>$phrases[cp_members_remote_db]</a></td></tr>\n";
+print "<tr><td width=24><img src='images/db_clean.gif' width=24></td><td class=row_1><a href='clients_remote_db.php?action=clients_local_db_clean'>$phrases[members_local_db_clean_wizzard]</a></td></tr>\n";
 }
 print "</table></fieldset>";
 }

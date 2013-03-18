@@ -198,108 +198,59 @@ function check_member_login() {
 
 //----------- members custom fields ----------
 
-function get_member_field($name, $data, $action = "add", $memberid = 0) {
-    global $phrases;
+function get_member_field($name,$data,$value="",$search=false){
+      global $phrases;
 
-    $cntx = "";
+    $cntx = "" ;
 
 //----------- text ---------------
-    if ($data['type'] == "text") {
+if($data['type']=="text"){
 
-        if ($action == "edit") {
-            $dtsx = db_qr_fetch("select value from store_clients_fields where member='$memberid' and cat='$data[id]'");
-
-            $cntx .= "<input type=text name=\"$name\" value=\"$dtsx[value]\" $data[style]>";
-        } elseif ($action == "add") {
-            $cntx .= "<input type=text name=\"$name\" value=\"$data[value]\" $data[style]>";
-        } else {
-            $cntx .= "<input type=text name=\"$name\" value=\"\" $data[style]>";
-        }
+$cntx .= "<input type=text name=\"$name\" value=\"".iif($search,"",iif($value,$value,$data['value']))."\" $data[style]>";  
 
 //---------- text area -------------
-    } elseif ($data['type'] == "textarea") {
+}elseif($data['type']=="textarea"){
 
-        if ($action == "edit") {
-            $dtsx = db_qr_fetch("select value from store_clients_fields where member='$memberid' and cat='$data[id]'");
-
-            $cntx .= "<textarea name=\"$name\" $data[style]>$dtsx[value]</textarea>";
-        } elseif ($action == "add") {
-            $cntx .= "<textarea name=\"$name\" $data[style]>$data[value]</textarea>";
-        } else {
-            $cntx .= "<textarea name=\"$name\" $data[style]></textarea>";
-        }
+$cntx .= "<textarea name=\"$name\" $data[style]>".iif($search,"",iif($value,$value,$data['value']))."</textarea>"; 
 
 //-------- select -----------------
-    } elseif ($data['type'] == "select") {
+}elseif($data['type']=="select"){
+  
+     $cntx .= "<select name=\"$name\" $data[style]>";
+        if($search || !$data['required']){ $cntx .= "<option value=\"\">$phrases[without_selection]</option>";}
 
-        if ($action == "edit") {
-            $dtsx = db_qr_fetch("select value from store_clients_fields where member='$memberid' and cat='$data[id]'");
-        }
-
-        $cntx .= "<select name=\"$name\" $data[style]>";
-        if ($action == "search") {
-            $cntx .= "<option value=\"\">$phrases[without_selection]</option>";
-        }
-
-        $vx = explode("\n", $data['value']);
-        foreach ($vx as $value) {
-
-            if ($action == "edit" && $value == $dtsx['value']) {
-                $chk = "selected";
-            } else {
-                $chk = "";
+        $vx  = explode("\n",$data['value']);
+        foreach($vx as $value_f){
+              $value_f=trim($value_f);
+        $cntx .= "<option value=\"$value_f\"".iif($value==$value_f," selected").">$value_f</option>";
             }
-
-            $cntx .= "<option value=\"$value\" $chk>$value</option>";
-        }
         $cntx .= "</select>";
 
 //--------- radio ------------
-    } elseif ($data['type'] == "radio") {
+}elseif($data['type']=="radio"){
 
-        if ($action == "search") {
-            $cntx .= "<input type=\"radio\" name=\"$name\" value=\"\" $data[style] checked>$phrases[without_selection]<br>";
-        }
+        if($search || !$data['required']){ $cntx .= "<input type=\"radio\" name=\"$name\" value=\"\" $data[style] checked>$phrases[without_selection]<br>";}
 
-        if ($action == "edit") {
-            $dtsx = db_qr_fetch("select value from store_clients_fields where member='$memberid' and cat='$data[id]'");
-        }
-
-        $vx = explode("\n", $data['value']);
-        foreach ($vx as $value) {
-            if ($action == "edit" && $value == $dtsx['value']) {
-                $chk = "checked";
-            } else {
-                $chk = "";
+     
+        $vx  = explode("\n",$data['value']);
+        foreach($vx as $value_f){
+        $cntx .= "<input type=\"radio\" name=\"$name\" value=\"$value_f\" $data[style] ".iif($value==$value_f," checked")."> $value_f<br>";
             }
-            $cntx .= "<input type=\"radio\" name=\"$name\" value=\"$value\" $data[style] $chk> $value<br>";
-        }
 
 //-------- checkbox -------------
-    } elseif ($data['type'] == "checkbox") {
+}elseif($data['type']=="checkbox"){
 
-        if ($action == "edit") {
-            $dtsx = db_qr_fetch("select value from store_clients_fields where member='$memberid' and cat='$data[id]'");
-        }
 
-        $vx = explode("\n", $data['value']);
-        foreach ($vx as $value) {
-            if ($action == "edit" && $value == $dtsx['value']) {
-                $chk = "checked";
-            } else {
-                $chk = "";
+        $vx  = explode("\n",$data['value']);
+        foreach($vx as $value_f){
+       
+        $cntx .= "<input type=\"checkbox\" name=\"$name\" value=\"$value_f\" ".iif($value==$value_f,"checked").">$value_f<br>";
             }
-            $cntx .= "<input type=\"checkbox\" name=\"$name\" value=\"$value\"  $chk> $value<br>";
         }
-    }
-    return $cntx;
+return $cntx;
 }
 
-//-------- Members Custom Fields Value ----------
-function get_member_field_value($cat, $memberid) {
-    $dtsx = db_qr_fetch("select value from store_clients_fields where member='$memberid' and cat='$cat'");
-    return "$dtsx[value]";
-}
+
 
 //--------------- Account Activation Email --------------------
 function snd_email_activation_msg($id) {

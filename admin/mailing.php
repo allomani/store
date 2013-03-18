@@ -4,7 +4,7 @@ define('CWD', (($getcwd = getcwd()) ? $getcwd : '.'));
 define('IS_ADMIN', 1);
 $is_admin =1 ;
 
-include_once(CWD . "/global.php") ;
+require(CWD . "/global.php") ;
 
 if(!check_admin_login()){die("<center> $phrases[access_denied] </center>");} 
 
@@ -14,7 +14,7 @@ print "<html dir=$global_dir>\n";
 print "<meta http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
 <meta http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
 
-print "<link href=\"images/style.css\" type=text/css rel=stylesheet>
+print "<link href=\"css/style.css\" type=text/css rel=stylesheet>
 <script src='javascript.js' type=\"text/javascript\" language=\"javascript\"></script>";
 
 
@@ -74,13 +74,13 @@ if($send_to=="all"){
 
                if(($start+$perpage) < $data_count){
    print "<br><br>
-   <form action='mailing.php' method=post name='mailing_form'>
+   <form action='mailing.php' method=post name='mailing_form' id='mailing_form'>
           <input type=hidden name=conf value='1'>
            <input type=hidden name=datastring value=\"".base64_encode(serialize($mailing))."\">
            <input type=submit value=' $phrases[next_page] '>
            </form>";
            if($auto_pageredirect){
-           print "<script>mailing_form.submit();</script>";
+           print "<script>$('#mailing_form').submit();</script>";
            }
 
    }else{
@@ -153,7 +153,7 @@ if($send_to=="all"){
     <tr><td>$phrases[auto_pages_redirection]</td><td>
     <select name='mailing[auto_pageredirect]'>
     <option value=0>$phrases[no]</option>
-    <option value=1>$phrases[yes]</option>
+    <option value=1 selected>$phrases[yes]</option>
     </select>
     </td></tr>
 

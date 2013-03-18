@@ -85,7 +85,7 @@ if (!$action || $action == "edit_ok" || $action == "del" ||
             print "<div id=\"item_$data[id]\" class='$tr_class'>
 <table width=100%>
 <tr>
-<td class=\"handle\"></td>
+<td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
       <td width=60%>$data[name]</td>
     <td align=$global_align_x>" . iif($data['active'], "<a href='payment_methods.php?action=disable&id=$data[id]'>$phrases[disable]</a>", "<a href='payment_methods.php?action=enable&id=$data[id]'>$phrases[enable]</a>") . " -
     <a href='payment_methods.php?action=edit&id=$data[id]'>$phrases[edit]</a> - 

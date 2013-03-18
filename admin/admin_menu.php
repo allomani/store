@@ -101,8 +101,8 @@ print "
 <fieldset>
 <legend>$phrases[the_members]</legend>
 <table width=100%>";
-print "<tr><td width=24><img src='images/clients.gif' width=24></td><td class=row_1><a href='index.php?action=clients'> $phrases[cp_mng_members]</a></td></tr>\n";
-print "<tr><td width=24><img src='images/clients_mailing.gif' width=24></td><td class=row_1><a href='index.php?action=clients_mailing'> $phrases[members_mailing]</a></td></tr>\n";
+print "<tr><td width=24><img src='images/clients.gif' width=24></td><td class=row_1><a href='clients.php'> $phrases[cp_mng_members]</a></td></tr>\n";
+print "<tr><td width=24><img src='images/clients_mailing.gif' width=24></td><td class=row_1><a href='clients.php?action=mailing'> $phrases[members_mailing]</a></td></tr>\n";
 print "</table></fieldset>";
 }
 

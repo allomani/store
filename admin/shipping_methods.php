@@ -124,7 +124,7 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
             print "<div id=\"item_$data[id]\" class='$row_class'>
 <table width=100%>
 <tr>
-<td class=\"handle\"></td>
+<td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
       <td width=75%>$data[name]</td>
     <td align='$global_align_x'>" . iif($data['active'], "<a href='shipping_methods.php?action=disable&id=$data[id]'>$phrases[disable]</a>", "<a href='shipping_methods.php?action=enable&id=$data[id]'>$phrases[enable]</a>") . " -
     <a href='shipping_methods.php?action=edit&id=$data[id]'>$phrases[edit]</a> - 

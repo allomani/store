@@ -97,7 +97,7 @@ print "<p align=center class=title>$phrases[the_banners]</p>";
      onmouseover=\"this.style.backgroundColor='#EFEFEE'\"
      onmouseout=\"this.style.backgroundColor='".iif($data['active'],"#FFFFFF","#FFEAEA")."'\">
   <table width=100%><tr>
-   <td class=\"handle\"></td>
+   <td class=\"handle\" title='$phrases[click_and_drag_to_change_order]'></td>
       ";
   if($data['c_type']=="code"){
       print "<td width=25><img src='images/code_icon.gif' alt='$phrases[bnr_ctype_code]'></td>";

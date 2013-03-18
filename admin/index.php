@@ -119,8 +119,6 @@ if($global_lang=="arabic"){
    }
 
 
-//---------- Members --------
-require(ADMIN_DIR ."/clients.php");
 
 //-------- Geo --------
 require(ADMIN_DIR ."/countries.php");

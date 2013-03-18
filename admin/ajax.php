@@ -47,6 +47,9 @@ if ($action == "set_sort") {
         case "news_cats" : if_admin("news");
             $sort_table = 'store_news_cats';
             break;
+          case "clients_fields" : if_admin("clients");
+            $sort_table = 'store_clients_sets';
+            break;
         case "store_fields" : if_admin("store_fields");
             $sort_table = 'store_fields_sets';
             break;
