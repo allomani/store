@@ -1398,7 +1398,7 @@ function login_redirect() {
 
 //----------------- Path Links ---------
 function print_path_links($cat, $filename = "") {
-    global $phrases, $style, $links, $global_align;
+    global $phrases, $style, $links, $global_align,$cats_data,$cats_array;
 
     $cat = intval($cat);
     if ($cat) {
@@ -1409,28 +1409,11 @@ function print_path_links($cat, $filename = "") {
         }
 
         $cats_array = explode(",", $data_cat['path']);
-
-        foreach ($cats_array as $id) {
-            // $dir_data = db_qr_fetch("select name,id,cat from store_products_cats where id='$dir_data[cat]'");
-            if ($id) {
-                $dir_data = $cats_data[$id];
-
-                $dir_content = "
-            <li><a href='" . str_replace('{id}', $dir_data['id'], $links['browse_products']) . "'>$dir_data[name]</a> </li>
-            " . $dir_content;
-            }
-        }
+}else{
+    $cats_array = array();
     }
-    print "
-        <div class='nav-bar-wrapper'>
-        <ul class='nav-bar'>
-       <li><a href='" . str_replace('{id}', '0', $links['browse_products']) . "'>$phrases[the_products] </a></li>
-        $dir_content ";
-    if ($filename) {
-        print "<li class='name'>$filename</li>";
-    }
-    print "</ul>
-        </div>";
+    
+    run_template('path_links');
 }
 
 function login_header() {

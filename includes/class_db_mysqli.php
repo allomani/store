@@ -49,16 +49,16 @@ class db_mysqli {
 
         $this->link = @mysqli_connect($host, $user, $pass);
         if (!$this->link) {
+            /*
             if (mysqli_errno($this->link) == 1040) {
                 throw new Exception("Mysql Server is Busy  , Please Try again later");
             } else {
-
-                if ($this->config['debug']['log_mysqli_errors']) {
+    if ($this->config['debug']['log_mysqli_errors']) {
                     do_error_log(@mysqli_errno($this->link) . " : " . @mysqli_error($this->link), 'db');
-                }
+                }*/
 
-                throw new Exception(@mysqli_errno($this->link) . " : Database Connection Error");
-            }
+                throw new Exception("Database Connection Error");
+    //      }
         }
 
         $this->select($dbname, $dbcharset);

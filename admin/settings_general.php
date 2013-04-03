@@ -18,7 +18,7 @@ if ($action == "edit") {
 load_settings();
 
 print "
- <p align=center class=title>  $phrases[the_settings] </p>
+ <p align=center class=title>  $phrases[general_settings] </p>
  <form action='settings_general.php' method=post>
  <input type=hidden name=action value='edit'>
  <table  class=grid>

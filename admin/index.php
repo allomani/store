@@ -165,38 +165,42 @@ if($action=="db_info"){
     if_admin();
 
 if(!$disable_repair){
-print "<script language=\"JavaScript\">\n";
-print "function checkAll(form){\n";
-print "  for (var i = 0; i < form.elements.length; i++){\n";
-print "    eval(\"form.elements[\" + i + \"].checked = form.elements[0].checked\");\n";
-print "  }\n";
-print "}\n";
-print "</script>\n";
+
 
         $tables = db_query("SHOW TABLE STATUS");
         print "<form name=\"form1\" method=\"post\" action=\"index.php\"/>
         <input type=hidden name=action value='repair_db_ok'>
         <center><table  class=grid>";
         print "<tr><td colspan=\"5\"> <font size=4><b>$phrases[the_database]</b></font> </td></tr>
-        <tr><td>
-        <input type=\"checkbox\" name=\"check_all\" checked=\"checked\" onClick=\"checkAll(this.form)\"/></td>
+        <tr><td></td>
         ";
-        print "<td><b>$phrases[the_table]</b></td><td><b>$phrases[the_size]</b></td>
-        <td><b>$phrases[the_status]</b></td>
+        print "<td><b>$phrases[the_table]</b></td><td align=left><b>$phrases[the_size]</b></td>
+        <td align=center><b>$phrases[the_status]</b></td>
             </tr>";
         while($table = db_fetch($tables))
         {
             $size = round($table['Data_length']/1024, 2);
             $status = db_qr_fetch("ANALYZE TABLE `$table[Name]`");
             print "<tr>
-            <td  width=\"5%\"><input type=\"checkbox\" name=\"check[]\" value=\"$table[Name]\" checked=\"checked\" /></td>
+            <td width=\"5%\"><input type=\"checkbox\" name=\"check[]\" value=\"$table[Name]\" checked=\"checked\" /></td>
             <td width=\"50%\">$table[Name]</td>
             <td width=\"10%\" align=left dir=ltr>$size KB</td>
-            <td>$status[Msg_text]</td>
+            <td align=center>$status[Msg_text]</td>
             </tr>";
         }
 
-        print "</table><br> <center><input type=\"submit\" name=\"submit\" value=\"$phrases[db_repair_tables_do]\" /></center> <br>
+        print "</table>
+             <table width=100% class='grid'><tr>
+          <td width=2><img src='images/arrow_".$global_dir.".gif'></td>   
+          <td>
+
+          <a href='#' onclick=\"CheckAll('form1'); return false;\"> $phrases[select_all] </a> -
+          <a href='#' onclick=\"UncheckAll('form1'); return false;\">$phrases[select_none] </a> 
+          &nbsp;&nbsp; 
+          
+<input type=\"submit\" name=\"submit\" value=\"$phrases[db_repair_tables_do]\" /></center> <br>
+    </td></tr>
+    </table>
         </form>";
         }else{
               print_admin_table("<center> $disable_repair </center>") ;
@@ -217,9 +221,9 @@ print "</script>\n";
         {
             $query = db_query("REPAIR TABLE `". $table . "`");
             $que = db_fetch($query);
-            print "<tr><td width=\"20%\">";
-            print "$phrases[cp_repairing_table] " . $que['Table'] . " , <font color=green><b>$phrases[done]</b></font>";
-            print "</td></tr>";
+            print "<tr><td>{$que['Table']}</td>
+              <td>".iif($que['Msg_text']=="OK","<span style='color:green;font-weight:bold;'>$phrases[done]</span>","<span style='color:red;font-weight:bold;'>{$que['Msg_text']}</span>")."
+           </td></tr>";
         }
 
         print "</table></center>";

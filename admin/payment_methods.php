@@ -67,15 +67,43 @@ if (!$action || $action == "edit_ok" || $action == "del" ||
     //--- add ----
     if ($action == "add_ok") {
         $gateways_str = implode(",", (array) $gateways);
+    $ord = db_fetch_first("select max(ord)+1 from store_payment_methods");
 
-        db_query("insert store_payment_methods (name,img,details,is_gateway,gateways,active) values ('" . db_escape($name) . "','" . db_escape($img) . "','" . db_escape($details, false) . "','" . intval($is_gateway) . "','" . db_escape($gateways_str) . "','1')");
+        db_query("insert store_payment_methods (name,active,ord) values ('" . db_escape($name) . "','1','$ord')");
+        $new_id = db_inserted_id();
+        js_redirect("payment_methods.php?action=edit&id=".$new_id);
     }
 
     //--------------------------------  
-    print "<p align=center class=title>$phrases[payment_methods]</p>";
-    $qr = db_query("select * from store_payment_methods order by ord asc");
+    
+   ?>
+<div id="add_form" style="display:none;">
+      <form action=payment_methods.php method=post name=sender>
+        <input type=hidden name=action value='add_ok'>
+        <table width=90% class=grid>
+        <tr><td><b><?=$phrases['the_name'];?></b></td><td><input type=text name=name size=30></td></tr>
+        <tr><td colspan=2 align=center><input type=submit value="<?= $phrases['add_button'];?> "></td></tr>
+        </table>
+      </form>
+</div>
 
-    print "<a href='payment_methods.php?action=add' class='add'>$phrases[add_button]</a><br><br>";
+<script>
+        $(document).ready(function(){
+            $('#add_method_btn').click(function(e){
+                e.preventDefault();
+                $('#add_form').dialog({modal: true});
+            });
+        });
+</script>
+    
+ <?
+ 
+     print "<p align=center class=title>$phrases[payment_methods]</p>";
+ 
+    print "<a href=\"#\" id='add_method_btn' class='add'>$phrases[add_button]</a><br><br>";
+    
+      $qr = db_query("select * from store_payment_methods order by ord asc");
+ 
     if (db_num($qr)) {
         print "<center><table width=100% class=grid>
 <tr><td width=100%>
@@ -250,53 +278,7 @@ if ($action == "edit") {
     }
 }
 
-///----------- Add ------------
-if ($action == "add") {
-    if_admin();
-
-    print "
-        <ul class='nav-bar'>
-        <li><a href='payment_methods.php'>$phrases[payment_methods]</a></li>
-<li>$phrases[add]</li>
-    </ul>
-        
-        <center><form action=payment_methods.php method=post name=sender>
-        <input type=hidden name=id value='$id'>
-        <input type=hidden name=action value='add_ok'>
-        <table width=90% class=grid>
-        <tr><td><b>$phrases[the_name]</b></td><td><input type=text name=name value=\"$data[name]\" size=30></td></tr>
-            <tr><td>
-  <b>$phrases[the_image]</b></td>
-  <td> <table><tr><td><input type=text  dir=ltr size=30 name=img></td><td><a href=\"javascript:uploader('payment','img');\"><img src='images/file_up.gif' border=0 alt='$phrases[upload_file]'></a></td></tr></table>
-
-   </td></tr>
-         <tr><td><b>$phrases[the_details]</b></td><td><textarea cols=30 rows=7 name=details>$data[details]</textarea></td></tr>
-           <tr><td><b>$phrases[is_gateway]</b></td><td>";
-    print_select_row("is_gateway", array($phrases['no'], $phrases['yes']), $data['is_gateway']);
-    print "</td></tr>  
-           <tr><td><b>$phrases[payment_gateways]</b></td><td>
-           <table width=100%><tr>";
-    $gateways = (array) explode(",", $data['gateways']);
-
-    $qro = db_query("select * from store_payment_gateways order by ord");
-    $c = 0;
-    while ($datao = db_fetch($qro)) {
-        if ($c == 4) {
-            print "</tr><tr>";
-            $c = 0;
-        }
-
-        print "<td><input type=\"checkbox\" name=\"gateways[]\" value=\"$datao[id]\"" . iif(in_array($datao['id'], $gateways), ' checked') . ">" . iif($datao['title'], $datao['title'], $datao['name']) . "</td>";
-        $c++;
-    }
-
-    print "</table></td></tr>
-           
-         <tr><td colspan=2 align=center><input type=submit value=' $phrases[add_button] '></td></tr>
-        </table>
-        </form>
-        </center>";
-}
+ 
 
 //-----------end ----------------
 require(ADMIN_DIR . '/end.php');
