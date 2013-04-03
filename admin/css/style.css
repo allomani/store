@@ -303,7 +303,7 @@ input.btn {
 }
 
 
-
+/* ---------- password Strength ---------------- */
 
 #passwordStrength
 {
@@ -347,6 +347,7 @@ input.btn {
     width:250px;
 }
 
+/* -------- Auto Complete --------------------- */
 
 div.autocomplete {
     position:absolute;
@@ -417,7 +418,7 @@ ul.holder li.bit-box-focus a.closebutton, ul.holder li.bit-box-focus a.closebutt
 .ie6fix {height:1px;width:1px; position:absolute;top:0px;left:0px;z-index:1;}
 
 
-/*------------ Pages ------------- */
+/*------------ Pagination ------------- */
 .pagenavi {
     clear: both;
     text-align:center;
@@ -465,6 +466,8 @@ ul.holder li.bit-box-focus a.closebutton, ul.holder li.bit-box-focus a.closebutt
     padding:5px;
 }
 
+/* ------------ Login Form -------------- */
+
 .login_form_wrapper {
 }
 
@@ -496,4 +499,11 @@ background: url('../images/login.png') no-repeat center top;
 
 .login_form input[type="submit"] {
       margin:40px;
+}
+
+.settings li {
+    list-style-type: none;
+    padding:10px 20px;
+    display: inline-block;
+    text-align: center;
 }

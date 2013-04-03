@@ -141,6 +141,24 @@ class db_mysql {
         return $this->fetch($sql);
     }
 
+ //--------------- Fetch row ---------------
+    public function fetch_row($r) {
+
+        if (is_resource($r)) {
+            $qr = $r;
+        } else {
+            $qr = $this->query($r);
+        }
+
+        $data = @mysql_fetch_row($qr);
+        return $data;
+    }   
+    
+ //------- data seek  ------
+public function data_seek($r,$row_number=0){
+   return  mysql_data_seek($r,$row_number);
+    }
+    
 //--------------- Fetch First ---------------
     public function fetch_first($r) {
 

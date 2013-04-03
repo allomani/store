@@ -137,6 +137,20 @@ class db_mysqli {
         return $this->fetch($sql);
     }
 
+    //--------------- Fetch row ---------------
+    public function fetch_row($r) {
+
+        if (is_object($r)) {
+            $qr = $r;
+        } else {
+            $qr = $this->query($r);
+        }
+
+        $data = @mysqli_fetch_row($qr);
+        return $data;
+    }
+    
+    
 //--------------- Fetch First ---------------
     public function fetch_first($r) {
 
@@ -156,6 +170,11 @@ class db_mysqli {
         return $this->num($this->query($sql));
     }
 
+ //------- data seek  ------
+public function data_seek($r,$row_number=0){
+   return  mysqli_data_seek($r,$row_number);
+    }
+    
 //------------- query and return array ----------------
     public function fetch_all($r) {
 

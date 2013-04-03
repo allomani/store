@@ -87,39 +87,15 @@ if (!check_admin_login()) {
 if($action=="backup_db_do"){
 if(!$disable_backup){
 if_admin();
-$backup_obj = new MySQL_DB_Backup();
-$backup_obj->server = $db_host ;
-$backup_obj->port = 3306;
-$backup_obj->username = $db_username;
-$backup_obj->password = $db_password;
-$backup_obj->database = $db_name;
-$backup_obj->drop_tables = true;
-$backup_obj->create_tables = true;
-$backup_obj->struct_only = false;
-$backup_obj->locks = true;
-$backup_obj->comments = false;
-$backup_obj->fname_format = 'm-d-Y-h-i-s';
-$backup_obj->null_values = array( '0000-00-00', '00:00:00', '0000-00-00 00:00:00');
-$backup_obj->backup_dir = CWD . '/'.$settings['uploader_path'].'/backups/'; 
-
-if($op=="local"){
-$task = MSX_DOWNLOAD;
-$filename = "store_".date('m-d-Y_h-i-s').".sql.gz";
-}elseif($op=="server"){
-$task = MSX_SAVE ;
-$filename = basename($filename);
+$backups_folder = CWD . '/' . $settings['uploader_path'] . '/backups/';
+$b = new DB_Backup();
+$r = $b->start($op,$backups_folder,$filename);
+if($r){
+    $output = $phrases['backup_done_successfully'];
+    }else{
+        $output = $b->error;
 }
-$use_gzip = true;
-$result_bk = $backup_obj->Execute($task, $filename, $use_gzip);
-    if (!$result_bk)
-        {
-                 $output = $backup_obj->error;
-        }
-        else
-        {
-                $output = $phrases['backup_done_successfully'];
 
-        }
         }else{
         $output =  $disable_backup ;
                 }

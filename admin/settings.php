@@ -4,26 +4,25 @@ require('./start.php');
 
 print "
 <fieldset>
-<legend></legend>
-<table width=100%>";
-print "<tr><td width=24><img src='images/settings.gif' width=24></td><td class=row_2><a href='settings_general.php'>$phrases[the_settings]</a></td></tr>";
+<legend>$phrases[the_settings]</legend>
+<ul class='settings'>";
+print "<li><a href='settings_general.php'><img src='images/stng.gif'><br>$phrases[general_settings]</a></li>";
+print "<li><a href='orders_status.php'><img src='images/orders_status.gif'><br>$phrases[orders_status]</a></li>";
+print "</ul>
+  </fieldset>";
 
-
-print "<tr><td width=24><img src='images/orders_status.gif' width=24></td><td class=row_2><a href='orders_status.php'>$phrases[orders_status]</a></td></tr>";
-
-print "</table></fieldset>";
 if(if_admin("clients",true)){
 print "
 <fieldset>
 <legend>$phrases[the_members]</legend>
-<table width=100%>";
-print "<tr><td width=24><img src='images/clients_custom_fields.gif' width=24></td><td class=row_2><a href='clients_fields.php'> $phrases[members_custom_fields]</a></td></tr>\n";
+<ul class='settings'>";
+print "<li><a href='clients_fields.php'><img src='images/clients_custom_fields.gif'><br>$phrases[members_custom_fields]</a></li>";
 
 if(if_admin("",true)){  
-print "<tr><td width=24><img src='images/clients_remote_db.gif' width=24></td><td class=row_2><a href='clients_remote_db.php'>$phrases[cp_members_remote_db]</a></td></tr>\n";
-print "<tr><td width=24><img src='images/db_clean.gif' width=24></td><td class=row_1><a href='clients_remote_db.php?action=clients_local_db_clean'>$phrases[members_local_db_clean_wizzard]</a></td></tr>\n";
+print "<li><a href='clients_remote_db.php'><img src='images/clients_remote_db.gif'><br>$phrases[cp_members_remote_db]</a></li>\n";
+print "<li><a href='clients_remote_db.php?action=clients_local_db_clean'><img src='images/db_clean.gif'><br>$phrases[members_local_db_clean_wizzard]</a></li>\n";
 }
-print "</table></fieldset>";
+print "</ul></fieldset>";
 }
 
 
@@ -31,12 +30,12 @@ if(if_admin("",true)){
 print "
 <fieldset>
 <legend>$phrases[payment_and_shipping]</legend>
-<table width=100%>";
-print "<tr><td width=24><img src='images/payment_methods.gif' width=24></td><td class=row_1><a href='payment_methods.php'>$phrases[payment_methods]</a></td></tr>";
-print "<tr><td width=24><img src='images/gateways.gif' width=24></td><td class=row_2><a href='payment_gateways.php'>$phrases[payment_gateways]</a></td></tr>";
-print "<tr><td width=24><img src='images/shipping_methods.gif' width=24></td><td class=row_1><a href='shipping_methods.php'>$phrases[shipping_methods]</a></td></tr>";
+<ul class='settings'>";
+print "<li><a href='payment_methods.php'><img src='images/payment_methods.gif'><br>$phrases[payment_methods]</a></li>";
+print "<li><a href='payment_gateways.php'><img src='images/gateways.gif'><br>$phrases[payment_gateways]</a></li>";
+print "<li><a href='shipping_methods.php'><img src='images/shipping_methods.gif'><br>$phrases[shipping_methods]</a></li>";
 
-print "</table></fieldset>"; 
+print "</ul></fieldset>"; 
 }
 
 
@@ -44,44 +43,44 @@ print "</table></fieldset>";
 if(if_admin("",true)){
 print "
 <fieldset>
-<legend>Geo Settings</legend>
-<table width=100%>
-<tr><td width=24><img src='images/db_backup.gif' width=24></td><td class=row_2><a href='index.php?action=geo_zones'>Geo Zones</a></td></tr>
-<tr><td width=24><img src='images/db_info.gif' width=24></td><td class=row_1><a href='index.php?action=countries'>Countries</a></td></tr>
+<legend>الإعدادات الجغرافية</legend>
+<ul class='settings'>
+<li><a href='index.php?action=geo_zones'><img src='images/db_backup.gif'><br>المناطق الجغرافية</a></li>
+<li><a href='index.php?action=countries'><img src='images/db_info.gif'><br>الدول</a></li>
 
-</table></fieldset>";
+</ul></fieldset>";
 }
 
 
 print "
 <fieldset>
 <legend></legend>
-<table width=100%>";
+<ul class='settings'>";
 if(if_admin("templates",true)){
-print "<tr><td width=24><img src='images/templates.gif' width=24></td><td class=row_1><a href='templates.php'> $phrases[the_templates] </a></td></tr>";
+print "<li><a href='templates.php'><img src='images/templates.gif'><br>$phrases[the_templates] </a></li>";
 }
 
 if(if_admin("phrases",true)){
-print "<tr><td width=24><img src='images/phrases.gif' width=24></td><td class=row_2><a href='phrases.php'>$phrases[the_phrases]</a></td></tr>";
+print "<li><a href='phrases.php'><img src='images/phrases.gif'><br>$phrases[the_phrases]</a></li>";
 }
 
 
 if(if_admin("",true)){ 
-print "<tr><td width=24><img src='images/seo_settings.gif' width=24></td><td class=row_1><a href='seo.php'> $phrases[seo_settings]</a></td></tr>";
-print "<tr><td width=24><img src='images/hooks.gif' width=24></td><td class=row_1><a href='hooks.php'>$phrases[cp_hooks]</a></td></tr>\n";
+print "<li><a href='seo.php'><img src='images/seo_settings.gif'><br>$phrases[seo_settings]</a></li>";
+print "<li><a href='hooks.php'><img src='images/hooks.gif'><br>$phrases[cp_hooks]</a></li>\n";
 }
 
 
-print "</table></fieldset>";
+print "</ul></fieldset>";
 
 if(if_admin("",true)){
 print "
 <fieldset>
 <legend>$phrases[the_database]</legend>
-<table width=100%>
-<tr><td width=24><img src='images/db_info.gif' width=24></td><td class=row_1><a href='index.php?action=db_info'>$phrases[cp_db_check_repair]</a></td></tr>
-<tr><td width=24><img src='images/db_backup.gif' width=24></td><td class=row_2><a href='index.php?action=backup_db'>$phrases[backup]</a></td></tr>
-</table></fieldset>";
+<ul class='settings'>
+<li><a href='index.php?action=db_info'><img src='images/db_info.gif'><br>$phrases[cp_db_check_repair]</a></li>
+<li><a href='index.php?action=backup_db'><img src='images/db_backup.gif'><br>$phrases[backup]</a></li>
+</ul></fieldset>";
 }
 
 
