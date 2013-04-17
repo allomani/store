@@ -24,21 +24,16 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
     if ($action == "edit_ok") {
 
         $all_cats = (int) $all_cats;
+        $all_geo_zones = (int) $all_geo_zones;
 
 
-        if ($geo_zones_all) {
-            $geo_zones_txt = '';
-        } else {
-            $geo_zones = (array) $geo_zones;
-            $geo_zones = array_map('intval', $geo_zones);
-            $geo_zones_txt = implode(',', $geo_zones);
-        }
+       
 
-        db_query("update store_shipping_methods set class='" . db_escape($class) . "',name='" . db_escape($name) . "',geo_zones='" . db_escape($geo_zones_txt) . "'
+        db_query("update store_shipping_methods set class='" . db_escape($class) . "',name='" . db_escape($name) . "'
   ,min_price='" . db_escape($min_price) . "',max_price='" . db_escape($max_price) . "'
   ,min_items='" . db_escape($min_items) . "',max_items='" . db_escape($max_items) . "'
   ,min_weight='" . db_escape($min_weight) . "',max_weight='" . db_escape($max_weight) . "'
-  ,default_status='" . db_escape($default_status) . "',all_cats='{$all_cats}' where id='$id'");
+  ,default_status='" . db_escape($default_status) . "',all_cats='{$all_cats}',all_geo_zones='{$all_geo_zones}' where id='$id'");
 
 
 //--------------
@@ -55,6 +50,20 @@ if (!$action || $action == "shipping_methods" || $action == "edit_ok" || $action
             db_query("update store_products_cats set shipping_methods = '" . implode(",", $cat_shipping_methods) . "' where id='$data[id]'");
         }
 //---------------
+   //---------- update geo zones shipping methods----
+        $geo_zones = (array) $geo_zones;
+        $qr = db_query("select id,shipping_methods from store_geo");
+        while ($data = db_fetch($qr)) {
+            $geo_shipping_methods = (array) explode(",", $data['shipping_methods']);
+            if (($key = array_search($id, $geo_shipping_methods)) !== false) {
+                unset($geo_shipping_methods[$key]);
+            }
+            if (in_array($data['id'], $geo_zones)) {
+                $geo_shipping_methods[] = $id;
+            }
+            db_query("update store_geo set shipping_methods = '" . implode(",", $geo_shipping_methods) . "' where id='$data[id]'");
+        }
+    //---------------
 //------------------------ 
         $qr = db_query("select name from store_shipping_methods_settings where cat='$id'");
         while ($data = db_fetch($qr)) {
@@ -151,12 +160,6 @@ if ($action == "edit") {
     if (db_num($qr)) {
         $data = db_fetch($qr);
 
-        if ($data['geo_zones']) {
-            $geo_zones = explode(',', $data['geo_zones']);
-        } else {
-            $geo_zones = array();
-        }
-
         print "<ul class='nav-bar'>
             <li><a href='shipping_methods.php'>$phrases[shipping_methods]</a></li>
         <li>$data[name]</li>
@@ -169,18 +172,19 @@ if ($action == "edit") {
         <tr><td><b>$phrases[the_type]</b></td><td><input type=text name='class' size=30 value=\"$data[class]\"></td></tr>    
         <tr><td><b>$phrases[the_name]</b></td><td><input type=text name=name value=\"$data[name]\" size=30></td></tr>
        
-       <tr><td><b>المناطق الجغرافية</b></td><td>
-       <input type='radio' id='geo_zones_all_yes' name='geo_zones_all' value=1 onClick=\"\$('#geo_zones_div').css('display','none');\" " . iif(!count($geo_zones), " checked") . ">
+        <tr><td><b>المناطق الجغرافية</b></td><td>
+       <input type='radio' id='geo_zones_all_yes' name='all_geo_zones' value=1 onClick=\"\$('#geo_zones_div').hide()\" " . iif($data['all_geo_zones'], " checked") . ">
      <label for='geo_zones_all_yes'>جميع المناطق</label><br>
            
-       <input type='radio' id='geo_zones_all_no' name='geo_zones_all' value=0 onClick=\"\$('#geo_zones_div').css('display','');\"" . iif(count($geo_zones), " checked") . ">
+       <input type='radio' id='geo_zones_all_no' name='all_geo_zones' value=0 onClick=\"\$('#geo_zones_div').show();\"" . iif(!$data['all_geo_zones'], " checked") . ">
            <label for='geo_zones_all_no'>مناطق محددة</label>
        <br><br>
-       <div id='geo_zones_div'" . iif(!count($geo_zones), "style=\"display:none;\"") . ">
+       <div id='geo_zones_div'" . iif($data['all_geo_zones'], "style=\"display:none;\"") . ">
        ";
-        $qr_geo = db_query("select * from store_geo order by id");
+         $qr_geo = db_query("select * from store_geo order by id");
         while ($data_geo = db_fetch($qr_geo)) {
-            print "<input type='checkbox' name='geo_zones[]' value='$data_geo[id]'" . iif(in_array($data_geo['id'], $geo_zones), " checked") . "> $data_geo[name] <br>";
+            $zones  = explode(",", $data_geo['shipping_methods']);
+            print "<input type='checkbox' name='geo_zones[]' value='$data_geo[id]'" . iif(in_array($data['id'], $zones), " checked") . "> $data_geo[name] <br>";
         }
 
 

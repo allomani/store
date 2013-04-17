@@ -25,15 +25,7 @@ if (!$action || $action == "edit_ok" || $action == "del" ||
         $gateways_str = implode(",", (array) $gateways);
    
         $all_cats = (int) $all_cats;
-
-
-        if ($geo_zones_all) {
-            $geo_zones_txt = '';
-        } else {
-            $geo_zones = (array) $geo_zones;
-            $geo_zones = array_map('intval', $geo_zones);
-            $geo_zones_txt = implode(',', $geo_zones);
-        }
+        $all_geo_zones = (int) $all_geo_zones;
 
 
         db_query("update store_payment_methods set 
@@ -41,14 +33,13 @@ if (!$action || $action == "edit_ok" || $action == "del" ||
              details='" . db_escape($details, false) . "',
               is_gateway='" . intval($is_gateway) . "',
               gateways='" . db_escape($gateways_str) . "',
-               geo_zones='" . db_escape($geo_zones_txt) . "',
               min_price='" . db_escape($min_price) . "',max_price='" . db_escape($max_price) . "',
             min_items='" . db_escape($min_items) . "',max_items='" . db_escape($max_items) . "',
-            all_cats='{$all_cats}'               
+            all_cats='{$all_cats}',all_geo_zones='{$all_geo_zones}'               
        where id='$id'");
 
 
-        //--------------
+        //---------- update cats payment methods----
         $cats_arr = (array) explode(",", $cats);
         $qr = db_query("select id,payment_methods from store_products_cats");
         while ($data = db_fetch($qr)) {
@@ -61,7 +52,21 @@ if (!$action || $action == "edit_ok" || $action == "del" ||
             }
             db_query("update store_products_cats set payment_methods = '" . implode(",", $cat_payment_methods) . "' where id='$data[id]'");
         }
-//---------------
+        
+        //---------- update geo zones payment methods----
+        $geo_zones = (array) $geo_zones;
+        $qr = db_query("select id,payment_methods from store_geo");
+        while ($data = db_fetch($qr)) {
+            $geo_payment_methods = (array) explode(",", $data['payment_methods']);
+            if (($key = array_search($id, $geo_payment_methods)) !== false) {
+                unset($geo_payment_methods[$key]);
+            }
+            if (in_array($data['id'], $geo_zones)) {
+                $geo_payment_methods[] = $id;
+            }
+            db_query("update store_geo set payment_methods = '" . implode(",", $geo_payment_methods) . "' where id='$data[id]'");
+        }
+    //---------------
     }
 
     //--- add ----
@@ -140,13 +145,7 @@ if ($action == "edit") {
     if (db_num($qr)) {
         $data = db_fetch($qr);
 
-        if ($data['geo_zones']) {
-            $geo_zones = explode(',', $data['geo_zones']);
-        } else {
-            $geo_zones = array();
-        }
-
-
+    
         print "<ul class='nav-bar'>
             <li><a href='payment_methods.php'>$phrases[payment_methods]</a></li>
         <li>$data[name]</li>
@@ -168,17 +167,18 @@ if ($action == "edit") {
    
 
  <tr><td><b>المناطق الجغرافية</b></td><td>
-       <input type='radio' id='geo_zones_all_yes' name='geo_zones_all' value=1 onClick=\"\$('#geo_zones_div').css('display','none');\" " . iif(!count($geo_zones), " checked") . ">
+       <input type='radio' id='geo_zones_all_yes' name='all_geo_zones' value=1 onClick=\"\$('#geo_zones_div').hide()\" " . iif($data['all_geo_zones'], " checked") . ">
      <label for='geo_zones_all_yes'>جميع المناطق</label><br>
            
-       <input type='radio' id='geo_zones_all_no' name='geo_zones_all' value=0 onClick=\"\$('#geo_zones_div').css('display','');\"" . iif(count($geo_zones), " checked") . ">
+       <input type='radio' id='geo_zones_all_no' name='all_geo_zones' value=0 onClick=\"\$('#geo_zones_div').show();\"" . iif(!$data['all_geo_zones'], " checked") . ">
            <label for='geo_zones_all_no'>مناطق محددة</label>
        <br><br>
-       <div id='geo_zones_div'" . iif(!count($geo_zones), "style=\"display:none;\"") . ">
+       <div id='geo_zones_div'" . iif($data['all_geo_zones'], "style=\"display:none;\"") . ">
        ";
         $qr_geo = db_query("select * from store_geo order by id");
         while ($data_geo = db_fetch($qr_geo)) {
-            print "<input type='checkbox' name='geo_zones[]' value='$data_geo[id]'" . iif(in_array($data_geo['id'], $geo_zones), " checked") . "> $data_geo[name] <br>";
+            $zones  = explode(",", $data_geo['payment_methods']);
+            print "<input type='checkbox' name='geo_zones[]' value='$data_geo[id]'" . iif(in_array($data['id'], $zones), " checked") . "> $data_geo[name] <br>";
         }
 
 

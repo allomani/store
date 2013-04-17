@@ -495,8 +495,8 @@ print "</td><td>".$items[$i]['qty']."</td><td>$data[item_price] $settings[curren
  "{billing_name}","{billing_telephone}","{billing_country}","{billing_city}","{billing_address1}","{billing_address2}",
  "{shipping_name}","{shipping_telephone}","{shipping_country}","{shipping_city}","{shipping_address1}","{shipping_address2}");
  $msg_rplc_arr = array($sitename,$scripturl,$order_id,$invc_url_admin,$invc_url_client,$total_price,$payment_info['name'],
- $billing_info['name'],$billing_info['telephone'],$billing_info['country'],$billing_info['city'],$billing_info['address_1'],$billing_info['address_2'],
- $shipping_info['name'],$shipping_info['telephone'],$shipping_info['country'],$shipping_info['city'],$shipping_info['address_1'],$shipping_info['shipping_2']);
+ $billing_info['name'],$billing_info['telephone'],get_country_name($billing_info['country']),$billing_info['city'],$billing_info['address_1'],$billing_info['address_2'],
+ $shipping_info['name'],$shipping_info['telephone'],get_country_name($shipping_info['country']),$shipping_info['city'],$shipping_info['address_1'],$shipping_info['shipping_2']);
  
  //--- pre-cache templates --//
  templates_cache(array('msg_new_order_client','msg_new_order_admin','msg_new_order_client_subject','msg_new_order_admin_subject')); 
