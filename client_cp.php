@@ -170,11 +170,10 @@
             print "</select>
             - <input type=text size=3 name='date_y' value='$birth_data[year]'></td></tr>
             <tr>  <td><b>$phrases[country] </b> </td><td><select name=country><option value=''></option>";
-            $c_qr = db_query("select * from store_countries order by binary name asc");
+            $c_qr = db_query("select * from store_countries order by name asc");
             while($c_data = db_fetch($c_qr)){
 
-                if($data['country']==$c_data['name']){$chk="selected";}else{$chk="";}
-                print "<option value='$c_data[name]' $chk>$c_data[name]</option>";
+                print "<option value='$c_data[code]'".iif($data['country']==$c_data['code']," selected").">$c_data[name]</option>";
             }
             print "</select></td>   </tr>";
 

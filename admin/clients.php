@@ -141,7 +141,7 @@ $exsists = members_db_qr_fetch("select count(*) as count from {{store_clients}} 
               $all_ok = 0 ;
            }
       }else{
-       print_admin_table("$phrases[err_email_not_valid]");
+       show_alert("$phrases[err_email_not_valid]","error");
       $all_ok = 0;
       }
     
@@ -160,11 +160,11 @@ $exsists = members_db_qr_fetch("select count(*) as count from {{store_clients}} 
                 $all_ok = 0 ;
            }
            }else{
-           print_admin_table("$phrases[err_username_not_allowed]");
+           show_alert("$phrases[err_username_not_allowed]","error");
          $all_ok= 0;
                }
           }else{
-         print_admin_table("$phrases[err_username_min_letters]");
+         show_alert("$phrases[err_username_min_letters]","error");
          $all_ok= 0;
           }
 if($all_ok){
@@ -203,10 +203,10 @@ if($username && $email && $password){
 
 connector_member_pwd($member_id,$password,'update');
 
- print_admin_table ("<center>$phrases[member_added_successfully]</center>");
+ show_alert("$phrases[member_added_successfully]","success");
 
 }else{
- print_admin_table("<center>$phrases[please_fill_all_fields]</center>");
+ show_alert("$phrases[please_fill_all_fields]","error");
 }
 }
         }
@@ -215,7 +215,7 @@ connector_member_pwd($member_id,$password,'update');
 if($action == "del"){
 members_db_query("delete from {{store_clients}} where ::id=':id'",array('id'=>$id));
 
-print_admin_table( "<center>$phrases[client_deleted_successfully]</center>");
+show_alert( "$phrases[client_deleted_successfully]","success");
         }
 
 
@@ -238,7 +238,7 @@ members_db_query("update {{store_clients}} set ::username=':username',::email=':
                connector_member_pwd($id,$password,'update');
               }else{
 
-              print_admin_table("<center>$phrases[err_passwords_not_match]</center>");
+              show_alert("$phrases[err_passwords_not_match]","error");
 
               }
            }
@@ -256,7 +256,7 @@ members_db_query("update {{store_clients}} set ::username=':username',::email=':
    }
    }
 
-   print_admin_table("<center>$phrases[member_edited_successfully]</center>");
+   show_alert("$phrases[member_edited_successfully]","success");
          }
 
 //---------- show members search form ---------
@@ -279,11 +279,11 @@ print "<p align=center class=title> $phrases[the_members] </p>
     <input type=text size=1 name='date_d'> - <input type=text size=1 name='date_m'> - <input type=text size=4 name='date_y'></td></tr>
 
             <tr>  <td><b>$phrases[country] </b> </td><td><select name=country><option value=''></option>";
-            $c_qr = db_query("select * from store_countries order by binary name asc");
+            $c_qr = db_query("select * from store_countries order by name asc");
    while($c_data = db_fetch($c_qr)){
 
 
-        print "<option value='$c_data[name]'>$c_data[name]</option>";
+        print "<option value='$c_data[code]'>$c_data[name]</option>";
            }
            print "</select></td>   </tr></table></fieldset>";
 
@@ -428,11 +428,10 @@ print "</table>
            print "</select>
            - <input type=text size=3 name='date_y' value='$birth_data[year]'></td></tr>
             <tr>  <td><b>$phrases[country] </b> </td><td><select name=country><option value=''></option>";
-            $c_qr = db_query("select * from store_countries order by binary name asc");
+            $c_qr = db_query("select * from store_countries order by name asc");
    while($c_data = db_fetch($c_qr)){
 
-           if($data['country']==$c_data['name']){$chk="selected";}else{$chk="";}
-        print "<option value='$c_data[name]' $chk>$c_data[name]</option>";
+       print "<option value='$c_data[code]'".iif($data['country']==$c_data['code']," selected").">$c_data[name]</option>";
            }
            print "</select></td>   </tr>";
 
@@ -558,11 +557,11 @@ print "</table>
            print "</select>
            - <input type=text size=3 name='date_y' value='0000'></td></tr>
             <tr>  <td><b>$phrases[country] </b> </td><td><select name=country><option value=''></option>";
-            $c_qr = db_query("select * from store_countries order by binary name asc");
+            $c_qr = db_query("select * from store_countries order by name asc");
    while($c_data = db_fetch($c_qr)){
 
 
-        print "<option value='$c_data[name]'>$c_data[name]</option>";
+        print "<option value='$c_data[code]'>$c_data[name]</option>";
            }
            print "</select></td>   </tr>";
 

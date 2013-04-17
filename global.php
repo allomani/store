@@ -1773,6 +1773,15 @@ $items_cats = array();
     return (array) $payment_ids;
 }
 
+function show_alert($msg="",$type=""){
+    print "<div class=\"alert $type\">$msg</div>";
+    }
+    
+//-------- get country name by code ------------
+function get_country_name($code){
+    return db_fetch_first("select name from store_countries where code = '".db_escape($code)."'"); 
+    }
+    
 //--------- load plugins function --------     
 function load_plugins($file) {
     $dhx = @opendir(CWD . "/plugins");

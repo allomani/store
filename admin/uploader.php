@@ -1,6 +1,4 @@
 <?
-// Edited : 05-10-2009  
-
 chdir('./../');
 define('CWD', (($getcwd = getcwd()) ? $getcwd : '.'));
 
@@ -11,7 +9,7 @@ print "<meta http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
 <mata http-equiv=Content-Type content=\"text/html; charset=$settings[site_pages_encoding]\">";
 ?>
 <? print "<title>$phrases[uploader_title]</title>\n";?>
-<link href="images/style.css" type=text/css rel=stylesheet>
+<link href="css/style.css" type=text/css rel=stylesheet>
 <script src='javascript.js' type="text/javascript" language="javascript"></script>
 <br>
 <?
@@ -22,7 +20,7 @@ if(($_FILES['datafile']['name'] || $url) && $folder && $f_name){
 
 
      if(!$upload_folder || !file_exists(CWD ."/$upload_folder")){
-     print_admin_table("<center>$phrases[err_wrong_uploader_folder]</center>");
+     show_alert("$phrases[err_wrong_uploader_folder]","error");
      die();
       }
  
@@ -46,7 +44,7 @@ if($fl->status){
 $saveto_filename =  $fl->saved_filename;
 if($default_uploader_chmod){@chmod(CWD . "/". $saveto_filename,$default_uploader_chmod);}   
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");
+show_alert($fl->last_error_description,"error");
 die();    
 }
 
@@ -55,11 +53,11 @@ die();
 $upload_max = convert_number_format(ini_get('upload_max_filesize'));
 $post_max = (convert_number_format(ini_get('post_max_size'))/2) ;
 
-     print_admin_table("<center>Uploading Error , Make Sure that file size is under ".iif($upload_max < $post_max,convert_number_format($upload_max,2,true),convert_number_format($post_max,2,ture))."</center>");  
+     show_alert("Uploading Error , Make Sure that file size is under ".iif($upload_max < $post_max,convert_number_format($upload_max,2,true),convert_number_format($post_max,2,ture)),"error");  
   die();
   }
 }else{
-print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+show_alert("$phrases[this_filetype_not_allowed]","error");
 die();
 }
 
@@ -76,13 +74,13 @@ if($fl->status){
 $saveto_filename =  $fl->saved_filename;
 if($default_uploader_chmod){@chmod(CWD . "/". $saveto_filename,$default_uploader_chmod);}   
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");
+show_alert($fl->last_error_description,"error");
 die();    
 }
 
 
      }else{
-     print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+     show_alert("$phrases[this_filetype_not_allowed]","error");
 die();
 }
    }
@@ -200,12 +198,12 @@ $phrases[allowed_filetypes] :
 }
 
 }else{
-        print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;
+        show_alert("$settings[uploader_msg]","info") ;
         }
  
 
 }else{
-print_admin_table("<center>$phrases[please_login_first]</center>");
+show_alert("$phrases[please_login_first]","error");
      }
 
 

@@ -203,7 +203,7 @@ if(!$disable_repair){
     </table>
         </form>";
         }else{
-              print_admin_table("<center> $disable_repair </center>") ;
+              show_alert("$disable_repair","info") ;
             }
     }
 //------------------------------------------------
@@ -231,7 +231,7 @@ if(!$disable_repair){
         }
 
         }else{
-              print_admin_table("<center> $disable_repair </center>") ;
+              show_alert("$disable_repair","info") ;
             }
     }
 

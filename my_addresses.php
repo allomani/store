@@ -89,7 +89,7 @@ require(CWD . "/includes/framework_start.php");
        <tr><td><b>$phrases[country]</b></td><td><select name=\"country\">";
  $qr_c = db_query("select * from store_countries order by name asc");
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\">$data_c[name]</option>";
  }
  
  print "</select></td></tr>
@@ -136,7 +136,7 @@ require(CWD . "/includes/framework_start.php");
        <tr><td><b>$phrases[country]</b></td><td><select name=\"country\">";
  $qr_c = db_query("select * from store_countries order by name asc");
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\"".iif($data['country']==$data_c['name'], "selected").">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\"".iif($data['country']==$data_c['code'], "selected").">$data_c[name]</option>";
  }
  
  print "</select></td></tr>

@@ -289,11 +289,11 @@ print "</table>
             <tr>  <td><b>$phrases[country] </b> </td><td><select name=country><option value=''> $phrases[select_from_menu] </option> ";
 
 
-           $c_qr = db_query("select * from store_countries order by binary name asc");
+           $c_qr = db_query("select * from store_countries order by name asc");
    while($c_data = db_fetch($c_qr)){
 
 
-        print "<option value='$c_data[name]' $chk>$c_data[name]</option>";
+        print "<option value='$c_data[code]'>$c_data[name]</option>";
            }
            print "</select></td></tr>";
 

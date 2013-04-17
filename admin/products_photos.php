@@ -65,13 +65,13 @@ $thumb_saved =  create_thumb($img_saved,$settings['products_photos_thumb_width']
              
               
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");  
+show_alert($fl->last_error_description,"error");  
 }
 
 
 
 }else{
-print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+show_alert("$phrases[this_filetype_not_allowed]","error");
 }
   
            
@@ -80,7 +80,7 @@ print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
           
       }
  }else{
-       print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
+       show_alert("$settings[uploader_msg]","info") ;  
  }    
   }
   //------------------------------------
@@ -235,7 +235,7 @@ if($action=="edit"){
         print_admin_table("<center>$phrases[err_wrong_url]</center>");
     }
     }else{
-          print_admin_table("<center>$phrases[please_select_photos_first]</center>");
+          show_alert("$phrases[please_select_photos_first]","error");
         }
 }
 

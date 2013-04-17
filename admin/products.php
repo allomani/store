@@ -35,7 +35,7 @@ $data=db_qr_fetch("select name from store_products_data where id='$idx'");
         ++$c;
         }
  print "<tr><td colspan=2><b>$phrases[move_to] : </b><select name=cat>";
-       $qr = db_query("select * from store_products_cats order by cat,ord,binary name asc");
+       $qr = db_query("select * from store_products_cats order by cat,ord, name asc");
    
     while($data=db_fetch($qr)){
         //-------------------------------
@@ -101,7 +101,7 @@ $data=db_qr_fetch("select name from store_products_cats where id='$idx'");
         }
  print "<tr><td colspan=2><b>$phrases[move_to] : </b><select name=cat>
  <option value='0'>$phrases[without_main_cat]</option>";
-       $qr = db_query("select * from store_products_cats where id !='$cat' and id not IN(".implode($sql_ids).") order by cat,ord,binary name asc");
+       $qr = db_query("select * from store_products_cats where id !='$cat' and id not IN(".implode($sql_ids).") order by cat,ord,name asc");
    
     while($data=db_fetch($qr)){
         //-------------------------------
@@ -156,11 +156,11 @@ $qr_to =  db_qr_num("select id from store_products_cats where id='$cat'");
             db_query("update store_products_data set cat='$cat' where id='$idx'");
     }
      }else{
-          print_admin_table("$phrases[err_products_not_selected]");   
+          show_alert("$phrases[err_products_not_selected]","error");   
      }
       
          }else{
-       print_admin_table("$phrases[err_invalid_cat_id]");
+       show_alert("$phrases[err_invalid_cat_id]","error");
         }
     }
     
@@ -182,11 +182,11 @@ if($cat==0){$qr_to=1;}
     }  
            
      }else{
-          print_admin_table("$phrases[err_cats_not_selected]");   
+          show_alert("$phrases[err_cats_not_selected]","error");   
      }
       
          }else{
-       print_admin_table("$phrases[err_invalid_cat_id]");
+       show_alert("$phrases[err_invalid_cat_id]","error");
         }
     }
  //--------- enable / disable cat ------------
@@ -322,15 +322,15 @@ $thumb =  create_thumb($img_full,$settings['products_thumb_width'],$settings['pr
 //------------------------
    
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");   
+show_alert($fl->last_error_description,"error");   
 }
 
       
 }else{
-print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+show_alert("$phrases[this_filetype_not_allowed]","error");
 }
 }else{
-      print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
+      show_alert("$settings[uploader_msg]","info") ;  
 }
 }
 
@@ -414,14 +414,14 @@ $thumb =  create_thumb($img_full,$settings['products_thumb_width'],$settings['pr
 //------------------------
    
 }else{
-print_admin_table("<center>".$fl->last_error_description."</center>");   
+show_alert($fl->last_error_description,"error");   
 }
       
 }else{
-print_admin_table("<center>$phrases[this_filetype_not_allowed]</center>");
+show_alert("$phrases[this_filetype_not_allowed]","error");
 }
  }else{
-     print_admin_table("<center>  $settings[uploader_msg] </center> ","90%") ;  
+     show_alert("$settings[uploader_msg]","info") ;  
  }
 }
 //--------------End Save New Picture----------------

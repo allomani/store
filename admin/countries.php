@@ -21,8 +21,8 @@ if($action=="countries" || $action=="countries_disable" || $action=="countries_e
         
     print "<tr class='$tr_class'><td width=10><input type='checkbox' name='id[]' value='$data[id]'></td>
     <td><a href='index.php?action=countries_edit&id=$data[id]'>$data[name]</a></td>
-    <td>$data[iso]</td>
-    <td>$data[iso3]</td>
+    <td>$data[code]</td>
+   
     <td align=center>";
     if($data['active']){
                         print "<a href='index.php?action=countries_disable&id=$data[id]'>$phrases[disable]</a>" ;
@@ -43,7 +43,7 @@ if($action=="countries_edit" || $action=="countries_edit_ok"){
 if_admin();
 
 if($action=="countries_edit_ok"){
-    db_query("update store_countries set name='".db_escape($name)."',iso='".db_escape($iso)."',iso3='".db_escape($iso3)."' where id='$id'");
+    db_query("update store_countries set name='".db_escape($name)."',code='".db_escape($code)."' where id='$id'");
 }
 
 
@@ -59,8 +59,7 @@ if(db_num($qr)){
  
  <table width=100% class='grid'>
  <tr><td><b>$phrases[the_name]</b></td><td><input type=text name='name' value=\"$data[name]\"></td></tr>
- <tr><td><b>ISO</b></td><td><input type=text name='iso' value=\"$data[iso]\"></td></tr>
- <tr><td><b>ISO-3</b></td><td><input type=text name='iso3' value=\"$data[iso3]\"></td></tr>
+ <tr><td><b>ISO</b></td><td><input type=text name='code' value=\"$data[code]\"></td></tr>
  
  <tr><td colspan=2 align=center><input type=submit value=\"$phrases[edit]\"></td></tr>
  </table>

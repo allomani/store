@@ -26,7 +26,7 @@ if($action=="add_ok"){
        
   db_query("insert into store_phrases (name,value,`cat`) values ('".db_escape($name)."','".db_escape($value)."','".db_escape($group)."')");
     }else{
-        print_admin_table("<center>$phrases[phrases_name_exists]</center>");
+        show_alert("$phrases[phrases_name_exists]","error");
     }
     }  
 }

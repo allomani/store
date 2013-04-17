@@ -55,7 +55,7 @@ db_query("update store_templates set title='".db_escape($title)."',content='".db
 cache_del("template:$cat:$name");
 
 }else{
-    print_admin_table("<center> $non_safe_content </center>");
+    show_alert("$non_safe_content","error");
 }
 }
 //--------- template add ------------
@@ -70,7 +70,7 @@ db_query("insert into  store_templates (name,title,content,cat,group_id) values(
 '".intval($cat)."','".intval($group_id)."')");
 
 }else{
-    print_admin_table("<center> $non_safe_content </center>");
+    show_alert("$non_safe_content","error");
 }
 }
 //---------- template del ---------

@@ -45,7 +45,7 @@ if (check_member_login()) {
  <br>
  <fieldset><legend>$phrases[billing_address]</legend>
  <b>$phrases[billing_name] : </b> $data[billing_name] <br>
- <b>$phrases[country] : </b> $data[billing_country] <br> 
+ <b>$phrases[country] : </b> ".get_country_name($data['billing_country'])." <br> 
  <b>$phrases[city] : </b> $data[billing_city] <br>     
  <b>$phrases[the_address] : </b> $data[billing_address1] <br> $data[billing_address2] <br>
  <b>$phrases[telephone] : </b> $data[billing_telephone] <br>
@@ -56,7 +56,7 @@ if (check_member_login()) {
             print "
  <br><fieldset><legend>$phrases[shipping_address]</legend>
  <b>$phrases[shipping_name] : </b> $data[shipping_name] <br>
- <b>$phrases[country] : </b> $data[shipping_country] <br>
+ <b>$phrases[country] : </b> ".get_country_name($data['shipping_country'])." <br>
   <b>$phrases[city] : </b> $data[shipping_city] <br>   
  <b>$phrases[the_address] : </b> $data[shipping_address1] <br> $data[shipping_address2] <br>
  <b>$phrases[telephone] : </b> $data[shipping_telephone] <br>

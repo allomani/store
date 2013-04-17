@@ -22,7 +22,7 @@ $cntx = db_qr_fetch("select count(id) as count from store_products_data where id
         db_query("insert into store_hot_items (`product_id`,ord) values ('$idx','0')");
         
         }else{
-        print_admin_table("<center>$phrases[err_invalid_id] : $idx</center>");
+        show_alert("$phrases[err_invalid_id] : $idx","error");
         print "<br>";
         }
  }

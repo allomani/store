@@ -230,7 +230,7 @@ print "<option value=0>$phrases[other]</option> ";
  $qr_c = db_query("select * from store_countries order by name asc");
  print "<option value=''></option>";
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\">$data_c[name]</option>";
  }
  
  print "</select></td></tr>
@@ -256,7 +256,7 @@ print "<option value=0>$phrases[other]</option> ";
  $qr_c = db_query("select * from store_countries order by name asc");
   print "<option value=''></option>";
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\">$data_c[name]</option>";
  }
  
  print "</select></td></tr>
@@ -345,9 +345,9 @@ $msg_rplc_arr = array($sitename,$scripturl,$id,$invc_url,"\"".addslashes($old_st
  $snd = send_email($sitename,$settings['mailing_email'],$client_email['email'],$msg_order_status_changed_sbjct,$msg_order_status_changed,$settings['mailing_default_use_html'],$settings['mailing_default_encoding']);
             //-------------------------//
             if($snd){
-            print_admin_table("<center><img src='images/done.gif'> &nbsp; $client_email[email] <br>$phrases[status_change_notify_sent]  </center>");
+            show_alert("<b>$client_email[email] </b> : $phrases[status_change_notify_sent]","success");
             }else{
-                print_admin_table("<center><img src='images/send_faild.gif'> &nbsp; $client_email[email] <br> $phrases[status_change_notify_failed] </center>"); 
+          show_alert("<b>$client_email[email] </b> : $phrases[status_change_notify_failed]","warning"); 
             }
             print "<br>";
          
@@ -611,7 +611,7 @@ set_shipping_method_text_display(".$data['shipping_method_id'].");
  <tr><td><b>$phrases[country]</b></td><td><select name=\"billing_country\">";
  $qr_c = db_query("select * from store_countries order by name asc");
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\"".iif($data['billing_country']==$data_c['name']," selected").">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\"".iif($data['billing_country']==$data_c['code']," selected").">$data_c[name]</option>";
  }
  
  print "</select></td></tr>
@@ -636,7 +636,7 @@ set_shipping_method_text_display(".$data['shipping_method_id'].");
  <tr><td><b>$phrases[country]</b></td><td><select name=\"shipping_country\">";
  $qr_c = db_query("select * from store_countries order by name asc");
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\"".iif($data['shipping_country']==$data_c['name']," selected").">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\"".iif($data['shipping_country']==$data_c['code']," selected").">$data_c[name]</option>";
  }
  
  print "</select></td></tr>

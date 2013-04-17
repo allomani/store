@@ -77,7 +77,7 @@ $total_items = count($items);
  $session->set("checkout_billing",$billing_info);
  }else{
     if($sop == $steps[$prev_step]){
-     print "<div class='err_msg'>Please Fill All Fields</div>";
+     print "<div class='alert error'>$phrases[please_fill_all_fields]</div>";
      $op = $sop;
     }
     }
@@ -91,7 +91,7 @@ $total_items = count($items);
     $session->set("checkout_shipping",$shipping_info);
     }else{
     if($sop == $steps[$prev_step]){
-     print "<div class='err_msg'>Please Fill All Fields</div>";
+     print "<div class='alert error'>$phrases[please_fill_all_fields]</div>";
      $op = $sop;
     }
     }
@@ -109,7 +109,7 @@ $total_items = count($items);
     $session->set("checkout_shipping_price", '');
     
     if($sop == $steps[$prev_step]){
-     print "<div class='err_msg'>Cannot get shipping price , please try again</div>";
+     print "<div class='alert error'>$phrases[cannot_get_shipping_price]</div>";
      $op = $sop;
     }
     
@@ -118,7 +118,7 @@ $total_items = count($items);
     
     }else{
     if($sop == $steps[$prev_step]){
-     print "<div class='err_msg'>no ship method selected</div>";
+     print "<div class='alert error'>$phrases[no_shipping_method_selected]</div>";
      $op = $sop;
     }
     }
@@ -130,7 +130,7 @@ $total_items = count($items);
     $session->set("checkout_billing_method",$payment_method);
     }else{
     if($sop == $steps[$prev_step]){
-     print "<div class='err_msg'>no billing method selected</div>";
+     print "<div class='alert error'>$phrases[no_billing_method_selected]</div>";
      $op = $sop;
     }
     }
@@ -161,7 +161,7 @@ open_table("$phrases[checkout]");
   //------------ steps header -------------
   print "<div class='checkout_steps'>";
   foreach($steps as $s){
- print "<div class='".iif($s==$op,"step_btn_selected","step_btn")."'>$s</div>";
+ print "<div class='".iif($s==$op,"step_btn_selected","step_btn")."'>{$phrases["checkout_{$s}"]}</div>";
  }
  print "</div>
  <div class='clear'></div>";
@@ -174,7 +174,7 @@ open_table("$phrases[checkout]");
  document.forms['checkout_form'].submit();
  }
  function checkout_next(){
-  document.forms['checkout_form'].elements['op'].value = '".$steps[$next_step]."';
+ document.forms['checkout_form'].elements['op'].value = '".$steps[$next_step]."';
  document.forms['checkout_form'].submit();
  }
  </script>
@@ -230,7 +230,7 @@ open_table("$phrases[checkout]");
  <option value=''>-- $phrases[select_from_menu] --</option>";
  $qr_c = db_query("select * from store_countries order by name asc");
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\" ".iif($billing_session['country']==$data_c['name']," selected").">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\" ".iif($billing_session['country']==$data_c['code']," selected").">$data_c[name]</option>";
  }
  
  print "</select>
@@ -276,7 +276,7 @@ open_table("$phrases[checkout]");
  <tr><td><b>$phrases[country]</b></td><td><select id='info_country' name=\"shipping_info[country]\">";
  $qr_c = db_query("select * from store_countries order by name asc");
  while($data_c = db_fetch($qr_c)){
-     print "<option value=\"$data_c[name]\" ".iif($shipping_session['country']==$data_c['name']," selected").">$data_c[name]</option>";
+     print "<option value=\"$data_c[code]\" ".iif($shipping_session['country']==$data_c['code']," selected").">$data_c[name]</option>";
  }
  
  print "</select>
@@ -512,7 +512,13 @@ print "</td><td>".$items[$i]['qty']."</td><td>$data[item_price] $settings[curren
  send_email($sitename,$settings['mailing_email'],$settings['admin_email'],$msg_new_order_admin_sbjct,$msg_new_order_admin,$settings['mailing_default_use_html'],$settings['mailing_default_encoding']);
 
  //------------------------------------------
-  
+ 
+   $session->set("checkout_shipping",'');
+   $session->set("checkout_billing",'');
+   $session->set("checkout_shipping_price",'');
+   $session->set("checkout_shipping_method",'');
+   $session->set("checkout_billing_method",'');
+   
  run_template('checkout_done');
  
  } 

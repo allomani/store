@@ -21,7 +21,7 @@ foreach ($pages as $value) {
 if(!$non_safe_content){    
       db_query("insert into store_banners (title,url,img,ord,type,date,menu_id,menu_pos,pages,content,c_type,active,start_date,expire_date) values ('".db_escape($title)."','".db_escape($url)."','".db_escape($img)."','".intval($ord)."','".db_escape($type)."','".time()."','".intval($menu_id)."','".db_escape($menu_pos)."','".db_escape($pg_view)."','".db_escape($content,false)."','".db_escape($c_type)."','1','".iif($start_date,strtotime($start_date),0)."','".iif($expire_date,strtotime($expire_date),0)."')");
  }else{
-    print_admin_table("<center> $non_safe_content </center>");
+    show_alert("$non_safe_content","error");
 }
           }
 
@@ -40,7 +40,7 @@ $non_safe_content =  check_safe_functions($content);
 if(!$non_safe_content){  
       db_query("update store_banners set title='".db_escape($title)."',url='".db_escape($url)."',img='".db_escape($img)."',ord='".intval($ord)."',type='".db_escape($type)."',menu_id='".intval($menu_id)."',menu_pos='".db_escape($menu_pos)."',pages='".db_escape($pg_view)."',content='".db_escape($content,false)."',c_type='".db_escape($c_type)."',start_date='".iif($start_date,strtotime($start_date),0)."',expire_date='".iif($expire_date,strtotime($expire_date),0)."' where id='$id'");
 }else{
-    print_admin_table("<center> $non_safe_content </center>");
+    show_alert("$non_safe_content","error");
 }
           }
 

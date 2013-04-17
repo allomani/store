@@ -28,7 +28,7 @@ db_query("update store_orders_status set active=1 where id='$id'");
 if($action=="disable"){
 $data_st = db_qr_fetch("select `default`,`default_if_shipping` from store_orders_status where id='$id'");
 if($data_st['default'] || $data_st['default_if_shipping']){
-print_admin_table("<center> $phrases[cannot_disable_default_status] </center>");
+show_alert("$phrases[cannot_disable_default_status]","error");
 }else{    
 db_query("update store_orders_status set active=0 where id='$id'");
 }    
@@ -37,7 +37,7 @@ db_query("update store_orders_status set active=0 where id='$id'");
 if($action=="del"){
     $data_st = db_qr_fetch("select `default`,`default_if_shipping` from store_orders_status where id='$id'");
 if($data_st['default'] || $data_st['default_if_shipping']){
-print_admin_table("<center> $phrases[cannot_delete_default_status] </center>");
+print_admin_table("$phrases[cannot_delete_default_status]","error");
 }else{  
     db_query("delete from  store_orders_status where id='$id'");
 }

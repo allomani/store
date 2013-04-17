@@ -77,16 +77,38 @@ input[type="submit"]:focus,input[type="button"]:focus{
 
 input{font-family:inherit} 
 
-.err_msg {
-    border:1px solid #EF8B03;
-    margin:11px 6px;
-    padding: 10px;
 
-    background-repeat: no-repeat;
-    padding-right: 30px;
-    background-position:right;
-    background-image:url('../images/warning.png');
-    border-radius:5px;
+/* ---- Alerts ------ */
+.alert {
+    border: 1px solid;
+    margin: 10px auto;
+    padding:10px;
+ text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+}
+.alert.info {
+     color: #3a87ad;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+.alert.success {
+     color: #468847;
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+}
+.alert.warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+   border-color: #9F6000;
+}
+.alert.error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color:#eed3d7;
 }
 
 .step_btn_selected {

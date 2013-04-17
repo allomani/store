@@ -532,7 +532,7 @@ if ($action == "news_move") {
             print_admin_table("<center>$phrases[err_wrong_url]</center>");
         }
     } else {
-        print_admin_table("<center>$phrases[please_select_news_first]</center>");
+        show_alert("$phrases[please_select_news_first]","error");
     }
 }
 

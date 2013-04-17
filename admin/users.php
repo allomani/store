@@ -139,7 +139,7 @@ if (!$action || $action == "users" || $action == "edit_ok" || $action == "add_ok
         if ($user_info['groupid'] == 1) {
             db_query("delete from store_user where id='$id'");
         } else {
-            print_admin_table("<center>$phrases[access_denied]</center>");
+            show_alert("$phrases[access_denied]","error");
             die();
         }
     }
@@ -148,15 +148,15 @@ if (!$action || $action == "users" || $action == "edit_ok" || $action == "add_ok
         if ($user_info['groupid'] == 1) {
             if (trim($username) && trim($password)) {
                 if (db_qr_num("select username from store_user where username='" . db_escape($username, false) . "'")) {
-                    print "<center> $phrases[cp_err_username_exists] </center>";
+                  show_alert("$phrases[cp_err_username_exists]","error");
                 } else {
                     db_query("insert into store_user (username,password,email,group_id) values ('" . db_escape($username, false) . "','" . db_escape($password, false) . "','" . db_escape($email) . "','" . intval($group_id) . "')");
                 }
             } else {
-                print "<center>  $phrases[cp_plz_enter_usr_pwd] </center>";
+              show_alert("$phrases[cp_plz_enter_usr_pwd]","error");
             }
         } else {
-            print_admin_table("<center>$phrases[access_denied]</center>");
+            show_alert("$phrases[access_denied]","error");
             die();
         }
     }
@@ -172,12 +172,12 @@ if (!$action || $action == "users" || $action == "edit_ok" || $action == "add_ok
             if ($user_info['id'] == $id) {
                 db_query("update store_user set username='" . db_escape($username, false) . "'  , email='" . db_escape($email) . "'  $ifeditpassword where id='$id'");
             } else {
-                print_admin_table("<center>$phrases[access_denied]</center>");
+                show_alert("$phrases[access_denied]","error");
                 die();
             }
         }
 
-        print "<center>  $phrases[cp_edit_user_success]  </center>";
+       show_alert("$phrases[cp_edit_user_success]","success");
     }
 
     if ($user_info['groupid'] == 1) {
@@ -260,7 +260,7 @@ if ($action == "edit") {
   </TR>
     <TR>
    <TD width=\"100\"><b>$phrases[cp_password] : </b></TD>
-   <TD width=\"614\"><INPUT type=\"text\" name=\"password\" id='password'  dir=ltr size=\"32\" required='required'> &nbsp; <input type=button value=\"Generate\" id='generate_pwd'>
+   <TD width=\"614\"><INPUT type=\"text\" name=\"password\" id='password'  dir=ltr size=\"32\"> &nbsp; <input type=button value=\"Generate\" id='generate_pwd'>
     <br>* $phrases[leave_blank_for_no_change] </TD>
   </TR>
   <tr><td></td><td>

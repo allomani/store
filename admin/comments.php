@@ -222,7 +222,7 @@ if ($action == "comments_edit") {
             print_admin_table("<center>  $phrases[err_wrong_url] </center>");
         }
     } else {
-        print_admin_table("<center>  $phrases[no_files_selected] </center>");
+        show_alert("$phrases[no_files_selected]","warning");
     }
 }
 

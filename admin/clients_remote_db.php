@@ -8,7 +8,7 @@
 
 print "<p align=center class=title> $phrases[cp_remote_members_db] </p>";
 
-print_admin_table("<center>$phrases[you_can_edit_this_values_from_config_file]</center>");
+show_alert("$phrases[you_can_edit_this_values_from_config_file]","info");
 print "<br><center><table width=60% class=grid><tr><td><b>$phrases[use_remote_db]</b></td><td>".($members_connector['enable'] ? $phrases['yes'] : $phrases['no'])."</td></tr>";
 if($members_connector['enable']){
 print "<tr><td><b>$phrases[db_host]</b></td><td>$members_connector[db_host]</td></tr>
@@ -108,9 +108,9 @@ print "</td>";
         }
         //----------- end tables check -----------
         if($tables_ok){
-        print_admin_table($phrases['members_remote_db_compatible']);
+        show_alert($phrases['members_remote_db_compatible'],"success");
             }else{
-            print_admin_table($phrases['members_remote_db_uncompatible']);
+            show_alert($phrases['members_remote_db_uncompatible'],"warning");
                 }
         //--------- clean local db note ------------
         print "<center> <br>
@@ -125,13 +125,13 @@ $phrases[members_local_db_clean_note]
 </form></center>";
 
         }else{
-        print_admin_table($phrases['wrong_remote_db_name']);
+        show_alert($phrases['wrong_remote_db_name'],"error");
             }
         }else{
-            print_admin_table($phrases['wrong_remote_db_connect_info']);
+            show_alert($phrases['wrong_remote_db_connect_info'],"error");
             }
         }else{
-        print_admin_table($phrases['members_remote_db_disabled']);
+        show_alert($phrases['members_remote_db_disabled'],"error");
             }
  }
 

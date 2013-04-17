@@ -22,14 +22,12 @@
  if($action=="geo_zones_edit" || $action=="geo_zone_country_add"){
 
  if_admin();
-  $country_id = (int) $country_id;
   
  if($action=="geo_zone_country_add"){
-     $count = db_fetch_first("select count(*) as count from store_geo_index where geo_id='$id' and country_id='$country_id'");
+     $count = db_fetch_first("select count(*) as count from store_geo_index where geo_id='$id' and country_code='".db_escape($country_code)."'");
      if(!$count){
-         db_query("insert into store_geo_index (geo_id,country_id) values ('$id','$country_id');");
+         db_query("insert into store_geo_index (geo_id,country_code) values ('$id','".db_escape($country_code)."');");
      }
-     
  }
  
  $qr = db_query("select * from store_geo where id='$id'");
@@ -40,10 +38,10 @@ print "
 <input type='hidden' name='action' value='geo_zone_country_add'>
 <input type='hidden' name='id' value='$id'>
 <fieldset>
-<select name='country_id'>";
+<select name='country_code'>";
 $qrc = db_query("select * from store_countries order by name asc");
 while($datac=db_fetch($qrc)){
-    print "<option value='$datac[id]'>$datac[name]</option>";
+    print "<option value='$datac[code]'>$datac[name]</option>";
 }
 print "</select>
 <input type='submit' value='$phrases[add_button]'>
@@ -51,7 +49,7 @@ print "</select>
 </form>";
 
 
-$qr = db_query("select store_countries.name,store_geo_index.id from store_countries,store_geo_index where store_countries.id =  store_geo_index.country_id and store_geo_index.geo_id = '$id'");
+$qr = db_query("select store_countries.name,store_geo_index.id from store_countries,store_geo_index where store_countries.code =  store_geo_index.country_code and store_geo_index.geo_id = '$id'");
 if(db_num($qr)){
     print "<table width=100% class='grid'>";
     while($data=db_fetch($qr)){
