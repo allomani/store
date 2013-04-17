@@ -92,8 +92,8 @@ $total_items = count($items);
  print "<div id='invoice_price_div' align='$global_align_x'>
      <table>";
  if($data['shipping_price']){
- print "<tr><td><b>Items :</b></td><td>$total_price $settings[currency]</td></tr>
-        <tr><td><b>Shipphing :</b></td><td>$data[shipping_price] $settings[currency] </td></tr>";
+ print "<tr><td><b>اجمالي السلع :</b></td><td>$total_price $settings[currency]</td></tr>
+        <tr><td><b>اجمالي التوصيل :</b></td><td>$data[shipping_price] $settings[currency] </td></tr>";
  }
  
  print "<tr><td><b>$phrases[the_total] :</b></td><td>".($total_price +$data['shipping_price'])." $settings[currency]</td></tr>
@@ -107,11 +107,17 @@ $total_items = count($items);
         if (!$data['paid'] && $datast['show_payment']) {
             
             $payment_ids = items_available_payment_methods($items);
+            $geo_payment_ids = country_available_payment_methods($data['billing_country']);
+            
           
             open_table("$phrases[bill_payment]");
             print "<fieldset>
  <legend>$phrases[payment_method]</legend>";
-            $qr_p = db_query("select * from store_payment_methods where active=1 and (id IN (".implode(",",$payment_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) order by ord asc");
+          
+             if(count($payment_ids)){
+      if(count($geo_payment_ids)){
+          
+            $qr_p = db_query("select * from store_payment_methods where (id IN (".implode(",",$payment_ids).") and id IN (".implode(",",$geo_payment_ids).")) order by ord asc");
 
             $i = 0;
             while ($data_p = db_fetch($qr_p)) {
@@ -123,6 +129,14 @@ $total_items = count($items);
                 print "<table><tr><td width=5><input type=radio name=payment_method value=\"$data_p[id]\"" . iif($data_p['id'] == $data['payment_method_id'], " checked") . " onClick=\"show_payment_method_details(this.value,$id);\"></td>" . iif($data_p['img'], "<td width=10><img src=\"$data_p[img]\"></td>") . "<td>$data_p[name]</td></tr></table>";
                 $i++;
             }
+            
+             }else{
+     print "لا تتوفر طريقة دفع مناسبة لدولتك";
+     }
+ }else{
+     print "لا تتوفر طريقة دفع مناسبة لطلبك";
+     }
+ 
             print "</fieldset><br>
  
  

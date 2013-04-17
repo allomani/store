@@ -42,9 +42,8 @@ $items[$i]['qty'] = (int) $items[$i]['qty'];
  if($data['can_shipping']){$can_shipping=1;}
  
  }
+
  
- $payment_ids = items_available_payment_methods($items);
- $shipping_ids = items_available_shipping_methods($items);
 
 //--------------------------------------------//
 $total_items = count($items);
@@ -297,11 +296,19 @@ open_table("$phrases[checkout]");
  } 
  //------- shipping method -----//   
  if($op=="shipping_method"){  
+     
+ $shipping_ids = items_available_shipping_methods($items);
+ $shipping_session = (array) $session->get("checkout_shipping");
+ $geo_shipping_ids = country_available_shipping_methods($shipping_session['country']);
+
+ 
  if(count($shipping_ids)){
+     if(count($geo_shipping_ids)){
+    
   $shipping_method_session = $session->get("checkout_shipping_method");    
- $qr_sm = db_query("select * from store_shipping_methods where (id IN (".implode(",",$shipping_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) order by ord asc");
+ $qr_sm = db_query("select * from store_shipping_methods where (id IN (".implode(",",$shipping_ids).") and id IN (".implode(",",$geo_shipping_ids).")) order by ord asc");
   if(db_num($qr_sm)){
-  print "<fieldset style=\"width:100%;\">  
+  print "<fieldset>  
   <legend>$phrases[shipping_method]</legend>";
   $c=0;
   $first_id = 0;
@@ -314,9 +321,9 @@ open_table("$phrases[checkout]");
   }
   print "
  </fieldset>
-  <br />
+ 
  <fieldset>
-  <legend>Shipping Price </legend>
+  <legend>سعر التوصيل </legend>
 <div id='shipping_method_price'></div>
    <div id='loading_div' style=\"display:none;\"><img src='images/ajax_loading.gif'></div>
   </fieldset>
@@ -331,28 +338,53 @@ get_shipping_method_price($first_id);
   
  // if($default_shipping_address_id){print "<script>get_shipping_address_fields_div($default_shipping_address_id);</script>";}  
  //}
- 
  }else{
-     print "no shipping methods";
+      print "<fieldset>  
+  <legend>$phrases[shipping_method]</legend>";
+     print "لا تتوفر طريقة توصيل مناسبة لدولتك";
+       print "</fieldset>";
+     }
+ }else{
+          print "<fieldset>  
+  <legend>$phrases[shipping_method]</legend>";
+     print "لا تتوفر طريقة توصيل مناسبة لطلبك";
+       print "</fieldset>";
  }
  }
  //----------- billing method ----------------
  if($op=="billing_method"){
-     $payment_method = $session->get('checkout_billing_method');
-    
- print "<br>
+     
+ print "
  
- <fieldset style=\"width:100%;\">
+ <fieldset>
  <legend>$phrases[payment_method]</legend>";
- $qr_p = db_query("select * from store_payment_methods where active=1 and (id IN (".implode(",",$payment_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) order by ord asc");
+ 
+ 
+     $payment_method = $session->get('checkout_billing_method');
+ $payment_ids = items_available_payment_methods($items);
+      $billing_session = (array) $session->get("checkout_shipping");
+    $geo_payment_ids = country_available_payment_methods($billing_session['country']);
+ if(count($payment_ids)){
+      if(count($geo_payment_ids)){
+   
+
+ 
+ $qr_p = db_query("select * from store_payment_methods where (id IN (".implode(",",$payment_ids).") and id IN (".implode(",",$geo_payment_ids).")) order by ord asc");
  $x=0;
  while($data_p = db_fetch($qr_p)){
  print "<table><tr><td width=5><input type=radio name='payment_method' value=\"$data_p[id]\"".iif($payment_method==$data_p['id'],"checked",iif(!$x," checked"))."></td>".iif($data_p['img'],"<td width=10><img src=\"$data_p[img]\"></td>")."<td>$data_p[name]</td></tr></table>"; 
    //  print "<input type=radio name=payment_method value=\"$data_p[id]\"".iif(!$x," checked")."> $data_p[name]<br>";
      $x++;
  }
- print "</fieldset>
- <br>  ";  
+
+ }else{
+     print "لا تتوفر طريقة دفع مناسبة لدولتك";
+     }
+ }else{
+     print "لا تتوفر طريقة دفع مناسبة لطلبك";
+     }
+ 
+  print "</fieldset> ";  
  }
  
  

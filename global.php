@@ -1707,15 +1707,84 @@ var url = \"$url\";
  <center> $phrases[redirection_msg] <a href=\"$url\">$phrases[click_here]</a></center>";
 }
 
+//--- get country available shipping methods ------//
+function country_available_shipping_methods($country){
+    $data = db_fetch_all("select geo_id from store_geo_index where country_code = '".db_escape($country)."'");
+    if(count($data)){
+   foreach($data as $geo_id){
+           $geo_ids[] = $geo_id;
+           }
+    $data_methods = db_fetch_all("select shipping_methods from store_geo where id IN (".implode(",",$geo_ids).")");
+  $methods = array();
+  foreach($data_methods as $dm){
+      $zone_methods = (array) explode(",", $dm['shipping_methods']);
+      foreach($zone_methods as $method_id){
+          if(!in_array($method_id,$methods)){
+              $methods[] = $method_id;
+              }
+          }
+      }
+      }
+    
+     $methods[] = 0;
+     
+ 
+   $data  = db_fetch_all("select id from store_shipping_methods where id IN(".implode(",",$methods).") or all_geo_zones='1' and active=1");
+   foreach($data as $f){
+       $final_ids[]  = $f['id'];
+       }
+      
+       
+       return (array)  $final_ids;
+    }
+ 
+//--- get country available payment methods ------//
+function country_available_payment_methods($country){
+    $data = db_fetch_all("select geo_id from store_geo_index where country_code = '".db_escape($country)."'");
+    if(count($data)){
+   foreach($data as $geo_id){
+           $geo_ids[] = $geo_id;
+           }
+    $data_methods = db_fetch_all("select payment_methods from store_geo where id IN (".implode(",",$geo_ids).")");
+  $methods = array();
+  foreach($data_methods as $dm){
+      $zone_methods = (array) explode(",", $dm['payment_methods']);
+      foreach($zone_methods as $method_id){
+          if(!in_array($method_id,$methods)){
+              $methods[] = $method_id;
+              }
+          }
+      }
+      }
+    
+     $methods[] = 0;
+     
+ 
+   $data  = db_fetch_all("select id from store_payment_methods where id IN(".implode(",",$methods).") or all_geo_zones='1' and active=1");
+   foreach($data as $f){
+       $final_ids[]  = $f['id'];
+       }
+      
+       
+       return  (array) $final_ids;
+    }
+    
 //----- get items shared shipping methods -----//
 function items_available_shipping_methods($items) {
    
 $items_cats = array();
+$total_price = 0;
+$total_weight = 0;
+$total_items = count($items);
 
    foreach ($items as $item) {
        
        $data = $item['data'];
-       
+   
+ $total_price += $data['item_price']; 
+ $total_weight += $data['weight'];
+ 
+ 
 if(!in_array($data['cat'],$items_cats)){
 $items_cats[] = $data['cat'];
 
@@ -1739,15 +1808,30 @@ $shipping_ids  = $tmp_arr ;
 }
 $shipping_ids[] = 0;
 
- return (array) $shipping_ids;
+$final_ids = array();
+$data_arr = db_fetch_all("select id from store_shipping_methods where (id IN (".implode(",",$shipping_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) and active=1");
+foreach($data_arr as $data_sm){
+    $final_ids[] = $data_sm['id'];
+}
+ 
+ return (array) $final_ids;
 }
 //----- get items shared payment methods -----//
 function items_available_payment_methods($items) {
 $items_cats = array();
+$total_price = 0;
+$total_weight = 0;
+$total_items = count($items);
+
+
     foreach ($items as $item) {
         
         $data = $item['data'];
-        
+     
+  $total_price += $data['item_price']; 
+ $total_weight += $data['weight'];
+ 
+ 
         if (!in_array($data['cat'], $items_cats)) {
             $items_cats[] = $data['cat'];
 
@@ -1770,7 +1854,18 @@ $items_cats = array();
         }
     }
     $payment_ids[] = 0;
-    return (array) $payment_ids;
+  
+    
+    $final_ids = array();
+
+$data_arr = db_fetch_all("select id from store_payment_methods where (id IN (".implode(",",$payment_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0)  and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) and active=1");
+foreach($data_arr as $data_sm){
+    $final_ids[] = $data_sm['id'];
+}
+ 
+ return (array) $final_ids;
+ 
+ 
 }
 
 function show_alert($msg="",$type=""){
