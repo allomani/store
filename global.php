@@ -22,6 +22,7 @@ function autoloadClass($name, $ext = 'php') {
         print "Class \"$name\" is not Exists !";
     }
 }
+
 //---------------------------------------------
 
 $config = array();
@@ -54,8 +55,6 @@ if (!empty($_GET)) {
 }
 //if (!empty($_ENV)) {extract($_ENV);}
 //-----------------------------------------------------
-
-
 //------ clean global vars ---------//
 $_SERVER['QUERY_STRING'] = strip_tags($_SERVER['QUERY_STRING']);
 $_SERVER['PHP_SELF'] = strip_tags($_SERVER['PHP_SELF']);
@@ -193,7 +192,6 @@ $script_path = trim(str_replace(rtrim(str_replace(DIRECTORY_SEPARATOR, '/', $_SE
 $scripturl = $siteurl . iif($script_path, "/" . $script_path, "");
 $upload_types = explode(',', str_replace(" ", "", strtolower($settings['uploader_types'])));
 $mailing_email = str_replace("{domain_name}", $_SERVER['HTTP_HOST'], $settings['mailing_email']);
-
 
 //------ validate styleid functon ------
 function is_valid_styleid($styleid) {
@@ -384,7 +382,7 @@ function check_admin_login() {
                 $user_info['email'] = $data['email'];
                 $user_info['groupid'] = $data['group_id'];
                 $user_info['perm_all_cats'] = $data['perm_all_cats'];
-                
+
                 return true;
             } else {
                 return false;
@@ -1047,30 +1045,29 @@ function print_pages_links($start, $items_count, $items_perpage, $page_string) {
 function if_products_cat_admin($cats, $skip_zero_id = true) {
     global $user_info, $phrases;
 
-    if($user_info['perm_all_cats'] || $user_info['groupid'] == 1){
+    if ($user_info['perm_all_cats'] || $user_info['groupid'] == 1) {
         return true;
     }
-  
-        
-        $cats = (array) $cats;
-
-        foreach ($cats as $cat) {
-            if ($cat) {
-                $cat_users = get_product_cat_users($cat, true);
 
 
-                if (!in_array($user_info['id'], $cat_users)) {
-                    print_admin_table("<center>$phrases[err_cat_access_denied]</center>");
-                    die();
-                }
-            } else {
-                if (!$skip_zero_id) {
-                    print_admin_table("<center>$phrases[err_cat_access_denied]</center>");
-                    die();
-                }
+    $cats = (array) $cats;
+
+    foreach ($cats as $cat) {
+        if ($cat) {
+            $cat_users = get_product_cat_users($cat, true);
+
+
+            if (!in_array($user_info['id'], $cat_users)) {
+                print_admin_table("<center>$phrases[err_cat_access_denied]</center>");
+                die();
+            }
+        } else {
+            if (!$skip_zero_id) {
+                print_admin_table("<center>$phrases[err_cat_access_denied]</center>");
+                die();
             }
         }
-    
+    }
 }
 
 //---------- Get Products Cats --------//
@@ -1182,7 +1179,7 @@ function get_product_cat_payment_methods($id, $fields_only = false) {
         $data = db_qr_fetch("select name,`payment_methods` from store_products_cats where id='" . $dir_data['id'] . "'");
         if (trim($data['payment_methods'])) {
             $cat_fields = explode(",", $data['payment_methods']);
-         
+
             for ($z = 0; $z < count($cat_fields); $z++) {
 
                 if ($fields_only) {
@@ -1363,7 +1360,7 @@ function login_redirect() {
 
 //----------------- Path Links ---------
 function print_path_links($cat, $filename = "") {
-    global $phrases, $style, $links, $global_align,$cats_data,$cats_array;
+    global $phrases, $style, $links, $global_align, $cats_data, $cats_array;
 
     $cat = intval($cat);
     if ($cat) {
@@ -1374,10 +1371,10 @@ function print_path_links($cat, $filename = "") {
         }
 
         $cats_array = explode(",", $data_cat['path']);
-}else{
-    $cats_array = array();
+    } else {
+        $cats_array = array();
     }
-    
+
     run_template('path_links');
 }
 
@@ -1673,130 +1670,131 @@ var url = \"$url\";
 }
 
 //--- get country available shipping methods ------//
-function country_available_shipping_methods($country){
-    $data = db_fetch_all("select geo_id from store_geo_index where country_code = '".db_escape($country)."'");
-    if(count($data)){
-   foreach($data as $geo_id){
-           $geo_ids[] = $geo_id;
-           }
-    $data_methods = db_fetch_all("select shipping_methods from store_geo where id IN (".implode(",",$geo_ids).")");
-  $methods = array();
-  foreach($data_methods as $dm){
-      $zone_methods = (array) explode(",", $dm['shipping_methods']);
-      foreach($zone_methods as $method_id){
-          if(!in_array($method_id,$methods)){
-              $methods[] = $method_id;
-              }
-          }
-      }
-      }
-    
-     $methods[] = 0;
-     
- 
-   $data  = db_fetch_all("select id from store_shipping_methods where id IN(".implode(",",$methods).") or all_geo_zones='1' and active=1");
-   foreach($data as $f){
-       $final_ids[]  = $f['id'];
-       }
-      
-       
-       return (array)  $final_ids;
+function country_available_shipping_methods($country) {
+    $data = db_fetch_all("select geo_id from store_geo_index where country_code = '" . db_escape($country) . "'");
+    if (count($data)) {
+        foreach ($data as $geo_id) {
+            $geo_ids[] = $geo_id;
+        }
+        $data_methods = db_fetch_all("select shipping_methods from store_geo where id IN (" . implode(",", $geo_ids) . ")");
+        $methods = array();
+        foreach ($data_methods as $dm) {
+            $zone_methods = (array) explode(",", $dm['shipping_methods']);
+            foreach ($zone_methods as $method_id) {
+                if (!in_array($method_id, $methods)) {
+                    $methods[] = $method_id;
+                }
+            }
+        }
     }
- 
+
+    $methods[] = 0;
+
+
+    $data = db_fetch_all("select id from store_shipping_methods where id IN(" . implode(",", $methods) . ") or all_geo_zones='1' and active=1");
+    foreach ($data as $f) {
+        $final_ids[] = $f['id'];
+    }
+
+
+    return (array) $final_ids;
+}
+
 //--- get country available payment methods ------//
-function country_available_payment_methods($country){
-    $data = db_fetch_all("select geo_id from store_geo_index where country_code = '".db_escape($country)."'");
-    if(count($data)){
-   foreach($data as $geo_id){
-           $geo_ids[] = $geo_id;
-           }
-    $data_methods = db_fetch_all("select payment_methods from store_geo where id IN (".implode(",",$geo_ids).")");
-  $methods = array();
-  foreach($data_methods as $dm){
-      $zone_methods = (array) explode(",", $dm['payment_methods']);
-      foreach($zone_methods as $method_id){
-          if(!in_array($method_id,$methods)){
-              $methods[] = $method_id;
-              }
-          }
-      }
-      }
-    
-     $methods[] = 0;
-     
- 
-   $data  = db_fetch_all("select id from store_payment_methods where id IN(".implode(",",$methods).") or all_geo_zones='1' and active=1");
-   foreach($data as $f){
-       $final_ids[]  = $f['id'];
-       }
-      
-       
-       return  (array) $final_ids;
+function country_available_payment_methods($country) {
+    $data = db_fetch_all("select geo_id from store_geo_index where country_code = '" . db_escape($country) . "'");
+    if (count($data)) {
+        foreach ($data as $geo_id) {
+            $geo_ids[] = $geo_id;
+        }
+        $data_methods = db_fetch_all("select payment_methods from store_geo where id IN (" . implode(",", $geo_ids) . ")");
+        $methods = array();
+        foreach ($data_methods as $dm) {
+            $zone_methods = (array) explode(",", $dm['payment_methods']);
+            foreach ($zone_methods as $method_id) {
+                if (!in_array($method_id, $methods)) {
+                    $methods[] = $method_id;
+                }
+            }
+        }
     }
-    
+
+    $methods[] = 0;
+
+
+    $data = db_fetch_all("select id from store_payment_methods where id IN(" . implode(",", $methods) . ") or all_geo_zones='1' and active=1");
+    foreach ($data as $f) {
+        $final_ids[] = $f['id'];
+    }
+
+
+    return (array) $final_ids;
+}
+
 //----- get items shared shipping methods -----//
 function items_available_shipping_methods($items) {
-   
-$items_cats = array();
-$total_price = 0;
-$total_weight = 0;
-$total_items = count($items);
 
-   foreach ($items as $item) {
-       
-       $data = $item['data'];
-   
- $total_price += $data['item_price']; 
- $total_weight += $data['weight'];
- 
- 
-if(!in_array($data['cat'],$items_cats)){
-$items_cats[] = $data['cat'];
+    $items_cats = array();
+    $total_price = 0;
+    $total_weight = 0;
+    $total_items = count($items);
 
-$cat_shipping = get_product_cat_shipping_methods($data['cat'],true);
-  
-if(count($shipping_ids)){
-  
-unset($tmp_arr);
-  foreach($cat_shipping as $cat_shipping_id){
-  
-  if(in_array($cat_shipping_id,$shipping_ids)){
-$tmp_arr[] = $cat_shipping_id ;  
-  }  
-  }
-$shipping_ids  = $tmp_arr ;   
-}else{
-    $shipping_ids =  $cat_shipping ;
-}
- unset($cat_shipping);
-}
-}
-$shipping_ids[] = 0;
+    foreach ($items as $item) {
 
-$final_ids = array();
-$data_arr = db_fetch_all("select id from store_shipping_methods where (id IN (".implode(",",$shipping_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) and active=1");
-foreach($data_arr as $data_sm){
-    $final_ids[] = $data_sm['id'];
+        $data = $item['data'];
+
+        $total_price += $data['item_price'];
+        $total_weight += $data['weight'];
+
+
+        if (!in_array($data['cat'], $items_cats)) {
+            $items_cats[] = $data['cat'];
+
+            $cat_shipping = get_product_cat_shipping_methods($data['cat'], true);
+
+            if (count($shipping_ids)) {
+
+                unset($tmp_arr);
+                foreach ($cat_shipping as $cat_shipping_id) {
+
+                    if (in_array($cat_shipping_id, $shipping_ids)) {
+                        $tmp_arr[] = $cat_shipping_id;
+                    }
+                }
+                $shipping_ids = $tmp_arr;
+            } else {
+                $shipping_ids = $cat_shipping;
+            }
+            unset($cat_shipping);
+        }
+    }
+    $shipping_ids[] = 0;
+
+    $final_ids = array();
+    $data_arr = db_fetch_all("select id from store_shipping_methods where (id IN (" . implode(",", $shipping_ids) . ") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0) and (min_weight <= $total_weight or min_weight=0) and (max_weight >= $total_weight or max_weight=0) and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) and active=1");
+    foreach ($data_arr as $data_sm) {
+        $final_ids[] = $data_sm['id'];
+    }
+
+    return (array) $final_ids;
 }
- 
- return (array) $final_ids;
-}
+
 //----- get items shared payment methods -----//
 function items_available_payment_methods($items) {
-$items_cats = array();
-$total_price = 0;
-$total_weight = 0;
-$total_items = count($items);
+    $items_cats = array();
+    $total_price = 0;
+    $total_weight = 0;
+    $total_items = count($items);
 
 
     foreach ($items as $item) {
-        
+
         $data = $item['data'];
-     
-  $total_price += $data['item_price']; 
- $total_weight += $data['weight'];
- 
- 
+
+        $total_price += $data['item_price'];
+        $total_weight += $data['weight'];
+
+
         if (!in_array($data['cat'], $items_cats)) {
             $items_cats[] = $data['cat'];
 
@@ -1819,29 +1817,27 @@ $total_items = count($items);
         }
     }
     $payment_ids[] = 0;
-  
-    
+
+
     $final_ids = array();
 
-$data_arr = db_fetch_all("select id from store_payment_methods where (id IN (".implode(",",$payment_ids).") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0)  and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) and active=1");
-foreach($data_arr as $data_sm){
-    $final_ids[] = $data_sm['id'];
-}
- 
- return (array) $final_ids;
- 
- 
+    $data_arr = db_fetch_all("select id from store_payment_methods where (id IN (" . implode(",", $payment_ids) . ") or all_cats=1) and (min_price <= $total_price or min_price=0) and (max_price >= $total_price or max_price=0)  and (min_items <= $total_items or min_items=0) and (max_items >= $total_items or max_items=0) and active=1");
+    foreach ($data_arr as $data_sm) {
+        $final_ids[] = $data_sm['id'];
+    }
+
+    return (array) $final_ids;
 }
 
-function show_alert($msg="",$type=""){
+function show_alert($msg = "", $type = "") {
     print "<div class=\"alert $type\">$msg</div>";
-    }
-    
+}
+
 //-------- get country name by code ------------
-function get_country_name($code){
-    return db_fetch_first("select name from store_countries where code = '".db_escape($code)."'"); 
-    }
-    
+function get_country_name($code) {
+    return db_fetch_first("select name from store_countries where code = '" . db_escape($code) . "'");
+}
+
 //--------- load plugins function --------     
 function load_plugins($file) {
     $dhx = @opendir(CWD . "/plugins");

@@ -50,15 +50,15 @@ class db_mysqli {
         $this->link = @mysqli_connect($host, $user, $pass);
         if (!$this->link) {
             /*
-            if (mysqli_errno($this->link) == 1040) {
-                throw new Exception("Mysql Server is Busy  , Please Try again later");
-            } else {
-    if ($this->config['debug']['log_mysqli_errors']) {
-                    do_error_log(@mysqli_errno($this->link) . " : " . @mysqli_error($this->link), 'db');
-                }*/
+              if (mysqli_errno($this->link) == 1040) {
+              throw new Exception("Mysql Server is Busy  , Please Try again later");
+              } else {
+              if ($this->config['debug']['log_mysqli_errors']) {
+              do_error_log(@mysqli_errno($this->link) . " : " . @mysqli_error($this->link), 'db');
+              } */
 
-                throw new Exception("Database Connection Error");
-    //      }
+            throw new Exception("Database Connection Error");
+            //      }
         }
 
         $this->select($dbname, $dbcharset);
@@ -149,8 +149,7 @@ class db_mysqli {
         $data = @mysqli_fetch_row($qr);
         return $data;
     }
-    
-    
+
 //--------------- Fetch First ---------------
     public function fetch_first($r) {
 
@@ -170,11 +169,11 @@ class db_mysqli {
         return $this->num($this->query($sql));
     }
 
- //------- data seek  ------
-public function data_seek($r,$row_number=0){
-   return  mysqli_data_seek($r,$row_number);
+    //------- data seek  ------
+    public function data_seek($r, $row_number = 0) {
+        return mysqli_data_seek($r, $row_number);
     }
-    
+
 //------------- query and return array ----------------
     public function fetch_all($r) {
 
