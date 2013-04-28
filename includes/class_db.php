@@ -7,7 +7,10 @@ class db {
        
          }
      
-     public static function instance($config = array()) {
+     public static function instance() {
+         
+         $config = app::$config;
+         
         if (!self::$instance) {
             $db_class = "db_{$config['db']['extension']}";
             if(!class_exists($db_class)){

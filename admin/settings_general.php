@@ -15,7 +15,9 @@ if ($action == "edit") {
     }
 }
 
-load_settings();
+app::load_settings();
+$settings = app::$settings;
+
 
 print "
  <p align=center class=title>  $phrases[general_settings] </p>

@@ -5,13 +5,28 @@ define('GLOBAL_LOADED', true);
 define('SCRIPT_NAME', "store");
 define('SCRIPT_VER', "2.0");
 define('SCRIPT_YEAR', "2013");
-//---------------------------------------------
+
 //----------- current work dir definition -------
 define('CWD', str_replace(DIRECTORY_SEPARATOR, "/", dirname(__FILE__)));
 define('CFN', basename($_SERVER['SCRIPT_FILENAME']));
+
+
+//---------- Classes Auto Load -----------------
+spl_autoload_register('autoloadClass');
+
+function autoloadClass($name, $ext = 'php') {
+    $file = CWD . "/includes/class_" . strtolower($name) . "." . $ext;
+    if (file_exists($file)) {
+        require($file);
+    } else {
+        print "Class \"$name\" is not Exists !";
+    }
+}
 //---------------------------------------------
+
 $config = array();
 require(CWD . "/config.php");
+app::set_config($config);
 
 
 //---------- custom error handler --------//
@@ -39,17 +54,7 @@ if (!empty($_GET)) {
 }
 //if (!empty($_ENV)) {extract($_ENV);}
 //-----------------------------------------------------
-//---------- Classes Auto Load -----------------
-spl_autoload_register('autoloadClass');
 
-function autoloadClass($name, $ext = 'php') {
-    $file = CWD . "/includes/class_" . strtolower($name) . "." . $ext;
-    if (file_exists($file)) {
-        require($file);
-    } else {
-        print "Class \"$name\" is not Exists !";
-    }
-}
 
 //------ clean global vars ---------//
 $_SERVER['QUERY_STRING'] = strip_tags($_SERVER['QUERY_STRING']);
@@ -74,23 +79,13 @@ if ($cat) {
     }
 }
 
-//--------------- Session ---------------------
-$session = session::instance($config['session']);
-cookie::instance($config['cookies']);
 
 //---------------- Cache -------------------
 require(CWD . "/includes/functions_" . $cache_srv['engine'] . ".php");
 cache_init();
 
 //-------------- Database -------------------
-//require(CWD . "/includes/functions_db_".$db_extension.".php");
 require(CWD . "/includes/functions_db.php");
-
-try {
-    $db = db::instance($config)->connect();
-} catch (Exception $e) {
-    die($e->getMessage());
-}
 
 //db_connect($db_host, $db_username, $db_password, $db_name, $db_charset);
 //---------------------------
@@ -113,17 +108,15 @@ if ($global_lang == "arabic") {
     $global_align_x = "right";
 }
 
-//--------------- Load Phrases ---------------------
-/*
- * var phrases
- */
-$phrases = array();
-$qr = db_query("select * from store_phrases");
-while ($data = db_fetch($qr)) {
+app::init();
 
-    $phrases["$data[name]"] = $data['value'];
-}
-//------------------------------  
+$phrases = app::$phrases;
+$settings = app::$settings;
+$links = app::$links;
+$session = session::instance();
+
+
+
 //-------- fields in short details count ----//
 $data = db_qr_fetch("select count(*) as count from store_fields_sets where in_short_details=1 and active=1");
 $short_details_fields_count = intval($data['count']);
@@ -192,22 +185,6 @@ $reports_types = array_keys($reports_types_phrases);
 //--------------------
 $rating_types = array('news', 'products');
 
-$settings = array();
-
-//--------------- Get Settings --------------------------
-function load_settings() {
-    global $settings;
-    $qr = db_query("select * from store_settings");
-    while ($data = db_fetch($qr)) {
-
-        $settings["$data[name]"] = $data['value'];
-    }
-}
-
-//------------------ Load Settings ---------
-load_settings();
-
-
 
 $sitename = $settings['sitename'];
 $section_name = $settings['section_name'];
@@ -217,12 +194,7 @@ $scripturl = $siteurl . iif($script_path, "/" . $script_path, "");
 $upload_types = explode(',', str_replace(" ", "", strtolower($settings['uploader_types'])));
 $mailing_email = str_replace("{domain_name}", $_SERVER['HTTP_HOST'], $settings['mailing_email']);
 
-//------------- timezone ------------------
-if ($settings['timezone']) {
-    date_default_timezone_set($settings['timezone']);
-}
 
-//-------------------------------------------
 //------ validate styleid functon ------
 function is_valid_styleid($styleid) {
     if (is_numeric($styleid)) {
@@ -250,13 +222,6 @@ $data_style = db_qr_fetch("select images from  store_templates_cats where id='" 
 $style['images'] = iif($data_style['images'], $data_style['images'], "images");
 
 $session->set('styleid', intval($styleid));
-
-
-//----------- Load links -----------
-$qr = db_query("select * from store_links");
-while ($data = db_fetch($qr)) {
-    $links[$data['name']] = $data['value'];
-}
 
 
 //------- theme file ---------

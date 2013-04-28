@@ -8,7 +8,9 @@ class cookie {
     private  $prefix;
     private  $timeout;
 
-    private function __construct($config) {
+    private function __construct() {
+        $config  = app::$config['cookies'];
+        
         $this->path = $config['path'];
         $this->domain = $config['domain'];
         $this->prefix = $config['prefix'];
@@ -17,9 +19,9 @@ class cookie {
 
  
 
-    public static function instance($config = array()) {
+    public static function instance() {
         if (!self::$instance) {
-            self::$instance = new self($config);
+            self::$instance = new self();
         }
         return self::$instance;
     }

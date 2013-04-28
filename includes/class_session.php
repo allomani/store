@@ -5,8 +5,10 @@ class session {
     private  $prefix = '';
     private static $instance;
     
-    private  function __construct($config) {
+    private  function __construct() {
     
+       $config  = app::$config['session'];
+        
        $this->prefix = $config['prefix'];
 
         $sid = cookie::instance()->get($config['cookie_name']);
@@ -27,9 +29,9 @@ class session {
         cookie::instance()->set($config['cookie_name'], $sid, $config['cookie_expire']);
     }
     
-      public static function instance($config=array()) {
+      public static function instance() {
         if (!self::$instance) {
-            self::$instance = new self($config);
+            self::$instance = new self();
         }
         return self::$instance;
     }
