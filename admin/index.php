@@ -123,7 +123,6 @@ if($global_lang=="arabic"){
 //-------- Geo --------
 require(ADMIN_DIR ."/countries.php");
 require(ADMIN_DIR ."/cities.php");
-require(ADMIN_DIR ."/geo_zones.php"); 
 
 
 

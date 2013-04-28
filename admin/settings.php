@@ -45,7 +45,7 @@ print "
 <fieldset>
 <legend>الإعدادات الجغرافية</legend>
 <ul class='settings'>
-<li><a href='index.php?action=geo_zones'><img src='images/db_backup.gif'><br>المناطق الجغرافية</a></li>
+<li><a href='geo_zones.php'><img src='images/db_backup.gif'><br>$phrases[geo_zones]</a></li>
 <li><a href='index.php?action=countries'><img src='images/db_info.gif'><br>الدول</a></li>
 
 </ul></fieldset>";

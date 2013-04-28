@@ -86,7 +86,7 @@ if (!$action || $action == "edit_ok" || $action == "del" ||
       <form action=payment_methods.php method=post name=sender>
         <input type=hidden name=action value='add_ok'>
         <table width=90% class=grid>
-        <tr><td><b><?=$phrases['the_name'];?></b></td><td><input type=text name=name size=30></td></tr>
+        <tr><td><b><?=$phrases['the_name'];?></b></td><td><input type=text name=name size=30 required></td></tr>
         <tr><td colspan=2 align=center><input type=submit value="<?= $phrases['add_button'];?> "></td></tr>
         </table>
       </form>
