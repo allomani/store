@@ -80,7 +80,7 @@ if ($cat) {
 
 
 //---------------- Cache -------------------
-require(CWD . "/includes/functions_" . $cache_srv['engine'] . ".php");
+require(CWD . "/includes/functions_" . $config['cache']['engine'] . ".php");
 cache_init();
 
 //-------------- Database -------------------

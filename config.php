@@ -39,12 +39,12 @@ $code_editor_path = "editors/codemirror";
 
 
 //------------ Cache --------------
-$cache_srv['engine'] = "nocache" ; // memcache - xcache - filecache - nocache 
-$cache_srv['expire'] = 3600 ; //seconds
-$cache_srv['memcache_host'] = "localhost";
-$cache_srv['memcache_port'] = 11211;
-$cache_srv['filecache_dir'] = "cache";
-$cache_srv['prefix'] = "main:";
+$config['cache']['engine'] = "nocache" ; // memcache - xcache - filecache - nocache 
+$config['cache']['expire'] = 3600 ; //seconds
+$config['cache']['memcache_host'] = "localhost";
+$config['cache']['memcache_port'] = 11211;
+$config['cache']['filecache_dir'] = "cache";
+$config['cache']['prefix'] = "main:";
 
 
 //----------- Error Handling  ---------

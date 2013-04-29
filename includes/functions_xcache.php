@@ -1,21 +1,21 @@
 <?
 
 function cache_init() {
-    global $cache_srv;
+    global $config;
     if (!function_exists('xcache_get')) {
         die("Xcache is not Installed");
     }
 }
 
 function cache_set($name, $data) {
-    global $cache_srv;
-    return xcache_set($cache_srv['prefix'] . $name, $data, $cache_srv['expire']);
+    global $config;
+    return xcache_set($config['cache']['prefix'] . $name, $data, $config['cache']['expire']);
 }
 
 function cache_get($name) {
-    global $cache_srv;
+    global $config;
 
-    $data = xcache_get($cache_srv['prefix'] . $name);
+    $data = xcache_get($config['cache']['prefix'] . $name);
     if ($data == NULL) {
         return false;
     } else {
@@ -24,6 +24,6 @@ function cache_get($name) {
 }
 
 function cache_del($name) {
-    global $cache_srv;
-    return xcache_unset($cache_srv['prefix'] . $name);
+    global $config;
+    return xcache_unset($config['cache']['prefix'] . $name);
 }
