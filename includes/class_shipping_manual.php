@@ -7,7 +7,8 @@ class shipping_manual {
     public $settings;
 
     function __construct($data, $shipping_settings=array()) {
-        global $phrases, $settings;
+        $phrases = app::$phrases;
+        $settings = app::$settings;
 
         $this->settings = array(
             'price' => array('type' => 'text', 'title' => $phrases['the_price'], 'ext' => $settings['currency'])
@@ -19,7 +20,7 @@ class shipping_manual {
     }
 
     function get_price() {
-        global $phrases;
+        $phrases = app::$phrases;
 
         return array('status'=>true,
                      'price'=>$this->shipping_settings['price']

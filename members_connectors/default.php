@@ -13,7 +13,7 @@ $members_fields_replacement = array();
 
 
 function get_members_groups_array(){
-    global $phrases;
+    $phrases = app::$phrases;
     $members_groups_array = array("0"=>"$phrases[acc_type_not_activated]","1"=>"$phrases[acc_type_activated]","2"=>"$phrases[acc_type_closed]"); 
     return $members_groups_array;
 

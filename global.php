@@ -231,8 +231,6 @@ require(CWD . "/includes/functions_clients.php");
 
 init_members_connector();
 
-require(CWD . '/includes/class_tabs.php');
-
 require(CWD . '/includes/functions_comments.php');
 
 function if_admin($dep = "", $continue = 0) {
@@ -687,58 +685,6 @@ function data_flush() {
     }
 }
 
-//-------------- Get Remote filesize --------
-function fetch_remote_filesize($url) {
-    // since cURL supports any protocol we should check its http(s)
-    preg_match('#^((http|ftp)s?):\/\/#i', $url, $check);
-    if (ini_get('allow_url_fopen') != 0 AND $check[1] == 'http') {
-        $urlinfo = @parse_url($url);
-
-        if (empty($urlinfo['port'])) {
-            $urlinfo['port'] = 80;
-        }
-
-        if ($fp = @fsockopen($urlinfo['host'], $urlinfo['port'], $errno, $errstr, 30)) {
-            fwrite($fp, 'HEAD ' . $url . " HTTP/1.1\r\n");
-            fwrite($fp, 'HOST: ' . $urlinfo['host'] . "\r\n");
-            fwrite($fp, "Connection: close\r\n\r\n");
-
-            while (!feof($fp)) {
-                $headers .= fgets($fp, 4096);
-            }
-            fclose($fp);
-
-            $headersarray = explode("\n", $headers);
-            foreach ($headersarray as $header) {
-                if (stristr($header, 'Content-Length') !== false) {
-                    $matches = array();
-                    preg_match('#(\d+)#', $header, $matches);
-                    return sprintf('%u', $matches[0]);
-                }
-            }
-        }
-    } else if (false AND !empty($check) AND function_exists('curl_init') AND $ch = curl_init()) {
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'HEAD');
-        /* Need to enable this for self signed certs, do we want to do that?
-          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-         */
-
-        $header = curl_exec($ch);
-        curl_close($ch);
-
-        if ($header !== false) {
-            preg_match('#Content-Length: (\d+)#i', $header, $matches);
-            return sprintf('%u', $matches[1]);
-        }
-    }
-    return false;
-}
 
 //--------------- Get file Extension ----------
 function file_extension($filename) {

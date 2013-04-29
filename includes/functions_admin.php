@@ -19,7 +19,7 @@ function get_timezones() {
 }
 //----------------- Admin Path Links ---------
 function print_admin_path_links($cat, $filename = "") {
-    global $phrases;
+    $phrases = app::$phrases;
 
     $dir_data['cat'] = intval($cat);
     while ($dir_data['cat'] != 0) {
@@ -36,7 +36,7 @@ function print_admin_path_links($cat, $filename = "") {
 //--------------------------------- Check Functions ---------------------------------
 function check_safe_functions($condition_value) {
 
-    global $phrases;
+    $phrases = app::$phrases;
 
 
     //------ get safe functions ----------

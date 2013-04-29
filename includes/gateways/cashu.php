@@ -13,7 +13,9 @@ class cashu {
     }
     
     function print_form(){
-    global $phrases,$data_order,$gateway_settings;
+    global $data_order,$gateway_settings;
+    
+    $phrases = app::$phrases;
     
     $price = number_format($data_order['price'],2,".","");
     $currency = strtolower($gateway_settings['currency_code']);
