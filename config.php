@@ -65,17 +65,17 @@ $config['debug']['logs_path'] = "data/logs";
 $config['debug']['log_max_size'] = 1024*1024;
 
 //---------- to use remote members database ----------
-$members_connector['enable'] = 0;
-$members_connector['db_host'] = "localhost";
-$members_connector['db_name'] = "forum";
-$members_connector['db_username'] = "root";
-$members_connector['db_password'] = "";
-$members_connector['db_charset'] = "utf8";
-$members_connector['custom_members_table'] = "";
-$members_connector['connector_file'] = "vbulliten.php";
+$config['connector']['enable'] = false;
+$config['connector']['db_host'] = "localhost";
+$config['connector']['db_name'] = "forum";
+$config['connector']['db_username'] = "root";
+$config['connector']['db_password'] = "";
+$config['connector']['db_charset'] = "utf8";
+$config['connector']['custom_members_table'] = "";
+$config['connector']['type'] = "vbulletin";
 
 //--------------- to use SMTP Server ---------
-$config['smtp']['enable'] = 0;
+$config['smtp']['enable'] = false;
 $config['smtp']['host_name']="mail.allomani.com";
 $config['smtp']['host_port']= 25;
 $config['smtp']['ssl']=0;

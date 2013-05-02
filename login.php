@@ -19,24 +19,24 @@ if ($action == "login") {
     }
 
 
-    $qr = members_db_query("select * from {{store_clients}} where ::username=':username'", array('username' => db_escape($username, false)));
+    $qr = members::db_query("select * from {{store_clients}} where ::username=':username'", array('username' => db_escape($username, false)));
 
 
 
     if (db_num($qr)) {
 
-        $data = members_db_fetch($qr);
+        $data = members::db_fetch($qr);
 
-        if (member_verify_password($data['id'], $password, $md5pwd, $md5pwd_utf)) {
+        if (members::password_verify($data['id'], $password, $md5pwd)) {
 
-            if (in_array($data['usr_group'], $members_connector['allowed_login_groups'])) {
+            if (in_array($data['usr_group'], members::$allowed_login_groups)) {
 
 
                 $session->set('member_data_id', $data['id']);
                 $session->set('member_data_password', $data['password']);
                 js_redirect($re_link,true);
                 // ------------- Closed Account -----------------       
-            } elseif (in_array($data['usr_group'], $members_connector['disallowed_login_groups'])) {
+            } elseif (in_array($data['usr_group'], members::$disallowed_login_groups)) {
                 site_header();
                 open_table($phrases['login']);
                 print "<center> $phrases[this_account_closed_cant_login] </center>";
@@ -44,7 +44,7 @@ if ($action == "login") {
                 site_footer();
 
                 //------------- Not Activated Member --------------------                
-            } elseif (in_array($data['usr_group'], $members_connector['waiting_conf_login_groups'])) {
+            } elseif (in_array($data['usr_group'], members::$waiting_conf_login_groups)) {
 
                 site_header();
                 open_table($phrases['login']);

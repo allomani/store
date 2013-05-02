@@ -103,7 +103,7 @@ if (!$action || $action == "comments" || $action == "comments_activate" || $acti
                 if ($members_cache[$data['uid']]['username']) {
                     $data_member = $members_cache[$data['uid']];
                 } else {
-                    $data_member = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
+                    $data_member = members::db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
                     $members_cache[$data['uid']] = $data_member;
                 }
 
@@ -191,7 +191,7 @@ if ($action == "comments_edit") {
             $i = 0;
             while ($data = db_fetch($qr)) {
 
-                $data_member = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
+                $data_member = members::db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
 
                 $file_info = get_comment_file_info($data['comment_type'], $data['fid']);
 

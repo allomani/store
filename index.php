@@ -53,19 +53,19 @@ Programmed By <a target=\"_blank\" href=\"http://allomani.com/\"> Allomani&trade
 }
 
 //---------------------------- Forget Password -------------------------
-if ($action == "forget_pass" || $action == "lostpwd" || $action == "rest_pwd") {
-    if ($action == "forget_pass") {
-        $action = "lostpwd";
+if ($action == "forget_pass" || $action == "lostpwd"){
+    members::password_forget();
     }
-
-    connector_members_rest_pwd($action, $useremail);
+    
+    if($action == "rest_pwd") {
+  members::password_reset();
 }
 //-------------------------- Resend Active Message ----------------
 if ($action == "resend_active_msg") {
 
-    $qr = members_db_query("select * from {{store_clients}} where ::email=':email'", array('email' => db_escape($email)));
+    $qr = members::db_query("select * from {{store_clients}} where ::email=':email'", array('email' => db_escape($email)));
     if (db_num($qr)) {
-        $data = members_db_fetch($qr);
+        $data = members::db_fetch($qr);
         open_table();
         if (in_array($data['usr_group'], $members_connector['allowed_login_groups'])) {
             print "<center> $phrases[this_account_already_activated] </center>";
@@ -89,10 +89,10 @@ if ($action == "activate_email") {
     if (db_num($qr)) {
         $data = db_fetch($qr);
 
-        $data_member = members_db_qr_fetch("select count(*) as count from {{store_clients}} where ::id=':id' and ::usr_group=':usr_group'", array('id' => $data['cat'], 'usr_group' => $members_connector['waiting_conf_login_groups'][0]));
+        $data_member = members::db_qr_fetch("select count(*) as count from {{store_clients}} where ::id=':id' and ::usr_group=':usr_group'", array('id' => $data['cat'], 'usr_group' => $members_connector['waiting_conf_login_groups'][0]));
 
         if ($data_member['count']) {
-            members_db_query("update {{store_clients}} set ::usr_group=':usr_group' where ::id=':id'", array('id'=>$data['cat'],'usr_group'=>$members_connector['allowed_login_groups'][0]));
+            members::db_query("update {{store_clients}} set ::usr_group=':usr_group' where ::id=':id'", array('id'=>$data['cat'],'usr_group'=>$members_connector['allowed_login_groups'][0]));
            db_query("delete from store_confirmations where code='" . db_escape($code) . "'");
             print "<center> $phrases[active_acc_succ] </center>";
         } else {
@@ -114,7 +114,7 @@ if ($action == "confirmations") {
         if (db_num($qr)) {
             $data = db_fetch($qr);
 
-            members_db_query("update {{store_clients}} set ::email =':email' where ::id=':id'", array('id'=>$data['cat'],'email'=>$data['new_value']));
+            members::db_query("update {{store_clients}} set ::email =':email' where ::id=':id'", array('id'=>$data['cat'],'email'=>$data['new_value']));
             db_query("delete from store_confirmations where code='" . db_escape($code) . "'");
             print "<center> $phrases[your_email_changed_successfully] </center>";
         } else {

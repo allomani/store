@@ -16,7 +16,7 @@
                     if($settings['auto_email_activate']){
                         $email_update_query = ", ::email=':email'" ;
                     }else{   
-                        $data_email = members_db_qr_fetch("select ::email,::username from {{store_clients}} where ::id=':id'",array('id'=>intval($member_data['id'])));
+                        $data_email = members::db_qr_fetch("select ::email,::username from {{store_clients}} where ::id=':id'",array('id'=>intval($member_data['id'])));
                         if($email != $data_email['email']){
                             $val_code = md5($email.$data_email['email'].time().rand(0,100));    
                             db_query("insert into store_confirmations (type,old_value,new_value,cat,code) values ('member_email_change','".$data_email['email']."','".db_escape($email)."','".intval($member_data['id'])."','$val_code')");
@@ -36,10 +36,10 @@
                 //------------------
 
 
-                members_db_query("update {{store_clients}} set ::country=':country',::birth=':birth' $email_update_query where ::id=':id'",
+                members::db_query("update {{store_clients}} set ::country=':country',::birth=':birth' $email_update_query where ::id=':id'",
                         array(
                             'country'=>db_escape($country),
-                            'birth'=>db_escape(connector_get_date("$date_y-$date_m-$date_d",'member_birth_date')),
+                            'birth'=>db_escape(members::get_date("$date_y-$date_m-$date_d",'member_birth_date')),
                             'id'=>intval($member_data['id'])      
                             )
                         );
@@ -48,7 +48,7 @@
                 //-------- if change password --------------
                 if ($password){
                     if($password == $re_password){
-                        connector_member_pwd($member_data['id'],$password,'update');
+                        members::password_update($member_data['id'],$password);
                     }else{
                         open_table();
                         print "<center>$phrases[err_passwords_not_match]</center>";
@@ -63,7 +63,7 @@
                             $m_custom_id=intval($custom_id[$i]);
                             $m_custom_name =$custom[$i] ;
 
-                            members_db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ::id=':id'",
+                            members::db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ::id=':id'",
                                     array('id'=>$member_data['id'])
                                     );
  
@@ -80,13 +80,13 @@
 
             open_table($phrases['the_profile']);
 
-             $data = members_db_qr_fetch("select * from {{store_clients}} where ::id=':id'",
+             $data = members::db_qr_fetch("select * from {{store_clients}} where ::id=':id'",
                      array(
                          'id'=>intval($member_data['id'])
                          )
                      );
 
-            $birth_data = connector_get_date($data['birth'],"member_birth_array");
+            $birth_data = members::get_date($data['birth'],"member_birth_array");
 
             print "
             <script type=\"text/javascript\" language=\"javascript\">

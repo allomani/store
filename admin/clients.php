@@ -20,14 +20,6 @@ if_admin("clients");
 $limit = intval($limit);
 $start  = intval($start);
 
-//-------- check remote and local db connection ------
-if($members_connector['enable']){
-$srch_remote_db = $members_connector['db_name'];
-$srch_local_db = $db_name ;
-}else{
-$srch_remote_db = $db_name ;
-$srch_local_db = $db_name ;
-}
 
 
  print "<p align=center class=title> $phrases[the_clients] </p>
@@ -38,7 +30,7 @@ if($date_y || $date_m || $date_d){
    $birth_struct =  iif($date_y,$date_y."-","0000-").iif($date_m,$date_m."-","01-").iif($date_d,$date_d,"01");
   // print $birth_struct;
 
-$birth = connector_get_date($birth_struct,'member_birth_date');
+$birth = members::get_date($birth_struct,'member_birth_date');
 //print $birth;
     }else{
 $birth = "";
@@ -72,12 +64,12 @@ $cond .= " and field_".$m_custom_id." like '%".db_escape($m_custom_name)."%'";
 $sql= "select * from {{store_clients}} where ".$cond ." limit $start,$limit";
 $page_result_sql = "select count(*) as count from {{store_clients}} where ".$cond;
 
-$qr = members_db_query($sql);
+$qr = members::db_query($sql);
 
 
  if(db_num($qr)){
 
-$page_result = members_db_qr_fetch($page_result_sql);
+$page_result = members::db_qr_fetch($page_result_sql);
  print "<b> $phrases[view]  </b>".($start+1)." - ".($start+$limit) . "<b> $phrases[from] </b> $page_result[count]<br><br>";
 
 
@@ -104,8 +96,8 @@ $page_string = htmlspecialchars("clients.php?".substr($query_string,0,strpos($qu
  print "<tr><td><a href='clients.php?action=edit&id=".$data['id']."'>$data[username]</td>
  </td><td>".$data['email']."</td>
  <td>".$data['birth']."</td>
- <td>".member_time_replace($data['date'])."</td>
- <td>".member_time_replace($data['last_login'])."</td>
+ <td>".members::time_replace($data['date'])."</td>
+ <td>".members::time_replace($data['last_login'])."</td>
  </tr>";
 
          }
@@ -134,7 +126,7 @@ if($action=="add_ok"){
     $all_ok = 1;
  if(check_email_address($email)){
 
-$exsists = members_db_qr_fetch("select count(*) as count from {{store_clients}} where ::email=':email'",array('email'=>db_escape($email)));
+$exsists = members::db_qr_fetch("select count(*) as count from {{store_clients}} where ::email=':email'",array('email'=>db_escape($email)));
       //------------- check email exists ------------
        if($exsists['count']){
                          print "<li>$phrases[register_email_exists]<br>$phrases[register_email_exists2] <a href='index.php?action=forget_pass'>$phrases[click_here] </a></li>";
@@ -152,7 +144,7 @@ $exsists = members_db_qr_fetch("select count(*) as count from {{store_clients}} 
 
          if(!in_array($username,$exclude_list)){
 
-     $exsist2 = members_db_qr_fetch("select count(*) as count from {{store_clients}} where ::username=':username'",array('username'=>db_escape($username)));
+     $exsist2 = members::db_qr_fetch("select count(*) as count from {{store_clients}} where ::username=':username'",array('username'=>db_escape($username)));
 
        //-------------- check username exists -------------
             if($exsist2['count']){
@@ -171,15 +163,15 @@ if($all_ok){
 if($username && $email && $password){
 
 
- members_db_query("insert into {{store_clients}} (::username,::email,::country,::birth,::usr_group,::date)
+ members::db_query("insert into {{store_clients}} (::username,::email,::country,::birth,::usr_group,::date)
  values(':username',':email',':country',':birth',':usr_group',':date')",
          array(
              'username'=>db_escape($username),
              'email'=>db_escape($email),
              'country'=>db_escape($country),
-             'birth'=>connector_get_date("$date_y-$date_m-$date_d",'member_birth_date'),
+             'birth'=>members::get_date("$date_y-$date_m-$date_d",'member_birth_date'),
              'usr_group'=>$usr_group,
-             'date'=>connector_get_date(date("Y-m-d H:i:s"),'member_reg_date')
+             'date'=>members::get_date(date("Y-m-d H:i:s"),'member_reg_date')
              )
          );
 
@@ -192,7 +184,7 @@ if($username && $email && $password){
    if($custom_id[$i]){
    $m_custom_id=intval($custom_id[$i]);
    $m_custom_name =$custom[$i] ;
-   members_db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name,false)."' where ::id=':id'",
+   members::db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name,false)."' where ::id=':id'",
           array('id'=>$member_id)
         );
        }
@@ -201,7 +193,7 @@ if($username && $email && $password){
 //-----------------------------------------------
 
 
-connector_member_pwd($member_id,$password,'update');
+members::password_update($member_id,$password);
 
  show_alert("$phrases[member_added_successfully]","success");
 
@@ -213,7 +205,7 @@ connector_member_pwd($member_id,$password,'update');
 
 //------ delete memeber query --------
 if($action == "del"){
-members_db_query("delete from {{store_clients}} where ::id=':id'",array('id'=>$id));
+members::db_query("delete from {{store_clients}} where ::id=':id'",array('id'=>$id));
 
 show_alert( "$phrases[client_deleted_successfully]","success");
         }
@@ -221,13 +213,13 @@ show_alert( "$phrases[client_deleted_successfully]","success");
 
  if($action == "edit_ok"){
 
-members_db_query("update {{store_clients}} set ::username=':username',::email=':email',::country=':country',
+members::db_query("update {{store_clients}} set ::username=':username',::email=':email',::country=':country',
     ::birth=':birth',::usr_group=':usr_group'  where ::id=':id'",
         array(
             'username'=>db_escape($username),
             'email'=>db_escape($email),
             'country'=>db_escape($country),
-            'birth'=>connector_get_date("$date_y-$date_m-$date_d",'member_birth_date'),
+            'birth'=>members::get_date("$date_y-$date_m-$date_d",'member_birth_date'),
             'usr_group'=>$usr_group,
             'id'=>$id
             ));
@@ -235,7 +227,7 @@ members_db_query("update {{store_clients}} set ::username=':username',::email=':
  //-------- if change password --------------
           if ($password){
               if($password == $re_password){
-               connector_member_pwd($id,$password,'update');
+               members::password_update($id,$password);
               }else{
 
               show_alert("$phrases[err_passwords_not_match]","error");
@@ -249,7 +241,7 @@ members_db_query("update {{store_clients}} set ::username=':username',::email=':
    if($custom_id[$i]){
    $m_custom_id=intval($custom_id[$i]);
    $m_custom_name =$custom[$i] ;
-  members_db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name,false)."' where ::id=':id'",
+  members::db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name,false)."' where ::id=':id'",
           array('id'=>$id)
         );
        }
@@ -290,7 +282,7 @@ print "<p align=center class=title> $phrases[the_members] </p>
    $cf = 0 ;
 
    //------------ custom fields -----
-   if(!$members_connector['enable'] || $members_connector['same_connection']){
+
 $qr = db_query("select * from store_clients_sets order by required,ord");
    if(db_num($qr)){
     print "<br><br><fieldset>
@@ -308,7 +300,7 @@ $cf++;
 print "</table>
 </fieldset>";
 }
-   }
+  
 
    print "<br><br><fieldset>
       <table width=100%>
@@ -322,11 +314,11 @@ print "</table>
 if($action=="edit"){
    if_admin("members");
 
-           $qr = members_db_query("select * from {{store_clients}} where ::id=':id'",array('id'=>$id));
+           $qr = members::db_query("select * from {{store_clients}} where ::id=':id'",array('id'=>$id));
 
     if(db_num($qr)){
-                   $data = members_db_fetch($qr);
-          $birth_data = connector_get_date($data['birth'],"member_birth_array");
+                   $data = members::db_fetch($qr);
+          $birth_data = members::get_date($data['birth'],"member_birth_array");
            print "
                    <script type=\"text/javascript\" language=\"javascript\">
 <!--
@@ -382,7 +374,7 @@ return false ;
 
 
  <tr>   <td>$phrases[member_acc_type] : </td><td>";
- $usrs_groups = get_members_groups_array();
+ $usrs_groups = members::$groups_array;
  
                 print_select_row("usr_group",$usrs_groups,$data['usr_group']);
                    
@@ -511,7 +503,7 @@ return false ;
              <tr><td colspan=2>&nbsp;</td></tr>
 
              <tr>   <td>$phrases[member_acc_type] : </td><td>";
-              print_select_row("usr_group",get_members_groups_array());
+              print_select_row("usr_group",members::$groups_array);
 
 
             print "

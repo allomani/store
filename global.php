@@ -185,13 +185,13 @@ $reports_types = array_keys($reports_types_phrases);
 $rating_types = array('news', 'products');
 
 
-$sitename = $settings['sitename'];
-$section_name = $settings['section_name'];
-$siteurl = "http://$_SERVER[HTTP_HOST]";
-$script_path = trim(str_replace(rtrim(str_replace(DIRECTORY_SEPARATOR, '/', $_SERVER['DOCUMENT_ROOT']), "/"), "", CWD), "/");
-$scripturl = $siteurl . iif($script_path, "/" . $script_path, "");
-$upload_types = explode(',', str_replace(" ", "", strtolower($settings['uploader_types'])));
-$mailing_email = str_replace("{domain_name}", $_SERVER['HTTP_HOST'], $settings['mailing_email']);
+$sitename = app::$sitename;
+$section_name = app::$section_name;
+$siteurl = app::$siteurl;
+$script_path = app::$script_path;
+$scripturl = app::$scripturl;
+$upload_types = app::$upload_types;
+$mailing_email = app::$mailing_email;
 
 //------ validate styleid functon ------
 function is_valid_styleid($styleid) {
@@ -227,12 +227,21 @@ require(CWD . "/includes/functions_themes.php");
 //---------
 require(CWD . "/includes/functions_forms.php");
 require(CWD . "/includes/functions_cart.php");
-require(CWD . "/includes/functions_clients.php");
 
-init_members_connector();
+members::init();
 
 require(CWD . '/includes/functions_comments.php');
 
+$member_data  = array();
+
+function check_member_login(){
+    global $member_data;
+     $login = members::check_login();
+     $member_data = members::$member_data;
+     return $login;
+    }
+    
+    
 function if_admin($dep = "", $continue = 0) {
     global $user_info, $phrases;
 

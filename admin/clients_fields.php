@@ -9,7 +9,7 @@ if(!$action || $action=="edit_ok" || $action=="add_ok" || $action=="del"){
 if($action=="del"){
 $id=intval($id);
 db_query("delete from store_clients_sets where id='$id'");
-members_db_query("ALTER TABLE  `{{store_clients}}` DROP  `field_".$id."`");
+members::db_query("ALTER TABLE  `{{store_clients}}` DROP  `field_".$id."`");
 }
 
 if($action=="edit_ok"){
@@ -28,7 +28,7 @@ db_query("insert into store_clients_sets  (name,details,required,type,value,styl
 
 $field_id = db_inserted_id();
 
-members_db_query("ALTER TABLE  `{{store_clients}}` ADD  `field_".$field_id."` VARCHAR( 255 ) NOT NULL , ADD INDEX (  `field_".$field_id."` )");  
+members::db_query("ALTER TABLE  `{{store_clients}}` ADD  `field_".$field_id."` VARCHAR( 255 ) NOT NULL , ADD INDEX (  `field_".$field_id."` )");  
 }
 }
 

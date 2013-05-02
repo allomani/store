@@ -53,7 +53,7 @@ if(is_array($custom)){
 if(check_email_address($email)){
 //$email = db_escape($email);
 
-$exsist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'",array('email'=>db_escape($email)));
+$exsist = members::db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'",array('email'=>db_escape($email)));
       //------------- check email exists ------------
        if($exsist['count']){
                          print "<li>$phrases[register_email_exists]<br>$phrases[register_email_exists2] <a href='index.php?action=forget_pass'>$phrases[click_here] </a></li>";
@@ -72,7 +72,7 @@ $exsist = members_db_qr_fetch("select count(::id) as count from {{store_clients}
 
          if(!in_array($username,$exclude_list)){
 
-     $exsist2 = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username like ':username'",array('username'=>db_escape($username)));
+     $exsist2 = members::db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username like ':username'",array('username'=>db_escape($username)));
 
        //-------------- check username exists -------------
             if($exsist2['count']){
@@ -143,13 +143,13 @@ if($settings['auto_email_activate']){
     }
 
 
-   members_db_query("insert into {{store_clients}} (::email,::username::date,::usr_group,::birth,::country,::gender,::pm_email_notify,::privacy_settings,::members_list,::ip_address)
+   members::db_query("insert into {{store_clients}} (::email,::username::date,::usr_group,::birth,::country,::gender,::pm_email_notify,::privacy_settings,::members_list,::ip_address)
   values(':email',':username',':date',':usr_group',':birth',':country',':gender',':pm_email_notify',':privacy_settings',':members_list',':ip_address')",
         array('email'=> db_escape($email),
             'username'=>db_escape($username),
-            'date'=>connector_get_date(time(),'member_reg_date'),
+            'date'=>members::get_date(time(),'member_reg_date'),
             'usr_group'=>$member_group,
-            'birth'=>connector_get_date("$date_y-$date_m-$date_d",'member_birth_date'),
+            'birth'=>members::get_date("$date_y-$date_m-$date_d",'member_birth_date'),
             'country'=>db_escape($country),
             'gender'=>db_escape($gender),
             'pm_email_notify'=>'1',
@@ -169,7 +169,7 @@ if($settings['auto_email_activate']){
    if($custom_id[$i] && $custom[$i]){
    $m_custom_id=intval($custom_id[$i]);
    $m_custom_name =$custom[$i] ;
-    members_db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ::id=':id'",array('id'=>$member_id));
+    members::db_query("update {{store_clients}} set field_".$m_custom_id."='".db_escape($m_custom_name)."' where ::id=':id'",array('id'=>$member_id));
   
        }
    }
@@ -178,8 +178,8 @@ if($settings['auto_email_activate']){
 
 
 
-   connector_member_pwd($member_id,$password,'update');
-   connector_after_reg_process();
+   members::password_update($member_id,$password);
+   members::register_post_action();
 
    if($settings['auto_email_activate']){
        print "<center>  $phrases[reg_complete] </center>";

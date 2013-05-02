@@ -47,9 +47,9 @@ if(@mysql_select_db($members_connector['db_name'])){
  if(is_array($required_database_fields_names)){
 
 
- $qr = members_db_query("SHOW FIELDS FROM {{store_clients}}");
+ $qr = members::db_query("SHOW FIELDS FROM {{store_clients}}");
   $c=0;
-while($data =members_db_fetch($qr)){
+while($data =members::db_fetch($qr)){
 
     $table_fields['name'][$c] = $data['Field'];
     $table_fields['type'][$c] = $data['Type'];
@@ -79,7 +79,7 @@ if(in_array($table_fields['type'][$searchkey],$req_type)){
 print "<b><font color=green>Valid</font></b>";
 }else{
 print "<b><font color=red>Not Valid Type</font></b>";
-$qrx = members_db_query("ALTER TABLE {{store_clients}} CHANGE `".$required_database_fields_names[$i]."` `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;");
+$qrx = members::db_query("ALTER TABLE {{store_clients}} CHANGE `".$required_database_fields_names[$i]."` `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;");
 
     if(!$qrx){
     print "<td><b><font color=red> $phrases[chng_field_type_failed] </font></b></td>";
@@ -93,7 +93,7 @@ print "</td>";
     }else{
     print "<td><b><font color=red>Not found</font></b></td>";
 
-    $qrx = members_db_query("ALTER TABLE {{store_clients}} ADD `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;");
+    $qrx = members::db_query("ALTER TABLE {{store_clients}} ADD `".$required_database_fields_names[$i]."` ".$req_type[0]." NOT NULL ;");
 
     if(!$qrx){
     print "<td><b><font color=red> $phrases[add_field_failed] </font></b></td>";

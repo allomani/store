@@ -8,7 +8,7 @@ if ($action == "check_register_username") {
         $exclude_list = explode(",", $settings['register_username_exclude_list']);
 
         if (!in_array($str, $exclude_list)) {
-            $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username  like ':username'", array('username' => db_escape($str)));
+            $exist = members::db_qr_fetch("select count(::id) as count from {{store_clients}} where ::username  like ':username'", array('username' => db_escape($str)));
 
             if (!$exist['count']) {
                 print "<img src='$style[images]/true.gif'>";
@@ -27,7 +27,7 @@ if ($action == "check_register_username") {
 //------------------------------------------
 if ($action == "check_register_email") {
     if (check_email_address($str)) {
-        $exist = members_db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'", array('email' => db_escape($str)));
+        $exist = members::db_qr_fetch("select count(::id) as count from {{store_clients}} where ::email like ':email'", array('email' => db_escape($str)));
         if (!$exist['count']) {
             print "<img src='$style[images]/true.gif'>";
         } else {
@@ -235,7 +235,10 @@ if ($action == "payment_method_details") {
 
 //--------- Payment Gateway Details -------
 function payment_gateway_details($id, $order_id) {
-    global $member_data, $data_order, $gateway_settings;
+    global  $data_order, $gateway_settings;
+    
+    $member_data = members::$member_data;
+    
     check_member_login();
 
     $id = intval($id);
@@ -512,7 +515,7 @@ if ($action == "comments_add") {
 
                 if ($settings['comments_auto_activate']) {
                     //  print $content;   
-                    $data_member = members_db_qr_fetch("select ::id as uid,::username from {{store_clients}} where ::id=':id'", array('id' => intval($member_data['id'])));
+                    $data_member = members::db_qr_fetch("select ::id as uid,::username from {{store_clients}} where ::id=':id'", array('id' => intval($member_data['id'])));
 
                     $data = $data_member;
                     $data['id'] = $new_id;
@@ -582,7 +585,7 @@ if ($action == "comments_get") {
             if ($members_cache[$data['uid']]['username']) {
                 $udata = $members_cache[$data['uid']];
             } else {
-                $udata = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
+                $udata = members::db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'", array('id' => $data['uid']));
                 $members_cache[$data['uid']] = $udata;
             }
 

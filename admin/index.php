@@ -12,7 +12,7 @@ require(CWD . "/counter.php");
 
    $data4 = db_qr_fetch("select count(id) as count from store_user");
    
-   $count_members = members_db_qr_fetch("select count(::id) as count from {{store_clients}}");
+   $count_members = members::db_qr_fetch("select count(::id) as count from {{store_clients}}");
 
 print "<center><table class=grid style='width:50%;'><tr><td align=center><b>$phrases[welcome_to_cp] <br><br>";
 

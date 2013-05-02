@@ -114,10 +114,10 @@ if($action=="view"){
        
 if($msg_snd_ok){
                     
-$qr = members_db_query("select ::id,::username,::email,::pm_email_notify from {{store_clients}} where ::username=':username'",
+$qr = members::db_query("select ::id,::username,::email,::pm_email_notify from {{store_clients}} where ::username=':username'",
         array('username'=>db_escape($to_username)));
 if(db_num($qr)){
-$data=members_db_fetch($qr);
+$data=members::db_fetch($qr);
  
                          $data_count = db_qr_fetch("select count(id) as count from store_clients_msgs where owner='$data[id]'");
                           $msgs_count = $data_count['count'];
@@ -165,7 +165,7 @@ $data=members_db_fetch($qr);
                      $to_msg = "\n\n\n\n--------------------------\n".date("d-m-Y h:i",$data['date'])."\n\n$data[content]";
                      }else{
                      if($id){
-                     $from_data = members_db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'",array('id'=>$id));
+                     $from_data = members::db_qr_fetch("select ::username from {{store_clients}} where ::id=':id'",array('id'=>$id));
                      $recevie_user = $from_data['username']  ;
                      }
                      }
