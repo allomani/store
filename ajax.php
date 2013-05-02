@@ -4,7 +4,7 @@ require("global.php");
 header("Content-Type: text/html;charset=$settings[site_pages_encoding]");
 //------------------------------------------
 if ($action == "check_register_username") {
-    if (strlen($str) >= $settings['register_username_min_letters']) {
+    if (mb_strlen($str,'utf-8') >= $settings['register_username_min_letters']) {
         $exclude_list = explode(",", $settings['register_username_exclude_list']);
 
         if (!in_array($str, $exclude_list)) {

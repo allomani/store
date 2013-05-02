@@ -10,7 +10,7 @@ if ($settings['enable_search']) {
 
     $keyword = trim($keyword);
 
-    if (strlen($keyword) >= $settings['search_min_letters']) {
+    if (mb_strlen($keyword,'utf-8') >= $settings['search_min_letters']) {
 
         $keyword = htmlspecialchars($keyword);
 

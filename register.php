@@ -66,8 +66,8 @@ $exsist = members_db_qr_fetch("select count(::id) as count from {{store_clients}
  //      $username = db_escape($username);
 
         //------- username min letters ----------
-       if(strlen($username) >= $settings['register_username_min_letters']){
-              if(strlen($username) <= $settings['username_max_letters']){    
+       if(mb_strlen($username,'utf-8') >= $settings['register_username_min_letters']){
+              if(mb_strlen($username,'utf-8') <= $settings['username_max_letters']){    
        $exclude_list = explode(",",$settings['register_username_exclude_list']) ;
 
          if(!in_array($username,$exclude_list)){
