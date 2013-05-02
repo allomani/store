@@ -274,8 +274,8 @@ class members {
 
 //--------------- Account Activation Email --------------------
     public static function snd_email_activation_msg($id) {
-        global $sitename, $mailing_email, $script_path, $settings, $siteurl, $scripturl, $phrases, $settings;
-
+       $phrases = app::$phrases;
+       
         $qr = members_db_query("select * from {{store_clients}} where ::id=':id'", array('id' => $id));
         if (db_num($qr)) {
             $data = members_db_fetch($qr);
@@ -287,59 +287,26 @@ class members {
 
             $url = $scripturl . "/index.php?action=activate_email&code=$active_code";
 
-            $msg = get_template('email_activation_msg', array('{name}', '{url}', '{code}', '{siteurl}', '{sitename}'), array($data['username'], $url, $active_code, $siteurl, $sitename));
+            $msg = get_template('email_activation_msg', array('{name}', '{url}', '{code}', '{siteurl}', '{sitename}'), array($data['username'], $url, $active_code, app::$siteurl, app::$sitename));
 
-            send_email($sitename, $mailing_email, $data['email'], $phrases['email_activation_msg_subject'], $msg, $settings['mailing_default_use_html'], $settings['mailing_default_encoding']);
+            send_email(app::$sitename, app::$mailing_email, $data['email'], $phrases['email_activation_msg_subject'], $msg, app::$settings['mailing_default_use_html'], app::$settings['mailing_default_encoding']);
         }
     }
 
 //--------------- Change Email Confirmation --------------------
     public static function snd_email_chng_conf($username, $email, $active_code) {
-        global $sitename, $mailing_email, $script_path, $settings, $phrases, $sitename, $siteurl, $scripturl;
+       $phrases = app::$phrases;
 
         $active_link = $scripturl . "/index.php?action=confirmations&op=member_email_change&code=$active_code";
 
 
-        $msg = get_template("email_change_confirmation_msg", array('{username}', '{active_link}', '{sitename}', '{siteurl}'), array($username, $active_link, $sitename, $siteurl));
+        $msg = get_template("email_change_confirmation_msg", array('{username}', '{active_link}', '{sitename}', '{siteurl}'), array($username, $active_link, app::$sitename, app::$siteurl));
 
 
-        $mailResult = send_email($sitename, $mailing_email, $email, $phrases['chng_email_msg_subject'], $msg, $settings['mailing_default_use_html'], $settings['mailing_default_encoding']);
+        $mailResult = send_email(app::$sitename, app::$mailing_email, $email, $phrases['chng_email_msg_subject'], $msg, app::$settings['mailing_default_use_html'], app::$settings['mailing_default_encoding']);
     }
 
-//--------------- Forgot Password Message ---------------------
-    public static function snd_usr_info($email) {
-        global $sitename, $mailing_email, $sitename, $siteurl, $phrases;
-        $msg = get_template("forgot_pwd_msg");
 
-        $qr = members_db_query("select ::username,::password,::last_login from  {{store_clients}} where ::email like ':email'", array('email' => db_escape($email)));
-        if (db_num($qr)) {
-            $data = members_db_fetch($qr);
-
-            $msg = str_replace(
-                    array(
-                "{username}",
-                "{password}",
-                "{last_login}",
-                "{sitename}",
-                "{siteurl}"
-                    ), array(
-                $data['username'],
-                $data['password'],
-                $data['last_login'],
-                $sitename,
-                $siteurl
-                    )
-                    , $msg);
-
-
-
-            send_email($sitename, $mailing_email, $email, $phrases['forgot_pwd_msg_subject'], $msg, $settings['mailing_default_use_html'], $settings['mailing_default_encoding']);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
 
 }
 

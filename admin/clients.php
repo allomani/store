@@ -293,7 +293,7 @@ while($data = db_fetch($qr)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$data[id]\">
     <tr><td width=25%><b>$data[name]</b><br>$data[details]</td><td>";
-    print get_member_field("custom[$cf]",$data,"",true);
+    print members::get_member_field("custom[$cf]",$data,"",true);
         print "</td></tr>";
 $cf++;
 }
@@ -393,7 +393,7 @@ while($dataf = db_fetch($qrf)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-    print get_member_field("custom[$cf]",$dataf,$data["field_".$dataf['id']]);
+    print members::get_member_field("custom[$cf]",$dataf,$data["field_".$dataf['id']]);
         print "</td></tr>";
 $cf++;
 }
@@ -434,7 +434,7 @@ while($dataf = db_fetch($qrf)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-    print get_member_field("custom[$cf]",$dataf,$data["field_".$dataf['id']]);
+    print members::get_member_field("custom[$cf]",$dataf,$data["field_".$dataf['id']]);
         print "</td></tr>";
 $cf++;
 }
@@ -522,7 +522,7 @@ while($dataf = db_fetch($qrf)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-    print get_member_field("custom[$cf]",$dataf);
+    print members::get_member_field("custom[$cf]",$dataf);
         print "</td></tr>";
 $cf++;
 }
@@ -564,7 +564,7 @@ while($dataf = db_fetch($qrf)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-    print get_member_field("custom[$cf]",$dataf);
+    print members::get_member_field("custom[$cf]",$dataf);
         print "</td></tr>";
 $cf++;
 }

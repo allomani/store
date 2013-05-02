@@ -72,7 +72,7 @@ if ($action == "resend_active_msg") {
         } elseif (in_array($data['usr_group'], $members_connector['disallowed_login_groups'])) {
             print "<center> $phrases[closed_account_cannot_activate] </center>";
         } elseif (in_array($data['usr_group'], $members_connector['waiting_conf_login_groups'])) {
-            snd_email_activation_msg($data['id']);
+            members::snd_email_activation_msg($data['id']);
             print "<center>  $phrases[activation_msg_sent_successfully] </center>";
         }
         close_table();

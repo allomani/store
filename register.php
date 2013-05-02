@@ -185,7 +185,7 @@ if($settings['auto_email_activate']){
        print "<center>  $phrases[reg_complete] </center>";
    }else{
    print "<center>  $phrases[reg_complete_need_activation] </center>";
-   snd_email_activation_msg($member_id);
+   members::snd_email_activation_msg($member_id);
    }
 
            }else{
@@ -248,7 +248,7 @@ while($data = db_fetch($qr)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$data[id]\">
     <tr><td width=25%><b>$data[name]</b><br>$data[details]</td><td>";
-    print get_member_field("custom[$cf]",$data);
+    print members::get_member_field("custom[$cf]",$data);
         print "</td></tr>";
 $cf++;
 }
@@ -304,7 +304,7 @@ while($data = db_fetch($qr)){
     print "
     <input type=hidden name=\"custom_id[$cf]\" value=\"$data[id]\">
     <tr><td width=25%><b>$data[name]</b><br>$data[details]</td><td>";
-    print get_member_field("custom[$cf]",$data,"",true);
+    print members::get_member_field("custom[$cf]",$data,"",true);
         print "</td></tr>";
 $cf++;
 }

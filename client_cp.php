@@ -20,7 +20,7 @@
                         if($email != $data_email['email']){
                             $val_code = md5($email.$data_email['email'].time().rand(0,100));    
                             db_query("insert into store_confirmations (type,old_value,new_value,cat,code) values ('member_email_change','".$data_email['email']."','".db_escape($email)."','".intval($member_data['id'])."','$val_code')");
-                            snd_email_chng_conf($data_email['username'],$email,$val_code);
+                            members::snd_email_chng_conf($data_email['username'],$email,$val_code);
                             open_table();
                             print "<center> $phrases[chng_email_conf_msg_sent] </center>";
                             close_table();
@@ -143,7 +143,7 @@
                     print "
                     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
                     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-                    print get_member_field("custom[$cf]",$dataf,"edit",$data['id']);
+                    print members::get_member_field("custom[$cf]",$dataf,"edit",$data['id']);
                     print "</td></tr>";
                     $cf++;
                 }
@@ -184,7 +184,7 @@
                     print "
                     <input type=hidden name=\"custom_id[$cf]\" value=\"$dataf[id]\">
                     <tr><td width=25%><b>$dataf[name]</b><br>$dataf[details]</td><td>";
-                    print get_member_field("custom[$cf]",$dataf,"edit",$data['id']);
+                    print members::get_member_field("custom[$cf]",$dataf,"edit",$data['id']);
                     print "</td></tr>";
                     $cf++;
                 }
