@@ -195,9 +195,8 @@ open_table("$phrases[checkout]");
    <input type='radio' name='op' id='op_2' value='guest'><label for='op_2'> Continue as Guest</lable><br>   
    
    </td>
-   <td width=50%>";
-   require(CWD."/login_form.php");
-   print "
+   <td width=50%>
+   <a href=\"login.php\">تسجيل دخول</a>
    </td>
    </td></tr></table>";   
   }

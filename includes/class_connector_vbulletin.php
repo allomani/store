@@ -18,14 +18,6 @@ class connector_vbulletin {
     private function __construct() {
 
 
-        if ($members_connector['custom_members_table']) {
-            $members_connector['members_table'] = $members_connector['custom_members_table'];
-        } else {
-            $members_connector['members_table'] = "user";
-        }
-
-
-
         $this->members_tables_replacement = array(
             'store_clients' => app::$config['connector']['members_table']
         );
@@ -61,7 +53,7 @@ class connector_vbulletin {
         return $members_groups_array;
     }
 
-    function fetch_user_salt($length = SALT_LENGTH) {
+    private function fetch_user_salt($length = SALT_LENGTH) {
         $salt = '';
 
         for ($i = 0; $i < $length; $i++) {
@@ -73,7 +65,7 @@ class connector_vbulletin {
 
     public function password_update($userid, $pwd) {
 
-        $salt = fetch_user_salt(3);
+        $salt = $this->fetch_user_salt(3);
         $pwdz = md5(md5($pwd) . $salt);
         members::db_query("update user set password='" . $pwdz . "',salt='$salt' where userid='" . intval($userid) . "'");
     }

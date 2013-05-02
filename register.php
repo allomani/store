@@ -137,9 +137,9 @@ if(is_array($custom) && is_array($custom_id)){
  if($all_ok){
 
 if($settings['auto_email_activate']){
-    $member_group = $members_connector['allowed_login_groups'][0] ;
+    $member_group = members::$allowed_login_groups[0] ;
     }else{
-    $member_group = $members_connector['waiting_conf_login_groups'][0] ;
+    $member_group = members::$waiting_conf_login_groups[0] ;
     }
 
 

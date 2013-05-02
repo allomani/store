@@ -65,13 +65,13 @@ $config['debug']['logs_path'] = "data/logs";
 $config['debug']['log_max_size'] = 1024*1024;
 
 //---------- to use remote members database ----------
-$config['connector']['enable'] = false;
+$config['connector']['enable'] = true;
 $config['connector']['db_host'] = "localhost";
 $config['connector']['db_name'] = "forum";
 $config['connector']['db_username'] = "root";
 $config['connector']['db_password'] = "";
 $config['connector']['db_charset'] = "utf8";
-$config['connector']['custom_members_table'] = "";
+$config['connector']['members_table'] = "user";
 $config['connector']['type'] = "vbulletin";
 
 //--------------- to use SMTP Server ---------

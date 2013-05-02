@@ -1599,8 +1599,12 @@ function redirect($url) {
 
 //---- Js Redirect -----//
 function js_redirect($url, $with_body = false) {
-    global $phrases;
+    global $phrases,$scripturl;
 
+    if(!stristr($url,"://")){
+        $url = $scripturl . "/".$url;
+        }
+        
     if ($with_body) {
         print "<html>
 <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$settings[site_pages_encoding]\" />
@@ -1622,6 +1626,7 @@ var url = \"$url\";
  </script>
  
  <center> $phrases[redirection_msg] <a href=\"$url\">$phrases[click_here]</a></center>";
+    die();
 }
 
 //--- get country available shipping methods ------//

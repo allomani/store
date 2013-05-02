@@ -92,7 +92,7 @@ $page_string = htmlspecialchars("clients.php?".substr($query_string,0,strpos($qu
       <td><b>$phrases[username]</b></td><td><b>$phrases[email]</b></td>
  <td><b>$phrases[birth]</b></td>
  <td><b>$phrases[register_date]</b></td><td><b>$phrases[last_login]</b></td></tr>";
- while($data = db_fetch($qr)){
+ while($data = members::db_fetch($qr)){
  print "<tr><td><a href='clients.php?action=edit&id=".$data['id']."'>$data[username]</td>
  </td><td>".$data['email']."</td>
  <td>".$data['birth']."</td>

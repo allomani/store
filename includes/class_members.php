@@ -10,6 +10,8 @@ class members {
     public static $allowed_login_groups = array();
     public static $disallowed_login_groups = array();
     public static $waiting_conf_login_groups = array();
+    public static $required_database_fields_names = array();
+    public static $required_database_fields_types = array();
 
     public static function init() {
         $config = app::$config;
@@ -45,6 +47,9 @@ class members {
         self::$allowed_login_groups = self::$connector->allowed_login_groups;
         self::$disallowed_login_groups = self::$connector->disallowed_login_groups;
         self::$waiting_conf_login_groups = self::$connector->waiting_conf_login_groups;
+        
+        self::$required_database_fields_names = self::$connector->required_database_fields_names;
+        self::$required_database_fields_types = self::$connector->required_database_fields_types;
     }
 
     private static function sql_parse($sql, $data = array()) {
@@ -89,10 +94,9 @@ class members {
     }
 
     public static function db_fetch($qr) {
-        $members_fields_replacement = self::$connector->members_fields_replacement;
-        $members_fields_replacement_x = array_flip($members_fields_replacement);
+        $members_fields_replacement_x = array_flip(self::$connector->members_fields_replacement);
 
-        $data = db_fetch($qr);
+        $data = (array) db_fetch($qr);
         foreach ($data as $field => $value) {
             $new_field = iif($members_fields_replacement_x[$field], $members_fields_replacement_x[$field], $field);
             $new_data[$new_field] = $value;
@@ -113,11 +117,11 @@ class members {
     public static function remote_db_connect() {
         $config = app::$config;
 
-        if ($config['connector']['enable'] && !self::same_db) {
+        if ($config['connector']['enable'] && !self::$same_db) {
 
 
 //----- connect -----
-            if (self::same_connection) {
+            if (self::$same_connection) {
                 db_select($config['connector']['db_name'], $config['connector']['db_charset']);
             } else {
                 db_connect($config['connector']['db_host'], $config['connector']['db_username'], $config['connector']['db_password'], $config['connector']['db_name'], $config['connector']['db_charset']);
@@ -130,10 +134,10 @@ class members {
         $config = app::$config;
 
 
-        if ($config['connector']['enable'] && !self::same_db) {
+        if ($config['connector']['enable'] && !self::$same_db) {
 
 //----- connect -----
-            if (self::same_connection) {
+            if (self::$same_connection) {
                 db_select($config['db']['name'], $config['db']['charset']);
             } else {
                 db_connect($config['db']['host'], $config['db']['username'], $config['db']['password'], $config['db']['name'], $config['db']['charset']);

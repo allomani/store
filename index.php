@@ -63,15 +63,16 @@ if ($action == "forget_pass" || $action == "lostpwd"){
 //-------------------------- Resend Active Message ----------------
 if ($action == "resend_active_msg") {
 
+    if($email){
     $qr = members::db_query("select * from {{store_clients}} where ::email=':email'", array('email' => db_escape($email)));
     if (db_num($qr)) {
         $data = members::db_fetch($qr);
         open_table();
-        if (in_array($data['usr_group'], $members_connector['allowed_login_groups'])) {
+        if (in_array($data['usr_group'], members::$allowed_login_groups)) {
             print "<center> $phrases[this_account_already_activated] </center>";
-        } elseif (in_array($data['usr_group'], $members_connector['disallowed_login_groups'])) {
+        } elseif (in_array($data['usr_group'], members::$disallowed_login_groups)) {
             print "<center> $phrases[closed_account_cannot_activate] </center>";
-        } elseif (in_array($data['usr_group'], $members_connector['waiting_conf_login_groups'])) {
+        } elseif (in_array($data['usr_group'], members::$waiting_conf_login_groups)) {
             members::snd_email_activation_msg($data['id']);
             print "<center>  $phrases[activation_msg_sent_successfully] </center>";
         }
@@ -81,6 +82,17 @@ if ($action == "resend_active_msg") {
         print "<center>  $phrases[email_not_exists] </center>";
         close_table();
     }
+    }else{
+          open_table($phrases['resend_activation_msg']);
+                print "<form action=index.php method=post>
+                    <input type=hidden name=action value='resend_active_msg'>
+                    <center><table><tr><td>
+                    $phrases[your_email] : </td><td>
+                    <input type=text size=30 name=email dir=ltr>
+                    </td><td><input type=submit value=' $phrases[send] '>
+                    </td></tr></table></center></form>";
+                close_table();
+                }
 }
 //-------------------------- Active Account ------------------------
 if ($action == "activate_email") {
@@ -89,10 +101,18 @@ if ($action == "activate_email") {
     if (db_num($qr)) {
         $data = db_fetch($qr);
 
-        $data_member = members::db_qr_fetch("select count(*) as count from {{store_clients}} where ::id=':id' and ::usr_group=':usr_group'", array('id' => $data['cat'], 'usr_group' => $members_connector['waiting_conf_login_groups'][0]));
+        $data_member = members::db_qr_fetch("select count(*) as count from {{store_clients}} where ::id=':id' and ::usr_group=':usr_group'", 
+                array(
+                    'id' => $data['cat'], 
+                    'usr_group' => members::$waiting_conf_login_groups[0]
+                    ));
 
         if ($data_member['count']) {
-            members::db_query("update {{store_clients}} set ::usr_group=':usr_group' where ::id=':id'", array('id'=>$data['cat'],'usr_group'=>$members_connector['allowed_login_groups'][0]));
+            members::db_query("update {{store_clients}} set ::usr_group=':usr_group' where ::id=':id'", 
+                    array(
+                        'id'=>$data['cat'],
+                        'usr_group'=>members::$allowed_login_groups[0]
+                        ));
            db_query("delete from store_confirmations where code='" . db_escape($code) . "'");
             print "<center> $phrases[active_acc_succ] </center>";
         } else {
@@ -126,10 +146,6 @@ if ($action == "confirmations") {
 
 //----------- Client CP ------//
 require(CWD . "/client_cp.php");
-//------------------------ Members Login ---------------------------
-if ($action == "login") {
-  require (CWD .  "/login_form.php");
-}
 
 //---------------------------------------------------
 require(CWD . "/includes/framework_end.php");

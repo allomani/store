@@ -9,11 +9,11 @@
 print "<p align=center class=title> $phrases[cp_remote_members_db] </p>";
 
 show_alert("$phrases[you_can_edit_this_values_from_config_file]","info");
-print "<br><center><table width=60% class=grid><tr><td><b>$phrases[use_remote_db]</b></td><td>".($members_connector['enable'] ? $phrases['yes'] : $phrases['no'])."</td></tr>";
-if($members_connector['enable']){
-print "<tr><td><b>$phrases[db_host]</b></td><td>$members_connector[db_host]</td></tr>
-<tr><td><b>$phrases[db_name]</b></td><td>$members_connector[db_name]</td></tr>
-<tr><td><b>$phrases[members_table]</b></td><td>$members_connector[members_table]</td></tr>";
+print "<br><center><table width=60% class=grid><tr><td><b>$phrases[use_remote_db]</b></td><td>".($config['connector']['enable'] ? $phrases['yes'] : $phrases['no'])."</td></tr>";
+if($config['connector']['enable']){
+print "<tr><td><b>$phrases[db_host]</b></td><td>{$config['connector'][db_host]}</td></tr>
+<tr><td><b>$phrases[db_name]</b></td><td>{$config['connector'][db_name]}</td></tr>
+<tr><td><b>$phrases[members_table]</b></td><td>{$config['connector'][members_table]}</td></tr>";
 }
 print "</table>
 <br>
@@ -34,10 +34,35 @@ $phrases[members_remote_db_wizzard_note]
 print "<p align=center class=title>$phrases[members_remote_db_wizzard]</p>";
 
 
-if($members_connector['enable']){
-$conx  = @mysql_connect($members_connector['db_host'],$members_connector['db_username'],$members_connector['db_password']);
+$required_database_fields_names = members::$required_database_fields_names;
+$required_database_fields_types = members::$required_database_fields_types;
+
+$qrf = db_query("select id from store_clients_sets");
+while($dataf = db_fetch($qrf)){
+    $required_database_fields_names[] = "field_".$dataf['id'];
+    $required_database_fields_types[] = "varchar(255)";
+   
+}
+
+
+if($config['connector']['enable']){
+
+    try {
+        db::instance()->connect($config['connector']['db_host'],$config['connector']['db_username'],$config['connector']['db_password']);
+        $conx = true;
+        }catch(Exception $e){
+            $conx = false;
+            }
 if($conx){
-if(@mysql_select_db($members_connector['db_name'])){
+    
+    
+    try {
+        db::instance()->select($config['connector']['db_name'],$config['connector']['db_charset']);
+        $db_selected = true;
+                }catch(Exception $e){
+                    $db_selected = false;
+                    }
+if($db_selected){
 
 
 

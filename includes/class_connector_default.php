@@ -11,7 +11,9 @@ class connector_default {
     public  $is_md5_password = true;
     public  $members_tables_replacement = array();
     public  $members_fields_replacement = array();
-
+    public $required_database_fields_names = array();
+    public $required_database_fields_types = array();
+    
     private function __construct() {
         
     }
