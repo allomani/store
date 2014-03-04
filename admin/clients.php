@@ -175,7 +175,7 @@ $phrases[members_local_db_clean_note]
 //------------------------------- Email Members -----------------------------------
 if($action=="clients_mailing"){
 if_admin("clients");
-$username = htmlspecialchars($username) ; 
+$username = html_encode_chars($username) ; 
 print "<p align=center class=title> $phrases[members_mailing] </p><br>" ;
 
  print "<center><iframe src='mailing.php?username=$username' width=95% height=800  border=0 frameborder=0></iframe></center>";
@@ -440,7 +440,7 @@ $m_perpage = $limit ;
 
 $query_string = $_SERVER['QUERY_STRING'];
 $query_string = iif(strchr($query_string,"&start="),$query_string,$query_string."&start=0");
-$page_string = htmlspecialchars("index.php?".substr($query_string,0,strpos($query_string,"&start="))."&start={start}"); 
+$page_string = html_encode_chars("index.php?".substr($query_string,0,strpos($query_string,"&start="))."&start={start}"); 
 
 
 

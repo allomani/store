@@ -1,6 +1,6 @@
 <?
  open_table();
-   $re_link = htmlspecialchars($re_link) ;  
+   $re_link = html_encode_chars($re_link) ;  
 print "
 <script type=\"text/javascript\" src=\"js/md5.js\"></script>
 

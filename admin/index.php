@@ -796,7 +796,7 @@ print "</td></tr>
   <tr>
               <td width=\"70\">
                 <b>$phrases[the_code]</b></td><td width=\"223\">
-                  <textarea name='code' rows=20 cols=45 dir=ltr >".htmlspecialchars($data['code'])."</textarea></td>
+                  <textarea name='code' rows=20 cols=45 dir=ltr >".html_encode_chars($data['code'])."</textarea></td>
                         </tr>
 <tr><td><b>$phrases[the_order]</b></td><td><input type=text size=3 name=ord value=\"$data[ord]\"></td></tr>
 <tr><td colspan=2 align=center><input type=submit value=' $phrases[edit] '></td></tr>
@@ -808,7 +808,7 @@ print "<center><table width=50% class=grid><tr><td align=center>$phrases[err_wro
 }         
 //------------------- DATABASE BACKUP --------------------------
 if($action=="backup_db_do"){
-    $output = htmlspecialchars($output) ;
+    $output = html_encode_chars($output) ;
 print "<br><center> <table width=50% class=grid><tr><td align=center>  $output </td></tr></table>";
 }
 
@@ -1089,7 +1089,7 @@ print "<center>
 $qr = db_query("select * from store_templates where id='$id'");
       if(db_num($qr)){
       $data = db_fetch($qr);
-    $data['content'] = htmlspecialchars($data['content']);
+    $data['content'] = html_encode_chars($data['content']);
     
      
  $cat_data = db_qr_fetch("select name from store_templates_cats where id='$data[cat]'");
@@ -1507,7 +1507,7 @@ if($action=="phrases_update"){
                 }
 
 if($group){
-  $group = htmlspecialchars($group);
+  $group = html_encode_chars($group);
 $cat_data = db_qr_fetch("select name from store_phrases_cats where id='".db_escape($group)."'");
 
 print "<p align=$global_align><img src='images/link.gif'><a href='index.php?action=phrases'>$phrases[the_phrases] </a> / $cat_data[name]</p>";

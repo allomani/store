@@ -290,7 +290,7 @@ db_query("delete from store_clients_msgs where id='$id' and user='$member_data[i
 
          print "<tr class='$tr_class'><td height=30><a href='index.php?action=msg_view&id=$data[id]'>
          $data[sender]</a></td>
-         <td align=center><a href='index.php?action=msg_view&id=$data[id]'>".htmlspecialchars($data['title']).iif(!$data['opened'],"&nbsp;<font color=red><b>$phrases[new]<b></font>")."</a></td>
+         <td align=center><a href='index.php?action=msg_view&id=$data[id]'>".html_encode_chars($data['title']).iif(!$data['opened'],"&nbsp;<font color=red><b>$phrases[new]<b></font>")."</a></td>
          <td align=center> $data[date]</td>
          <td align=center><a href='index.php?action=msg_del&id=$data[id]' onclick=\"return confirm('".$phrases['are_you_sure']."')\" >$phrases[delete]</a></td></tr>";
               }
@@ -315,7 +315,7 @@ if($action=="msg_view"){
    print "<table width=100%>
    <tr><td width=7%><b>  $phrases[the_sender] : </b></td><td>$data[sender]</td></tr>
    <tr><td><b> $phrases[the_date] : </b></td><td>$data[date]</td></tr>
-   <tr><td><b> $phrases[the_subject] :</b> </td><td>".htmlspecialchars($data['title'])."</td></tr>
+   <tr><td><b> $phrases[the_subject] :</b> </td><td>".html_encode_chars($data['title'])."</td></tr>
    <tr><td colspan=2 height=25 align=center>
    
    <table width=300><tr><td align=center>
@@ -331,7 +331,7 @@ if($action=="msg_view"){
    </td></tr>
    <tr><td colspan=2 align=center>
    <table width=96%><tr><td class='messages'>
-   ".nl2br(htmlspecialchars($data['content']))."
+   ".nl2br(html_encode_chars($data['content']))."
    </td></tr></table>
    </td></tr></table>";
           }else{

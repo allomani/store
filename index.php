@@ -615,12 +615,12 @@ compile_hook('cart_end');
  //---- clean billing and shipping for email ----//
  if(is_array($billing_info)){
  foreach($billing_info as $key=>$value){
- $billing_info_clean[$key] = htmlspecialchars($value);
+ $billing_info_clean[$key] = html_encode_chars($value);
  }
  }
  if(is_array($shipping_info)){
  foreach($shipping_info as $key=>$value){
- $shipping_info_clean[$key] = htmlspecialchars($value);
+ $shipping_info_clean[$key] = html_encode_chars($value);
  }
  }
  //-------------------------------//
@@ -1312,7 +1312,7 @@ close_table();
          
         if(strlen($keyword) >= $settings['search_min_letters']){
           
-              $keyword = htmlspecialchars($keyword); 
+              $keyword = html_encode_chars($keyword); 
               
                 compile_hook('search_start');   
       
@@ -1499,11 +1499,11 @@ open_table("$phrases[register]");
 
 
 //---------- filter fields -----------------
-$email = htmlspecialchars($email);
-$email_confirm = htmlspecialchars($email_confirm);
-$username = htmlspecialchars($username);
-$password = htmlspecialchars($password);
-$re_password = htmlspecialchars($re_password);
+$email = html_encode_chars($email);
+$email_confirm = html_encode_chars($email_confirm);
+$username = html_encode_chars($username);
+$password = html_encode_chars($password);
+$re_password = html_encode_chars($re_password);
 
 
 
@@ -1854,7 +1854,7 @@ $data = db_fetch($qr);
  if(@file_exists("login_form.php")){
      include "login_form.php";
  }else{
-    $re_link = htmlspecialchars($re_link) ;
+    $re_link = html_encode_chars($re_link) ;
 
          open_table();
 print "<script type=\"text/javascript\" src=\"js/md5.js\"></script>

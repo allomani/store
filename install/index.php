@@ -296,10 +296,10 @@
         <input type='hidden' name='step' value='".$step."'>
 
         <table width=100%>
-        <tr><td>Database Host</td><td><input type=text name='db_host' value=\"".htmlspecialchars($db_host[1])."\"></td></tr>
-        <tr><td>Database Username</td><td><input type=text name='db_user' value=\"".htmlspecialchars($db_user[1])."\"></td></tr>
-        <tr><td>Database Password</td><td><input type=text name='db_pass' value=\"".htmlspecialchars($db_pass[1])."\"></td></tr>
-        <tr><td>Database Name</td><td><input type=text name='db_name' value=\"".htmlspecialchars($db_name[1])."\"></td></tr>
+        <tr><td>Database Host</td><td><input type=text name='db_host' value=\"".html_encode_chars($db_host[1])."\"></td></tr>
+        <tr><td>Database Username</td><td><input type=text name='db_user' value=\"".html_encode_chars($db_user[1])."\"></td></tr>
+        <tr><td>Database Password</td><td><input type=text name='db_pass' value=\"".html_encode_chars($db_pass[1])."\"></td></tr>
+        <tr><td>Database Name</td><td><input type=text name='db_name' value=\"".html_encode_chars($db_name[1])."\"></td></tr>
         </table>
 
         <input type=submit value='Next'>

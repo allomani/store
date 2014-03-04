@@ -54,7 +54,7 @@ if($photos_arr[$cur_index]['img']){
     
 $prev_index = $cur_index - 1;
 $next_index = $cur_index + 1;
- $photo_title = "Photo # ".($cur_index+1)." of ".count($photos_arr).iif($photos_arr[$cur_index]['name']," - ".htmlspecialchars($photos_arr[$cur_index]['name'])) ;
+ $photo_title = "Photo # ".($cur_index+1)." of ".count($photos_arr).iif($photos_arr[$cur_index]['name']," - ".html_encode_chars($photos_arr[$cur_index]['name'])) ;
  print "
  <title>$photo_title</title> 
 </head> 

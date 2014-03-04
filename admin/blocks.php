@@ -214,7 +214,7 @@ if($action == "edit_block"){
 
     if_admin();
   $data=db_qr_fetch("select * from store_blocks where id='$id'");
-      $data['file'] = htmlspecialchars($data['file']) ;
+      $data['file'] = html_encode_chars($data['file']) ;
 
  print "<img src='images/arrw.gif'>&nbsp;<a href='index.php?action=blocks'>$phrases[the_blocks]</a> / $data[title] <br><br>
  

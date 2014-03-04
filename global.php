@@ -1,5 +1,4 @@
 <? 
-// Edited  : 24-10-2009
 
 $version_number = "1.0" ;  
 //-----------------------------
@@ -458,7 +457,7 @@ function check_safe_functions($condition_value){
 
                                         foreach($functions AS $error)
                                         {
-                                                $errormsg .= "$phrases[err_function_usage_denied]: <code>" . htmlspecialchars($error['func']) . "</code>
+                                                $errormsg .= "$phrases[err_function_usage_denied]: <code>" . html_encode_chars($error['func']) . "</code>
                                                 <br>\n";
                                         }
 
@@ -493,10 +492,10 @@ global $safe_functions ;
 //---------------------- Send Email Function -------------------
 function send_email($from_name,$from_email,$to_email,$subject,$msg,$html=0,$encoding=""){
         global $PHP_SELF,$smtp_settings,$settings ;
-    $from_name = htmlspecialchars($from_name);
-    $from_email = htmlspecialchars($from_email);
-    $to_email = htmlspecialchars($to_email);
-    $subject = htmlspecialchars($subject);
+    $from_name = html_encode_chars($from_name);
+    $from_email = html_encode_chars($from_email);
+    $to_email = html_encode_chars($to_email);
+    $subject = html_encode_chars($subject);
    // $msg=htmlspecialchars($msg);
 
 
@@ -1516,7 +1515,7 @@ print "
 function print_redirection($link,$print_header=1){
 global $sitename,$settings,$global_dir,$style,$re_link;
 
-$re_link = htmlspecialchars($link); 
+$re_link = html_encode_chars($link); 
 
 if($print_header){
 print "<html dir=$global_dir>
@@ -1673,6 +1672,13 @@ if(!file_exists($logs_path)){@mkdir($logs_path);}
  } 
   
 }
+
+
+function html_encode_chars($text){
+    return htmlspecialchars($text,NULL,"cp1252");
+}
+
+
 
 //------- print block banners -----------//
   function print_block_banners($data_array,$pos="block"){

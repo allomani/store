@@ -246,7 +246,7 @@ print "<option value='text' $chk1>$phrases[textbox]</option>
 </select>
 </td></tr>
 <tr id='fields_default_value_div'><td><b>$phrases[default_value]</b></td><td>
-<textarea name='value' rows=10 cols=30>".htmlspecialchars($data['value'])."</textarea></td></tr>
+<textarea name='value' rows=10 cols=30>".html_encode_chars($data['value'])."</textarea></td></tr>
 
 <tr id='fields_options_div'><td><b>$phrases[the_options]</b></td><td>";
 $qro = db_query("select * from store_fields_options where field_id='$id' order by ord asc");

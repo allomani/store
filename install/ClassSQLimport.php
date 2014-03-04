@@ -93,7 +93,7 @@ $sqlFile .= $line;
             		$result = mysql_query($stmt);
              	 	if (!$result)
              	 	{
-                       print "<br>SQL: ".htmlspecialchars($stmt)."<br><br>".mysql_error();
+                       print "<br>SQL: ".html_encode_chars($stmt)."<br><br>".mysql_error();
                  	$this ->CodigoError = "SQL: ".$stmt."<br><br>".mysql_errno();
                  	$this ->TextoError = mysql_error();
                 	 break;

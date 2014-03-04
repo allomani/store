@@ -16,12 +16,12 @@
 
 <?
 if(!strpos(strtolower($_GET['url']),"javascript")){
-print "<title>".htmlspecialchars($_GET['title'])."</title> 
+print "<title>".html_encode_chars($_GET['title'])."</title> 
 </HEAD> 
 <BODY onload='FitPic();' topmargin=\"0\"  
 marginheight=\"0\" leftmargin=\"0\" marginwidth=\"0\">"; 
 
- print "<img src=\"" . htmlspecialchars(strip_tags($_GET['url'])) . "\" border=0> 
+ print "<img src=\"" . html_encode_chars(strip_tags($_GET['url'])) . "\" border=0> 
 
 </BODY> 
 </HTML>";

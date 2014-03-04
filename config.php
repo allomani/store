@@ -108,7 +108,7 @@ $safe_functions = array('and',
                         'iif',
                         'get_template','urlencode','count','str_replace','strchr',
                         'get_song_field_value','sync_urls_sets','sync_songs_fields_sets','compile_template','strtotime','date',
-                        'intval','htmlspecialchars','number_format',
+                        'intval','htmlspecialchars','number_format','html_encode_chars',
                         'open_block','close_block','get_short_details_fields_data');
 
 ?>

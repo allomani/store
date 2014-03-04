@@ -140,9 +140,9 @@ window.close();
 
 
 
-$folder = htmlspecialchars($folder);
-$f_name = htmlspecialchars($f_name);
-$frm = htmlspecialchars($frm);
+$folder = html_encode_chars($folder);
+$f_name = html_encode_chars($f_name);
+$frm = html_encode_chars($frm);
 
 print "
 <center>

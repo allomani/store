@@ -28,7 +28,7 @@ $perpage = $settings['orders_perpage'];
 if($op=="search"){
 $query_string = $_SERVER['QUERY_STRING'];
 $query_string = iif(strchr($query_string,"&start="),$query_string,$query_string."&start=0");
-$page_string = htmlspecialchars("index.php?".substr($query_string,0,strpos($query_string,"&start="))."&start={start}"); 
+$page_string = html_encode_chars("index.php?".substr($query_string,0,strpos($query_string,"&start="))."&start={start}"); 
 
  
 

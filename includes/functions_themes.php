@@ -20,7 +20,7 @@ $qr = db_query("select content from store_templates where name like '$name' and 
     unset($data);
    }else{
    if(!$hide_error){
-   $content =  "<b>Error : </b> Template ".htmlspecialchars($name)." Not Exists <br>";
+   $content =  "<b>Error : </b> Template ".html_encode_chars($name)." Not Exists <br>";
    }else{
    $content =  "";
    }
@@ -118,7 +118,7 @@ $title_sub = "$data[title]" ;
 if($action == "search" && $keyword){
 
 $title_sub = $phrases['the_search'] ;
-$meta_description = htmlspecialchars($keyword);    
+$meta_description = html_encode_chars($keyword);    
 
  }
 //-------------------------------------
@@ -130,7 +130,7 @@ $meta_description = htmlspecialchars($keyword);
  
 if(!$meta_keywords){
 if($title_sub){
-$keys_arr = explode(" ",htmlspecialchars($title_sub));
+$keys_arr = explode(" ",html_encode_chars($title_sub));
 if(count($keys_arr)){
     foreach($keys_arr as $value){
         
@@ -138,7 +138,7 @@ if(count($keys_arr)){
     }
     unset($keys_arr);
 }else{
-    $meta_keywords = htmlspecialchars($keyword);
+    $meta_keywords = html_encode_chars($keyword);
 }
       }else{
       $meta_keywords = $sitename;

@@ -2,7 +2,7 @@
 require("global.php") ;
       if(!$re_link){$re_link=iif($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_REFERER'],"index.php");}  
    
-   $re_link = htmlspecialchars($re_link);
+   $re_link = html_encode_chars($re_link);
  
 if($action=="login"){
 

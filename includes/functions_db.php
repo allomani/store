@@ -23,7 +23,7 @@ return db_escape($str,false);
  
  //------------ db escape -------------//
  function db_escape($str,$specialchars=true){
- if($specialchars) { $str =  htmlspecialchars($str) ;}
+ if($specialchars) { $str =  html_encode_chars($str) ;}
  return db_escape_string($str); 
  }
  //----------- escape String -----------
