@@ -1329,13 +1329,13 @@ close_table();
         
    
       if($full_text_search){  
-         $qr=db_query("select *,match(name) against('".db_escape($keyword)."') as score from store_products_data where match(name) against('".db_escape($keyword)."') order by score desc limit $start,$perpage");
-         $products_count=db_qr_fetch("select count(*) as count from store_products_data where match(name) against('".db_escape($keyword)."')");
+         $qr=db_query("select *,match(name) against('".db_escape($keyword)."') as score from store_products_data where active=1 and match(name) against('".db_escape($keyword)."') order by score desc limit $start,$perpage");
+         $products_count=db_qr_fetch("select count(*) as count from store_products_data where match(name) against('".db_escape($keyword)."') and active=1");
        
      
       }else{
-              $qr=db_query("select * from store_products_data where name like '%".db_escape($keyword)."%' order by id desc limit $start,$perpage");
-             $products_count = db_qr_fetch("SELECT count(*) as count from store_products_data where name like '%".db_escape($keyword)."%'");
+              $qr=db_query("select * from store_products_data where name like '%".db_escape($keyword)."%' and active=1 order by id desc limit $start,$perpage");
+             $products_count = db_qr_fetch("SELECT count(*) as count from store_products_data where name like '%".db_escape($keyword)."%' and active=1");
    
       }
      

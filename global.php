@@ -3,7 +3,8 @@
 
 $version_number = "1.0" ;  
 //-----------------------------
-define(MEMBER_SQL,"member_sql");
+define("GLOBAL_LOADED",true);
+define("MEMBER_SQL","member_sql");
 //------------------------------
 //----------- current work dir definition -------
 define('CWD', (($getcwd = getcwd()) ? str_replace("\\","/",$getcwd) : '.'));
@@ -1703,7 +1704,7 @@ if(!file_exists($logs_path)){@mkdir($logs_path);}
         
         }        
        }
-  
+   
   //--------- load plugins function --------     
    function load_plugins($file){
        $dhx = @opendir(CWD ."/plugins");

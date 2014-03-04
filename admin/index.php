@@ -1,7 +1,5 @@
 <?
 
-// Edited : 07-10-2009
-
 define('ADMIN_DIR', (($getcwd = str_replace("\\","/",getcwd())) ? $getcwd : '.'));  
 chdir('./../');
 define('CWD', (($getcwd = str_replace("\\","/",getcwd())) ? $getcwd : '.'));
@@ -171,7 +169,12 @@ print "<META http-equiv=Content-Language content=\"$settings[site_pages_lang]\">
 editor_html_init();
 
 if(file_exists(CWD . "/install/")){
-print "<h3><center><font color=red>Warning : Installation Folder Exists , Please Delete it</font></center></h3>";
+print "<div style=\"border:1px solid;color: #D8000C;background-color: #FFBABA;padding:3px;text-align:center;margin:0;\">Installation folder exists at /install , Please delete it</div>";
+}
+        
+if($license_properties['expire']['value'] && $license_properties['expire']['value'] != "0000-00-00"){
+    $remaining_days = floor((strtotime($license_properties['expire']['value']) - time()) / (24*60*60));
+    print "<div style=\"border:1px solid;color: #9F6000;background-color: #F9F0B5;padding:3px;text-align:center;margin:0;direction:ltr;\">The license will expire on : {$license_properties['expire']['value']} ($remaining_days days)</div>";
 }
 
 ?>  

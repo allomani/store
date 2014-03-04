@@ -1,0 +1,19 @@
+RewriteEngine On
+
+
+
+
+RewriteRule ^browse_(.*)_(.*).html index.php?action=browse&cat=$1&start=$2
+RewriteRule ^browse_(.*).html index.php?action=browse&cat=$1
+RewriteRule ^browse.html index.php?action=browse&cat=0
+
+RewriteRule ^details_(.*).html index.php?action=product_details&id=$1
+
+RewriteRule ^news_(.*)_(.*).html index.php?action=news&date=$1&start=$2
+RewriteRule ^news_(.*).html index.php?action=news&id=$1
+RewriteRule ^news.html index.php?action=news
+
+RewriteRule ^page_(.*).html index.php?action=pages&id=$1
+
+
+RewriteRule ^sitemap.xml sitemap.php

@@ -26,7 +26,7 @@ $default_timezone = "Etc/GMT-3"; //time zone
                         
 $access_log_expire=90 ; // days
 
-$full_text_search = true;  
+$full_text_search = true;       
  
 //$default_uploader_chmod = "777";
 
