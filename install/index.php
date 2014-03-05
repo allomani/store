@@ -445,4 +445,8 @@ $newImport -> import ();
     {
         return ($expression ? $returntrue : $returnfalse);
     }
+    
+    function html_encode_chars($text){
+    return htmlspecialchars($text,NULL,"cp1252");
+}
 ?> 
