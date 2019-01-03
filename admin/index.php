@@ -184,10 +184,6 @@ if(file_exists(CWD . "/install/")){
 print "<div style=\"border:1px solid;color: #D8000C;background-color: #FFBABA;padding:3px;text-align:center;margin:0;\">Installation folder exists at /install , Please delete it</div>";
 }
         
-if($license_properties['expire']['value'] && $license_properties['expire']['value'] != "0000-00-00"){
-    $remaining_days = floor((strtotime($license_properties['expire']['value']) - time()) / (24*60*60));
-    print "<div style=\"border:1px solid;color: #9F6000;background-color: #F9F0B5;padding:3px;text-align:center;margin:0;direction:ltr;\">The license will expire on : {$license_properties['expire']['value']} ($remaining_days days)</div>";
-}
 
 ?>  
 
